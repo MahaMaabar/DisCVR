@@ -6,7 +6,7 @@ DisCVR is a fast, accurate viral detection tool designed to analyse HTS data and
 
 # Installation 
 DisCVR can be downloaded from [here](http://bioinformatics.cvr.ac.uk/discvr.php) 
-The download includes information for installing and running the tool. 
+..The download includes information for installing and running the tool. 
 ## Contact
 DisCVR was developed by: 
-[Maha Maabar] (https://github.com/MahaMaabar/)
+[Maha Maabar](https://github.com/MahaMaabar)
