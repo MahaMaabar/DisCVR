@@ -4,7 +4,9 @@ DisCVR is a user-friendly tool for detecting known viruses in clinical samples. 
 
 ## Installation 
 DisCVR can be downloaded from [here](http://bioinformatics.cvr.ac.uk/discvr.php) 
-..The download includes information for installing and running the tool. 
+
+The download includes information for installing and running the tool. 
 ## Contact
 DisCVR was developed by: 
+
 [Maha Maabar](https://github.com/MahaMaabar)
