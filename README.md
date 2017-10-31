@@ -3,3 +3,6 @@ DisCVR is a user-friendly tool for detecting known viruses in clinical samples. 
 
 DisCVR is a fast, accurate viral detection tool designed to analyse HTS data and validate the results interactively on computers that have limited resources. At present, DisCVR is a human viral diagnostic tool, but it could be readily extended to include non-viral human pathogens and pathogens of other hosts. 
 # Framework
+
+# Installation 
+[DisCVR can be downloaded from the Viral Genomics and Bioinformatics website](http://bioinformatics.cvr.ac.uk/discvr.php) 
