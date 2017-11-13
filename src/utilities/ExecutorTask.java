@@ -3,24 +3,16 @@ package utilities;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
+/***
+ * Handles the execution of a thread to run a sub-processor; used by tantoi package 
+ * @author Maha Maabar
+ *
+ */
 public class ExecutorTask implements Runnable {
 		      
      String command=null;
@@ -32,10 +24,8 @@ public class ExecutorTask implements Runnable {
     	 file = f;
      }
      
-     
      @Override
-     public void run() {
-    	 
+     public void run() {    	 
         
          Process process = null;
 
@@ -56,14 +46,12 @@ public class ExecutorTask implements Runnable {
                 stdErr.close();
                 
                 if(count>0) {
-                   //System.out.println("\nError messages During runs:");
-                   //System.out.println(errText);
+                   
                    PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file+"\\log.txt",true))); 
-                   //System.out.println("File: "+file);
                    pw.println("\nError messages During runs:");
                    pw.println(errText);
                    
-       			  	pw.close();
+       			   pw.close();
                 }
                 
             }       
@@ -71,7 +59,6 @@ public class ExecutorTask implements Runnable {
                 {
             	System.out.println("\nRUN ERROR\n"+ioe);
             }            
-     }
-     
- }//executorTask
+     }     
+ }
 
