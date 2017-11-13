@@ -2,7 +2,6 @@ package customdatabase;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -17,6 +16,12 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+/***
+ * Filters out common sequences from downloaded virus data
+ * 
+ * @author MahaMaabar
+ *
+ */
 public class DataSequences {
 
 	public static final String DIR_PROPERTY_NAME = "discvrJAR.rootDir";
@@ -42,13 +47,11 @@ public class DataSequences {
 		
 		/*setting up the path for the NCBI files*/
 		String actualPath = System.getProperty(DIR_PROPERTY_NAME, currentDir );
-                /*String namesFile = actualPath+"/resources/names.dmp";
-    	String nodesFile = actualPath+"/resources/nodes.dmp";*/		
+               	
 		String namesFile = actualPath+"/customisedDB/names.dmp";
     	String nodesFile = actualPath+"/customisedDB/nodes.dmp";
     	
-    	//System.out.println("Actual Path: "+actualPath);
-			   
+    	
     	/*output files */
     	String parentFile = directory+"/"+dbName+"_lineageIDs.txt";
 		String infoFileName = directory+"/"+dbName+"_DataInformation.csv";
@@ -147,15 +150,12 @@ public class DataSequences {
 						 taxIDsHeaders.add(line) ;
 					 }
 				 }
-				 //System.out.println("taxID<"+taxID+"> has "+taxIDsHeaders.size()+" sequence(s)");
-			 }  catch (IOException e) {
+			}  catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			/*remove common sequences from the ancestors'
-			 * 		
-			 */
+			/*remove common sequences from the ancestors' */
 			for(int id: parentsIDs){
 				String parentIDFile=directory+"/Virus_"+id+".fa";
 				String tempFile=directory+"/Virus_"+id+"_temp.fa";
@@ -172,11 +172,9 @@ public class DataSequences {
 							
 							 pw.println(line) ;//print header
 							 pw.println(br.readLine()) ;//print sequence
-							 //notCommon++;
 						 }
 						 if(line.charAt(0) =='>' && taxIDsHeaders.contains(line)){
 							 shared++;
-							 //System.out.println("Shared header["+shared+"]:<"+taxID+","+id+">"+line);
 						 }
 					 }
 					 System.out.println("Number of shared sequences between the taxID<"+taxID+"> and its ancestor <"+id+">: "+shared);
@@ -204,8 +202,7 @@ public String [] getVirusInfo (TreeMap<Integer,String> taxIDsNameMap,TreeMap<Int
 	String []taxIDsInfo = new String [taxIDsList.size()] ;
 	int index=0;
 	for(int id:taxIDsList){
-		//System.out.println("ID: "+id);
-		//get the num of sequences 
+		
 		String fileName = directory+"/Virus_"+id+".fa";
 		int seqCount = 0;
 		
@@ -216,15 +213,11 @@ public String [] getVirusInfo (TreeMap<Integer,String> taxIDsNameMap,TreeMap<Int
 				//dealing with exception thrown at empty sequence 
 				if(line.length()==0) continue;
 				if(line.charAt(0)=='>'){
-					//System.out.println("["+seqCount+"]"+line);
 					seqCount++;
 				}
-						
-				
 			}
 			br.close();
 		}catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 				
@@ -235,7 +228,6 @@ public String [] getVirusInfo (TreeMap<Integer,String> taxIDsNameMap,TreeMap<Int
 		//check if id has ref seq
 		if(accNumMap.get(id) != null){
 			ArrayList<String> accNum = accNumMap.get(id);
-			//System.out.println("AccNum["+id+"]: has "+accNum.size());
 			if (accNum.size()==1){
 				accNumStr+=accNum.get(0);
 			}
@@ -246,18 +238,14 @@ public String [] getVirusInfo (TreeMap<Integer,String> taxIDsNameMap,TreeMap<Int
 				}
 				accNumStr+=accNum.get(accNum.size()-1);
 			}
-			//System.out.println("AccNumStr["+id+"]:"+accNumStr);
 		}
 		String idInfo=id+","+seqCount+","+name+","+rank+","+accNumStr;
-		//System.out.println("line["+id+"]:"+ idInfo);
 		taxIDsInfo[index++]=idInfo;
 	}
 	return taxIDsInfo;
 }
 
-/*prints the information for all taxIDs in the directory to a file
- * 
- */
+/*prints the information for all taxIDs in the directory to a file */
 public void printVirusInfo(String [] virusInfo, String fileName){
 	try(PrintWriter pw = new PrintWriter(new FileWriter(fileName))){
 		for(int i=0; i < virusInfo.length;i++){
@@ -266,30 +254,19 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 		pw.flush();
 		pw.close();
 	}catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 }
  
- /* copies tmp file to original file and then delete the tmp file
-  * 
-  */
+ /* copies tmp file to original file and then delete the tmp file  */
   private void copyFile(String sourcePath, String destinationPath) {
-	  
 	    try {
 			Files.copy(Paths.get(sourcePath), new FileOutputStream(destinationPath));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    
 	    File sourceFile = new File(sourcePath);
-	    if(sourceFile.delete()){
-			//System.out.println("Temp File: "+sourceFile.getName() + " is deleted!");
-		}else{
-			//System.out.println("Delete operation is failed.");
-		}
-	    
 	}
 
 	/*returns a map of all taxIDs in a file and their rank, taken from the VirusRankMap
@@ -312,9 +289,7 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 		return taxIdRankMap;
  	}
 		
-	/*
-	 * returns a map of all taxaIDs in a file and their names, taken from the VirusNamesMap
-	 */	
+	/*returns a map of all taxaIDs in a file and their names, taken from the VirusNamesMap */	
 	public TreeMap<Integer,String> getTaxIDsNameMap (TreeMap<Integer,Integer> taxIDSeqMap){
 		TreeMap<Integer,String> taxIDsNameMap = new TreeMap<Integer,String>();
 		
@@ -331,13 +306,9 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 		return taxIDsNameMap;
  	}
 	
-	/*
-	 * get a list of all files in a directory
-	 */
+	/* get a list of all files in a directory */
 	private String[] getFilesList(File dir) {
-		//System.out.println("Listing files in the directory... "); 
-    	     
-         String[] files = null;    
+		String[] files = null;    
          if(dir.isDirectory()){
              files = dir.list();
          }
@@ -361,7 +332,7 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 	  		    if (names[3].contains("scientific")) {
 	  		    	virusNameMap.put(Integer.parseInt(names[0]), names[1]);
 	  		    }
-	  		  }//end-while		
+	  		  }		
 	  			
 	  		br.close();
 		}
@@ -384,7 +355,7 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 	  		while((nodeLine= br.readLine())!= null){
 	  			String [] words = nodeLine.split("\t\\|\t");	  			
 	  		    virusRankMap.put(Integer.parseInt(words[0]), words[2]);
-			}//end-while		
+			}		
 	  		br.close();
 		}
 		catch (IOException ex)
@@ -395,17 +366,13 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 		System.out.println("Size of the virus ranks map :"+virusRankMap.size());
 	}
 	
-		/*get a map of taxaIDs and their number of sequences
-		 * 
-		 */
+		/*get a map of taxaIDs and their number of sequences */
 		private TreeMap<Integer,Integer> getTaxaIDs (String directory, String [] files){
 			TreeMap<Integer,Integer> taxaIDmap = new TreeMap<Integer,Integer>();
 			for(int i=0;i<files.length;i++){
 				String fileName =directory+"/"+files[i];
-				//System.out.println("File("+i+") "+fileName);
 				if(fileName.endsWith("_Info")){
 					String [] words = files[i].split("_");
-					//System.out.println(words[0]+"\t"+words[1]+"\t"+words[2]);
 					int taxaID = Integer.parseInt(words[1]);
 					
 					//read the first line in the file = number of sequences for that taxaID
@@ -413,26 +380,18 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 						String line =br.readLine().trim();
 						int numSeq = Integer.parseInt(line);
 						
-						//System.out.println("["+i+"]: TaxaID = "+taxaID+" Num Of Seq. = "+numSeq);
-						
 						taxaIDmap.put(taxaID, numSeq);
 							        
 					 br.close();
 					 } catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					    e.printStackTrace();
 				   }
-			    
-				}//if-end
-				
-			  }//for-end
-		
+				}
+			 }
 			return taxaIDmap;		
 		}
 	   
-		/* returns a list of all keys in the map
-		 * 
-		 */
+		/* returns a list of all keys in the map  */
 	   public ArrayList<Integer> getTaxIDsList(TreeMap<Integer,Integer>taxaIDmap){
 			Set<Integer> taxaIdSet =taxaIDmap.keySet();
 			ArrayList<Integer> taxaIDsList = new ArrayList<Integer>();
@@ -443,8 +402,7 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 			return taxaIDsList;
 		}
 	   
-	
-	  private TreeMap<Integer,ArrayList<String>> getAccNumbers (String fileName){
+	 private TreeMap<Integer,ArrayList<String>> getAccNumbers (String fileName){
 			TreeMap<Integer,ArrayList<String>> accNumMap = new TreeMap<Integer,ArrayList<String>>();
 			
 			try(BufferedReader br = new BufferedReader(new FileReader(fileName))){
@@ -453,46 +411,28 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 				    // @taxaID@header@seq
 				    String line ;
 					while((line=br.readLine()) !=null ){
-											
+															
 						if(line.contains("@>")){
-							num++;
-							
+							num++;							
 							ArrayList<String> accList = new ArrayList<String>();
-							
-						    //System.out.println("line: "+line);
 							
 						    //get the list of taxIDs in the string
 					        int firstIndex = line.indexOf('@');
 					        int nextIndex = line.indexOf('>');
 					        String taxIDString = line.substring(firstIndex+1, nextIndex-1);
-					        //System.out.println("TaxaIDString: "+taxIDString);
-					        
 					        
 					        String [] taxIDList = taxIDString.split("\\|");
-					        //System.out.println("There are "+taxIDList.length+" taxID(s) in the header");
-					        
-					        /*for(String s: taxIDList){
-					        	System.out.print(s+",");
-					        }
-					        System.out.println();*/
-					        
+					        				        
 					        //get the list of acc Nums
 					        int lastIndex = line.lastIndexOf('@');
 					        
-					        //System.out.println("first Index = "+firstIndex+"\t next Index = "+nextIndex+"\t last Index = "+lastIndex);
-					        
 					        String accNumString = line.substring(nextIndex,lastIndex);
-					        //System.out.println("AccNumString: "+accNumString);
 					        
 					        String [] words = accNumString.split(",>");
 						    
-						    //System.out.println("The length of words in the Acc Num String is "+words.length);
-						   
 						    for(int i=0; i<words.length;i++){
 						    	String [] info = words[i].split(" ");
-							    //System.out.println("Info: "+info[0]);
 							    String accNum = info[0].replace(">", "");
-							    //System.out.println("Acc Num: "+accNum);
 							    accList.add(accNum);
 							}
 						    
@@ -506,10 +446,8 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 				
 			    
 			    } catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			   }
-			
+				  e.printStackTrace();
+			   }			
 			return accNumMap;
 		}
 	  
@@ -526,42 +464,27 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 			Set<Integer> taxaIdSet =taxIDSeqMap.keySet();
 			int num =0; //to keep track of number of parents
 			for(int id : taxIDSeqMap.keySet()){
-				//System.out.println("key - "+id);
 				
 				ArrayList<Integer> parentsList = getFullLineage (id, virusParentMap);
 				
 				//check the parents list is not empty
 				if(parentsList == null){
-					//System.out.println("The parent list for taxaID: "+id+" is null");
 				}
-				
 				else{
-					//System.out.println("The size of the parent list is "+parentsList.size());
 					ArrayList<Integer> pList = new ArrayList<Integer>();
-					//examine if any from the parent list exists in the taxaIdSet
-					//System.out.print("Parents List: ");
 					for(int parentId: parentsList){
-						//System.out.print(parentId+"\t");
 						if(taxaIdSet.contains(parentId)){
 							pList.add(parentId);
 							num++;
-							//System.out.println("*****");
-						}
+							}
 					}
-					//System.out.println();
 					
 					if(pList.size()> 0){
 						parentsIDList.put(id,pList);
 					}
 					
-					//System.out.println("<"+id+"> has "+pList.size()+" id(s) from the files in its parents list");
-					
 				}
 			}
-			
-			//System.out.println("Number of parents found: "+num);
-			
-			//printParentingTreeMap (parentsIDList);
 			
 			printMapToFile(parentFile,parentsIDList);
 			
@@ -609,9 +532,7 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 				pw.print(taxaID+"\t");
 						 
 				ArrayList<Integer> values =(ArrayList<Integer>) me.getValue();						
-				//System.out.print("["+num+"] TaxaID<"+me.getKey() + ">: ");
 				for(int v:values){
-					// System.out.println("parent:"+v);
 					pw.print(v+"\t");
 				}
 				pw.println();
@@ -630,20 +551,11 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 	           
 	    ArrayList<Integer> a_path = new ArrayList<Integer>(100);
 	    a_path.add(aParent);
-	    //System.out.print("TaxaID<"+taxaID+"-->"+aParent);
 	    
-	    
-	    while(aParent > 1) //The top parent in the tree is 1
-	    {
-	    	//a_path.add(aParent);
-	    	
+	    while(aParent > 1) {//The top parent in the tree is 1
 	    	aParent = parent_map.get(aParent).intValue();
-	    	//System.out.print("-->"+aParent);	    	
-	    	
 	    	a_path.add(aParent);	    	
 	    }
-	    
-	    //System.out.println();
 	    return a_path;
 	  }
 
@@ -677,7 +589,6 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 			int numSeqInFile=0;
 			//open virus file
 			String virusFile = directory+"/Virus_"+id+".fa";
-			//System.out.println("Reading file: "+virusFile);
 			try(PrintWriter pw = new PrintWriter(new FileWriter(fileName,true));
 				BufferedReader br = new BufferedReader (new FileReader(virusFile))){
 				String line;
@@ -685,13 +596,10 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 					//dealing with exception thrown at empty sequence 
 					if(line.length()==0) continue;
 					if(line.charAt(0)=='>'){	
-						//System.out.println("["+numSeqInFile+"]"+line);
 						numSeqInFile++;
 					}
 					pw.println(line);
 				}
-				//System.out.println("There are "+numSeqInFile+" sequences in the virus file: "+virusFile);
-				
 				numAllSeqs += numSeqInFile;
 				br.close();
 				
@@ -701,7 +609,6 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 		    catch (IOException ex)	{
 			   ex.printStackTrace();
 		    }
-			//System.out.println("There are "+numAllSeqs+" sequences in the database file: "+fileName);
 		}
                 System.out.println("There are "+numAllSeqs+" sequences in the database file: "+fileName);		
 	}

@@ -7,12 +7,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-//import java.util.Arrays;
-//import java.util.HashSet;
-//import java.util.Set;
-
-//import model.PermutationFiles;
 import utilities.PermutationFiles;
+
+/***
+ * Runs the build for the customised database
+ * @author MahaMaabar
+ *
+ */
 public class KmersDatabaseBuild{
 	
 	KmersDatabaseBuild (String [] args){
@@ -33,15 +34,39 @@ public class KmersDatabaseBuild{
 		System.out.println("=================================================================");
 		System.out.println();
 		
-		for (String s:args) System.out.println(s);
+		if(args.length < 7){
+			System.out.println("Insufficient Number of arguments: "+args.length);
+			System.out.println("");
+			System.out.println("Reguired parameters:");
+			System.out.println("[1]: Sequences dataset directory");
+			System.out.println("[2]: Host genome file");
+			System.out.println("[3]: Output file name (k-mer database file)");
+			System.out.println("[4]: k-mer size");
+			System.out.println("[5]: Number of threads (recommended 2)");
+			System.out.println("[6]: Entropy threshold");
+			System.out.println("[7]: Number of sequences files to process in a single batch.");
+			System.out.println();
+			System.out.println("=================================================================");
 			
-		new KmersDatabaseBuild (args);
-			
+			System.exit(0);
+		}
 		
-		System.out.println("Done!");
-        
-		System.out.println("==============================================");
-
+		else{
+			   //print out user's parameters
+				System.out.println("Sequences dataset directory: "+args[0]);
+				System.out.println("Host genome file: "+args[1]);
+				System.out.println("k-mer database file name: "+args[2]);
+				System.out.println("k-mer size: "+args[3]);
+				System.out.println("Number of threads: "+args[4]);
+				System.out.println("Entropy threshold: "+args[5]);
+				System.out.println("Number of sequences files to process in a single batch: "+args[6]);
+							
+			new KmersDatabaseBuild (args);
+				
+			System.out.println("Done!");
+	        
+			System.out.println("==============================================");
+		}
 	}
 	
 	private void build(String [] args){
@@ -73,7 +98,7 @@ public class KmersDatabaseBuild{
 		 
 		 long startTime = System.currentTimeMillis();
 			
-	         System.out.println("=================================================================");
+	     System.out.println("=================================================================");
 		 System.out.println();
 		 
 		 /*step1:
@@ -121,7 +146,7 @@ public class KmersDatabaseBuild{
 		  * Each k-mer is given, at the end of the line, the number of taxdIDs that are represented by this k-mer
 		  */
 		 //String virusSpecificKmersFile = workingdirectory+"/"+args[2];
-                 String virusSpecificKmersFile = workingdirectory+"/customisedDB/"+args[2];
+         String virusSpecificKmersFile = workingdirectory+"/customisedDB/"+args[2]+"_"+args[3];
 		 printKmersNumOfTaxIDs (tempFile, virusSpecificKmersFile);
 		 
 		 /*step4:
@@ -160,8 +185,7 @@ public class KmersDatabaseBuild{
 				int [] idList = new int[allIDs.length];
                 for (int i=0; i<allIDs.length; i++)	{
 				   idList[i] = Integer.parseInt(allIDs[i]); 
-				   //System.out.println(i+": "+idList[i]);
-				}
+				 }
 				             			
 			    if(idList.length==1) {//only single ID
 			    	//1 to indicate the k-mer is originally assigned a single taxa ID
@@ -180,11 +204,11 @@ public class KmersDatabaseBuild{
 			pw.close();
 			
 			System.out.println();
-			System.out.println("There are "+numOfLines+" k-mers in the virus-specific K-mers database file.");
+			System.out.println("There are "+numOfLines+" k-mers in the virus-specific k-mers database file.");
 			System.out.println();
-			System.out.println("There are "+numOfSingleID+" k-mers are assigned a single taxa ID so they are assigned to that taxa ID.");
+			System.out.println("There are "+numOfSingleID+" k-mers are assigned a single tax ID so they are assigned to that taxa ID.");
 			System.out.println();
-			System.out.println("There are "+numOfMultipleID+" k-mers are assigned multiple taxa ID.");
+			System.out.println("There are "+numOfMultipleID+" k-mers are assigned multiple tax ID.");
 			System.out.println();
 			
 		} catch (NumberFormatException e) {
@@ -214,7 +238,7 @@ public class KmersDatabaseBuild{
 	                else {
 	                    files[i].delete();
 	                }
-	            }
+	              }
 	        }
 	    }
 	    return(directory.delete());
@@ -230,5 +254,7 @@ private String[] getPermsArray(int permSize){
 	      
 	     return perms;		
 	}
+
+
 
 }

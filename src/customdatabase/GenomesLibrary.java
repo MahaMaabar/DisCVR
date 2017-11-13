@@ -14,6 +14,12 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+/***
+ * creates the reference genome library file from downloaded data
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class GenomesLibrary {
 
 	public static void main(String[] args) {
@@ -25,9 +31,8 @@ public class GenomesLibrary {
 		//directory contains the reference sequences fasta files and their info 
 		String refSeqDir = args[2];
 		
-		/*output files */
-        	
-		String outFile = args[1]+"_referenceGenomesLibrary";
+		/*output files */        	
+		String outFile = dbName+"_referenceGenomesLibrary";
 		
 		/*delete the output file if it already exists*/
 		File fileToDelete = new File(refSeqDir+outFile);
@@ -59,22 +64,18 @@ public class GenomesLibrary {
 			 String line;
 			 int numLines = 1;
 			 while((line=br.readLine())!=null){
-				 String words[]=line.split("\t");
-				 
+				 String words[]=line.split("\t");				 
 				 if(words.length == 2){
 					 taxIDsMap.put(words[0], words[1]);
-				 }
-				 
+				 }				 
 			 numLines++;	 
-			 }
-			 
+			 }			 
 		 } catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+				
 		return taxIDsMap;
 	}
 	
@@ -104,17 +105,14 @@ public class GenomesLibrary {
 						 taxIDsList.add(taxID);
 						 accNumsMap.put(accNumStr, taxIDsList);
 					 }
-				 }
-				 
+				 }				 
 			 numLines++;	 
-			 }
-			 
+			 }			 
 		 } catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		return accNumsMap;
 	}
 	
@@ -154,7 +152,7 @@ public class GenomesLibrary {
 	}
 
 /*prints the refSeq header and sequence to a file with the taxID
-*/	
+ * Segmented viruses have a string of 300 Ns added between the segments*/	
  private void printRefSeq(String taxID, String [] accList, String directory, String outFile, String taxaIDStr){
 		
 		String virusSeqFile= directory+"/Virus_"+taxID+"_RefSeq.fa";
@@ -236,16 +234,14 @@ public class GenomesLibrary {
 		for (int i=0;i<headers.size();i++) {
 			//split the headers into parts. 
 			//Accession Number comes after >
-			String [] headerParts = headers.get(i).split(" ");
-			
+			String [] headerParts = headers.get(i).split(" ");			
 			String headerAcc = headerParts[0].substring(1).trim();
 						
 			if (headerAcc.equals(accNum.trim())) {
 				index = i;
 				break;
 			}
-		}
-		
+		}		
 		return index;
 	}
  
@@ -270,27 +266,6 @@ private void printTaxIDsMap(TreeMap<String,String> taxIDsMap){
 			 System.out.println("["+num+"]: <"+taxID+" , "+accNumStr+">");
 			 num++;
 		 }
-	}
-	
-/*	private void printAccNumsMap(TreeMap<String,ArrayList<String>> accNumsMap){
-		//get an iterator
-		Set<Entry<String,ArrayList<String>>> set = accNumsMap.entrySet(); //get a set of the entries
-		Iterator<Entry<String,ArrayList<String>>> i = set.iterator(); //get an iterator
-		
-		int num=1;
-		while (i.hasNext())
-		 {
-			 Map.Entry me =(Map.Entry)i.next();
-			 String accNumStr = (String)me.getKey();
-			 ArrayList<String> taxIDsList = (ArrayList<String>)me.getValue();
-			 			 
-			 System.out.print("["+num+"]: <"+accNumStr+" , ");
-			 for(String id:taxIDsList)
-				 System.out.print(id+"::");
-			 System.out.println(">");
-			 num++;
-		 }
-	}
-*/
+	}	
 
 }

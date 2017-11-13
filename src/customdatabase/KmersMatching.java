@@ -5,19 +5,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.CharBuffer;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
-/*run matching between host k-mers and virus k-mers
- *common k-mers are removed
- *Only virus-specific k-mers are kept
+/*** 
+ *Runs matching between host k-mers and virus k-mers, common k-mers are removed
+ *Only k-mers that are virus-specific are kept.
+ *
+ *@author Maha Maabar 
  */
 public class KmersMatching {
 	
@@ -25,8 +20,6 @@ public class KmersMatching {
 		searchForKmersMatches(fileName,kSize,permFiles,dirName);
 		
 	}
-	
-	
 
   /*searches for virus-specific k-mers (i.e. exists in virus k-mers files but not in the host k-mers files
    *Uses binary search because it is the fastest search algorithm and only carries searching between 
@@ -45,8 +38,7 @@ public class KmersMatching {
 			{
 				//matches are done on the sorted virus k-mers
 				String virusFileName = outputDir+"vKmers_"+permFiles[i]+"_sorted";//get the virus file
-				
-				
+								
 				File f = new File(virusFileName); 
 				if(!f.exists()) //No need to carry search with the corresponding file from the host
 				{
@@ -82,7 +74,7 @@ public class KmersMatching {
 					 * The whole line (i.e. k-mer, its count and its taxID(s)) is written to the file
 					 * If there is a match, the k-mer is non-specific k-mer
 					 */	 		
-		                        BufferedReader bf     = new BufferedReader( new FileReader(virusFileName));
+		             BufferedReader bf     = new BufferedReader( new FileReader(virusFileName));
 				    String    kmerInstance ;	
 				    while((kmerInstance = bf.readLine()) !=null) {
 				    	String kmer = kmerInstance.substring(0,kmerLen);

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-//import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,8 +25,14 @@ import java.util.regex.Pattern;
 import utilities.EntropyFilter;
 import utilities.ExecutorTask;
 import utilities.PermutationFiles;
-//import model.PermutationFiles;
 
+/***
+ * Counts k-mers from virus files and label each k-mer with the taxID(s) that represent 
+ * all the viruses which the k-mer is originated from, and removes low entropy k-mers.
+ * 
+ * @author Maha Maabar 
+ *
+ */
 public class VirusKmersCounting {
 
 
@@ -81,11 +86,7 @@ public class VirusKmersCounting {
 	  String kAnalyzeDir = parms[3];
 	  int numThread = Integer.parseInt(parms[4]);
 	  int size = outputFiles.length;
-          
-       /*for(String p:parms)
-		  System.out.println("parameters for run k-mers counting: "+p);
-	   */
-	
+      
 	  /*split the list of files into chunks 
 	   *each chunk will use numThread to process virus files. 
 	   *Each thread carries k-mer counting from a single file and the output file is put 
@@ -101,7 +102,6 @@ public class VirusKmersCounting {
 			  for (int j=0; j<size; j++)	{				
 				command [j]="java -Xmx1024m -Xss500k -jar "+kAnalyzeDir+"/kanalyze.jar count  -k "+kSize+
 		    			" -o "+ outputFiles[j]+" -f fasta"+" "+inputFiles[j]+" -rcanonical";
-	 			//System.out.println(command[j]);
 	 			task [j]= new Thread(new ExecutorTask(command [j],outputDir));
 	 			task[j].start();
 			  }
@@ -117,8 +117,6 @@ public class VirusKmersCounting {
 	        e.printStackTrace();
 	    }	 
 		
-		//System.out.println("K-mers counting exit value: "+exitValue);
-		
 		if(exitValue <0 || exitValue < size-1){
 			
 			System.out.println("K-mers counting didn't finish properly for:"+size);
@@ -129,16 +127,16 @@ public class VirusKmersCounting {
 		
 		int numChunk = size/numThread;
 		int extraChunk = size%numThread;
-		System.out.println("Number of batches to process with "+numThread+" thread(s) is:"+numChunk);
-		if(extraChunk > 0)
-			System.out.println("The rest of files will be using "+extraChunk+" thread(s) to process");
-		
-				
+		System.out.println("Using "+numThread+ "thread(s) to count viru k-mers.");
+		System.out.println("Each thread processes "+ numChunk+" set(s) of virus files");
+		if(extraChunk > 0){
+			//System.out.println("The rest of virus files uses will be using "+extraChunk+" thread(s) to process");
+		    System.out.println(extraChunk+" thread(s) will be used to process the rest of virus files.");
+		}		
 		int batch =1;
 		int index = 0;
 		while (batch <= numChunk){
-			System.out.println("Batch :"+batch);
-			//System.out.println("File Index: "+index);
+			System.out.println("Processing Set "+batch);
 			
 			int exitValue=-1;
 			try {
@@ -149,7 +147,6 @@ public class VirusKmersCounting {
 					
 					command [j]="java -Xmx1024m -Xss500k -jar "+kAnalyzeDir+"/kanalyze.jar count  -k "+kSize+
 			    			" -o "+ outputFiles[j+index]+" -f fasta "+" "+inputFiles[j+index]+" -rcanonical";
-		 			//System.out.println(command[j]);
 		 			task [j]= new Thread(new ExecutorTask(command [j],outputDir));
 		 			task[j].start();
 				}
@@ -163,7 +160,6 @@ public class VirusKmersCounting {
 		        Thread.currentThread().interrupt();
 		        e.printStackTrace();
 		    }	 
-			//System.out.println("K-mers counting exit value: "+exitValue);
 			
 			if(exitValue <0 || exitValue < numThread-1){
 				System.out.println("K-mers counting didn't finish properly for batch: "+batch);
@@ -174,17 +170,13 @@ public class VirusKmersCounting {
 		}		
 		
 		if(batch > numChunk && extraChunk >0){
-			System.out.println("Batch (Last batch to process):"+batch);
-			//System.out.println("File Index: "+index);
+			System.out.println("Set (Last set to process):"+batch);
 			int exitValue=-1;
 			try {
 				String command [] = new String [extraChunk];
 				Thread task [] = new Thread [extraChunk];
 				
 				for (int j=0; j<extraChunk; j++)	{
-					
-					//System.out.println("File index to process: "+(index+j));
-					//System.out.println("File to process: "+inputFiles[j+index]);
 					
 					command [j]="java -jar "+kAnalyzeDir+"/kanalyze.jar count  -k "+kSize+
 			    			" -o "+ outputFiles[j+index]+" -f fasta "+" "+inputFiles[j+index]+" -rcanonical";;
@@ -202,8 +194,6 @@ public class VirusKmersCounting {
 		        Thread.currentThread().interrupt();
 		        e.printStackTrace();
 		    }	 
-			//System.out.println("K-mers counting exit value: "+exitValue);
-			
 			if(exitValue <0 || exitValue < extraChunk-2){
 				System.out.println("k-mers counting didn't finish properly for Last batch: "+batch);
 			}
@@ -225,7 +215,6 @@ public class VirusKmersCounting {
 		}
 		
 		String [] fileNames= filesList.toArray(new String[filesList.size()]);
-		
 		return fileNames;
 	}
 
@@ -236,9 +225,6 @@ public class VirusKmersCounting {
    */
  private String [] createOutputFilesList (String outputDir, String [] inputFiles,int kSize){
 		String [] outputFiles = new String [inputFiles.length];
-		/*System.out.println("OutputDir:"+outputDir);
-		System.out.println("Number of inputFiles "+inputFiles.length);
-		System.out.println("K size:"+kSize);*/
 		for(int i =0; i < outputFiles.length; i++){
 			//get the taxID from the file name "/Virus_taxID.fa"
 			File f = new File(inputFiles[i]);
@@ -265,37 +251,8 @@ public class VirusKmersCounting {
 		return outputFiles;
 	}
 
- /*gets a list of the names of the output k-mers file in a directory */ 
- private void getKmersOutputFile (String directory,ArrayList<File> files ){
-	 File[] fList = new File(directory).listFiles();
-	 for(File file: fList){
-		 if(file.isFile()){
-			
-			if(file.getName().contains("_kmers"))
-			   files.add(file);
-		 }
-		 else if(file.isDirectory()) {
-			getKmersOutputFile(file.getAbsolutePath(),files);
-		 }
-	 }
-}
-
-  /*returns an array from a list*/
-  private String [] getFileNames(ArrayList<File> filesList ){
-		String [] fileNames= new String[filesList.size()];
-		
-		for(int i=0; i<filesList.size();i++){
-			File file = filesList.get(i);
-			if(file.isFile() && file.getName().contains("_kmers")){
-			   fileNames[i]=file.getAbsolutePath();				
-			}				
-		}
-		return fileNames;
-  }
- 
   /*creates perms files with the fileNamePrefix */
- private String[] createPermFiles(String fileNamePrefix,int permSize){
-		
+ private String[] createPermFiles(String fileNamePrefix,int permSize){		
 	    char set[] = {'A', 'C', 'G', 'T'};
 		
 		PermutationFiles PF = new PermutationFiles(permSize,set.length);
@@ -330,46 +287,32 @@ private void runKmersFiltering(String [] fileNames, int counter, double entropyT
 		   int numChunk = fileNames.length / counter;
 		   int extraChunk = fileNames.length % counter;
 		   		   
-		   System.out.println("Number of batches to process virus k-mers files are: "+numChunk+" / "+counter+" files per batch ");
+		   System.out.println("Number of batches to process virus k-mers files is: "+numChunk+" with "+counter+" files per batch ");
 		   
 		   int lastBatchSize = fileNames.length - (numChunk*counter);
 		   if(extraChunk > 0){			   
-			   System.out.println("Last batch will process "+lastBatchSize+" virus k-mers files.");
+			   System.out.println("Last batch has "+lastBatchSize+" virus k-mers files to process.");
 			   
 		   }
 			   
 		   int index=0;
 		   int batch =1;
 		   for(int i = 0;i<numChunk;i++){
-			int firstIndex = index;
+			    int firstIndex = index;
 		    	int lastIndex = index+(counter-1);
-		    	
-	            /* System.out.println("Number of files to process in batch "+batch+" is "+counter);
-	 	     System.out.println("First index ["+firstIndex+"]:"+fileNames[firstIndex]);
-                     System.out.println("Last index ["+lastIndex+"]:"+fileNames[lastIndex]);*/
-	             
-                     String [] filesToProcess = new String [counter];
+		    	String [] filesToProcess = new String [counter];
                      
-                     for(int n=0;n<counter;n++){
+                 for(int n=0;n<counter;n++){
 	            	 filesToProcess [n] = fileNames[firstIndex+n];	
-                                  	 
 	             }
                      
 	             readViruKmersFiles(filesToProcess,entropyThreshold,outputDir,perms[0],perms[perms.length-1]);
-	            
-                     index += counter; 
+	             index += counter; 
 	              
 	             batch++;
 		    }
 		   //process last batch
-		   
-		   System.out.println("Processing last batch of size "+lastBatchSize);
-		   /*System.out.println("starting at index: "+index+
-				              " and ends at index "+(index+lastBatchSize-1));*/
-		   /*System.out.println("Number of files to process in batch "+batch+" is "+lastBatchSize);
-		   System.out.println("First index ["+index+"]:"+fileNames[index]);
-		   System.out.println("Last index ["+(index+lastBatchSize-1)+"]:"+fileNames[(index+lastBatchSize-1)]);*/
-            String [] filesToProcess = new String [lastBatchSize];
+		   String [] filesToProcess = new String [lastBatchSize];
             for(int n=0;n<lastBatchSize;n++){
            	 filesToProcess [n] = fileNames[index+n]; 
                  	            	 
@@ -590,7 +533,6 @@ private void sortPermsFile(String fileName){
 			//split the taxIDs into a list
 			String [] taxIDs = taxIDsInfo.split(" ");
 			
-			
 			//upload the line onto the tree, updating the k-mers count and its taxID list				
 			if(virusKmers.get(kmer) !=null){
 				ArrayList<Integer> values= (ArrayList<Integer>) virusKmers.get(kmer);
@@ -627,10 +569,8 @@ private void sortPermsFile(String fileName){
                                        //if taxID is the same as count
                                        if (id ==count)
 						values.add(id);
-				}
-									
-				virusKmers.put(kmer,values);
-				
+				}									
+				virusKmers.put(kmer,values);				
 			}
 			
 		}

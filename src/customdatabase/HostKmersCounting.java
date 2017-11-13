@@ -16,69 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import utilities.PermutationFiles;
-//import model.PermutationFiles;
 
+/***
+ * Count k-mers from the host file and split them into small files so
+ * that k-mers starts with the same prefix are all in one file.
+ *  
+ * @author Maha Maabar
+ *
+ */
 public class HostKmersCounting {
 
-/*	public static void main(String[] args) {
-		/*String inputFile = args[0];
-		int kSize = Integer.parseInt(args[1]);
-		String inputFormat = args[2];
-		String outputFile = args[3];
-		String kAnalyzeDir = args [4];*/
-		
-		
-/*		String workingdirectory = System.getProperty("user.dir");
-		String [] parms = {"E:/Eclipse_WorkSpace/DisCVR_Databases1/hostSequences.fa","31","fasta","E:/Eclipse_WorkSpace/DisCVR_Databases1/temp/hostKmers","E:/KAnalyze_WorkSpace/kanalyze-2.0.0"};
-		
-        long startTime = System.currentTimeMillis();
-		
-        String outputDir = workingdirectory+"/temp";
-        String kmersOutputFile = parms[3]+"/hostKmers_"+parms[1];
-	    String fileNamePrefix =outputDir+"/hKmers_";
-	    String virusSpecificKmersFile = outputDir+"/virusSpecificKmers_"+parms[1];
-	
-	    int permSize  =5;  
-	    
-	    
-	    FastReader fr = new FastReader();
-	    
-	    String [] perms =fr.createPermFiles(fileNamePrefix,permSize);
-		
-        /*counts host k-mers */
-		
-		/*HostKmersCounting hKC = new  HostKmersCounting(parms);
-		System.out.println("Finished Host k-mers counting");*/
-		
-		/*split host k-mers into perms Files*/
-/*		fr.writeHostKmersToPermsFiles(kmersOutputFile,outputDir, perms[0], perms[perms.length-1]);
-		
-		/*filter out host k-mers and write virus-specific k-mers to output file*/
-	    
-	    /*String [] perms = null;
-	    String outputDir2 = workingdirectory+"/";*/
-/*		new KmersMatching(virusSpecificKmersFile,Integer.parseInt(parms[1]), perms,outputDir);
-		
-		
-		long endTime = System.currentTimeMillis();
-		long time=endTime-startTime;
-		
-		
-		int seconds = (int)(time / 1000) % 60 ;
-		int minutes = (int)((time / (1000*60)) % 60);
-		int hours = (int)((time / (1000*60*60)) % 24);
-		
-		String timeText = String.format("%03d:%02d:%02d", hours, minutes, seconds);
-		System.out.println("Time taken to count virus k-mers: "+timeText);
-		
-		
-
-	}
-*/
-	/*count k-mers from the host file. 
-         *split the kmers and their counts into small files. 
-         *k-mers are split according to their first perm. e.g k-mers starts with AAAAA are all in one file
-         */
 	public HostKmersCounting(String [] parms)	{
 	       
 		  String hostFileName =parms[0];
@@ -88,7 +35,7 @@ public class HostKmersCounting {
 		  String kAnalyzeDir = parms[4];
 		  String permSize = parms[5];
 		  
-                  //setup dir and file names to hold host k-mers		  
+          //setup dir and file names to hold host k-mers		  
 		  String hostKmersOutputFile = hostKmersDir+"hostKmers_"+parms[1];
 		  String fileNamePrefix =tempDir+"hKmers_"; //example of host k-mer name "hKmers_AAAAA"
 		 
