@@ -9,14 +9,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import utilities.ExecutorTask;
 
-
+/***
+ * Runs Tanoti from within DisCVR
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class Tanoti {
 	
 	private final int IDENTITY = 80;
@@ -33,18 +38,9 @@ public class Tanoti {
     private String outputFile;
     
     
+    //called from the gui    
     public static void main(String[] args) {
-    	
-    	long startTime = System.currentTimeMillis();
-		
-		new Tanoti(args);	
-		
-		
-			    
-		long stopTime = System.currentTimeMillis();
-	    long elapsedTime = stopTime - startTime;
-	    //System.out.println("Time taken: "+(0.001*elapsedTime)+" seconds.");
-		
+    	new Tanoti(args);	
 	}
 	
 	public Tanoti(String [] args)
@@ -64,22 +60,19 @@ public class Tanoti {
 		this.setPID();
 				
 		//Create directory in the current directory with the PID name to hold results	
-		//String file =workingdirectory+"\\"+this.getPID();	
 		String file1 =workingdirectory+"/"+this.getPID();	
-		//String file2 =workingdirectory+"\\resources";
 		String file2 =workingdirectory+"/lib";
 		
 			
 		System.out.println("The file directory for temp folder and output file is: "+file1);
 		System.out.println("The file directory for resources is: "+file2);
 				
-		//File directory = new File(file);
 		File directory = new File(file1);
 				
 		if (!directory.exists()) {
 			if (directory.mkdir()) {
 				System.out.println("Temporary Folder: "+directory+" is created to hold intermediate files.");
-				//hide(directory);
+				
 			 } else {
 				System.err.println("Failed to create temporary folder to hold intermediate files.");
 			 }
@@ -87,39 +80,28 @@ public class Tanoti {
 		
 		//rename read files and put them in directory
 		String [] inputFile;
-		if (this.getPairedEnd() ==0 )
-			{
-			//String readFile = file+"\\tnt_1_in";
-			  String readFile = file1+"/tnt_1_in";
-			  inputFile = this.getInputFile();
-			 //this.copyFile (workingdirectory+"\\"+inputFile[0],readFile);
-			 this.copyFile (inputFile[0],readFile);
+		if (this.getPairedEnd() ==0 ){
+			String readFile = file1+"/tnt_1_in";
+			inputFile = this.getInputFile();
+			this.copyFile (inputFile[0],readFile);
 			}
 		else {
-			  //String readFile1 = file+"\\tnt_1_in";
-			  //String readFile2 = file+"\\tnt_2_in";
 			  String readFile1 = file1+"/tnt_1_in";
 			  String readFile2 = file1+"/tnt_2_in";
 			  inputFile = this.getInputFile();
-			  //this.copyFile (workingdirectory+"\\"+inputFile[0],readFile1);
-			  //this.copyFile (workingdirectory+"\\"+inputFile[1],readFile2);
 			  this.copyFile (inputFile[0],readFile1);
 			  this.copyFile (inputFile[1],readFile2);
 		 }		
 
-		//String refGenFile =  file+"\\tnt_5_"+this.getPID();
 		String refGenFile =  file1+"/tnt_5_"+this.getPID();
-		//this.copyFile (workingdirectory+"\\"+this.getReferenceFile(),refGenFile);
 		this.copyFile (this.getReferenceFile(),refGenFile);
 		
 		//prepare reference genome for search
-		//this.formatDB (file, refGenFile,workingdirectory);
 		this.formatDB (file1, refGenFile,file2);
 		
 		// Run preProcessor on read file(s)
 		System.out.println("PreProcessing ...");
 				
-		//int preProcessorValue=this.runPreProcessor (workingdirectory, file);
 		int preProcessorValue=this.runPreProcessor (file2, file1);
 		if (preProcessorValue <0)
 		{
@@ -127,16 +109,12 @@ public class Tanoti {
 		}
 		
 		//get number of split files
-		//String splitFile =file+"\\tnt_0_"+this.getPID();
 		String splitFile =file1+"/tnt_0_"+this.getPID();
 		this.setSplits (splitFile);
 		
-		//System.out.println("There are "+tanoti.getSplits()+" splits in the file: "+splitFile);
-				
 		this.setNumOfSplit(1);
 		
 		//Run Tanoti (Blast, PostProcessor, Assembler)
-		//int tanotiValue = this.runTanotiProcess (workingdirectory);
 		int tanotiValue = this.runTanotiProcess (workingdirectory,file2);
 		if (tanotiValue <0)
 		{
@@ -145,7 +123,6 @@ public class Tanoti {
 		        
 		//sum results in one file
 		this.printallToFile(workingdirectory);
-		//this.printallToFile(file);
 		
 		//add comments to output file
 		System.out.println("Generating SAM file.");
@@ -226,22 +203,6 @@ public void setNumOfSplit(int num){
 		this.numOfSplit = num;
 }
 
-/*private void hide(File src)  {
-    // win32 command line variant
-    Process p;
-	try {
-		p = Runtime.getRuntime().exec("attrib +h " + src.getPath());
-		 p.waitFor(); // p.waitFor() important, so that the file really appears as hidden immediately after function exit.
-	} catch (IOException e) {
-		System.err.println("Cannot hide the folder "+src.getPath());
-		e.printStackTrace();
-	} catch (InterruptedException e) {
-		System.err.println("Creating a hidden directory is interrrupted");
-        e.printStackTrace();
-		
-	}
-   
-}*/
     
  private  int runTanotiProcess (String wkDir, String libDir) {			
     	int exitVal = -1;
@@ -254,8 +215,6 @@ public void setNumOfSplit(int num){
     	
     	int batch = this.getSplits()/this.getProc();
  		int lastbatch = this.getSplits()%this.getProc();
- 		
- 		//System.out.println ("There are "+batch+" batches of 8 threads and 1 batch of "+lastbatch+" threads to run.");
  		
  		int flag=1;
  		int index=0;
@@ -271,7 +230,6 @@ public void setNumOfSplit(int num){
  			}
  			
  			//blasting		
- 			//int blastVal = blastRun (wkDir,index);
  			int blastVal = blastRun (wkDir,index,libDir);
  			if (blastVal >= 0){
  				exitVal++;
@@ -299,7 +257,7 @@ public void setNumOfSplit(int num){
                   		
       		flag++;
       		
- 		}//end-while 
+ 		}
  		
 		return exitVal;
    }
@@ -310,9 +268,11 @@ public void setNumOfSplit(int num){
    	    try{
 			if(this.getPairedEnd() ==0){
 				String readFile=file+"/tnt_1_in";
-				 				
+				//Windows OS				
      			String preProcCmd =wkDir+"/tanoti_preprocessor.exe "+readFile+" 1";
-         		
+     			/*Comment the above line and uncomment the following line if using Linux and Mac OS*/
+         		//Linux and Mac OS
+     			//String preProcCmd =wkDir+"/TANOTI_PREPROCESSOR "+readFile+" 1";
          		Thread task= new Thread(new ExecutorTask(preProcCmd,file));
          		task.start();
          		task.join();
@@ -323,8 +283,11 @@ public void setNumOfSplit(int num){
 				String preProcCmd [] = new String [2];
      			Thread task [] = new Thread [2];
      			for (int j=0; j<2; j++)	{
+     				//Windows OS
      				preProcCmd [j]=wkDir+"/tanoti_preprocessor.exe "+readFile[j]+" "+(j+1);
-         			
+     				/*Comment the above line and uncomment the following line if using Linux and Mac OS*/
+             		//Linux and Mac OS
+     				//preProcCmd [j]=wkDir+"/TANOTI_PREPROCESSOR "+readFile[j]+" "+(j+1);
          			task [j]= new Thread(new ExecutorTask(preProcCmd [j],file));
          			task[j].start();
      			}
@@ -345,12 +308,14 @@ public void setNumOfSplit(int num){
  private  void formatDB (String file, String rfFile, String libDir)
      {
     	 try {
+    		    //Windows OS
     		    String command= libDir+"/tan_formatdb -p F -i "+rfFile;
+    		    //Linux and Mac OS
+    		    //String command= libDir+"/TAN_FMDB -p F -i "+rfFile;
 				Thread task = new Thread(new ExecutorTask(command,file));
 				task.start();
 						
 				task.join();			    
-				
 				
 				File logFile= new File(file,"formatdb.log");    
 			    logFile.delete();
@@ -360,8 +325,7 @@ public void setNumOfSplit(int num){
 	        }		
      }
 	
-private  void copyFile (String srcFile, String desFile)
-    {
+private  void copyFile (String srcFile, String desFile) {
    	 	try {
    	 		  PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(desFile))); 
 				
@@ -380,13 +344,11 @@ private  void copyFile (String srcFile, String desFile)
 	        } 
     }
 
-private void getTanotiParameters (String [] args)
-	{
+private void getTanotiParameters (String [] args)	{
 		if (args.length == 0)
 		{
 			usage();
 			System.exit(0);
-			//return;
 		}
 		
 		ArrayList<String> parms = new ArrayList<String>(Arrays.asList(args));
@@ -394,8 +356,7 @@ private void getTanotiParameters (String [] args)
 		if(parms.contains("-h"))
 		{
 			usage();
-			System.exit(0);		
-			//return;
+			System.exit(0);	
 		}
 		
 		if (parms.contains("-t")){
@@ -404,7 +365,6 @@ private void getTanotiParameters (String [] args)
 			{
 				System.out.println("Wrong -t value "+ tempFile);
 				System.exit(0);	
-				//return;
 			}
 		} 
 		else {
@@ -417,7 +377,6 @@ private void getTanotiParameters (String [] args)
 			{
 				System.out.println("Wrong -p value");
 				System.exit(0);	
-				//return;
 			}
 		}
 		else {
@@ -444,7 +403,6 @@ private void getTanotiParameters (String [] args)
 		else {
 			System.out.println(" (-r) not found");
 			System.exit(0);	
-			//return;
 		}
 		
 		if (parms.contains("-o")){
@@ -478,15 +436,13 @@ private void getTanotiParameters (String [] args)
 				{
 					System.out.println("Wrong number of input files for paired-end");
 					System.exit(0);	
-					//return;
 				}
 			}
 			
 		}
 		else {
 			System.out.println(" (-i) not found");
-			System.exit(0);	
-			//return;			
+			System.exit(0);		
 		}
 	}
 	
@@ -521,8 +477,7 @@ private  void printTanotiParameters()
 	}
 	
 	/*helper Method*/
- private  void usage ()
-	{
+ private  void usage ()	{
 		System.out.println("Usage (Single-end): java Tanoti -r reference -i input1.fq -o output.sam");
 		System.out.println("Usage (Paired-end): java Tanoti -r reference -i input1.fq input2.fq -p 1 -o output.sam");
 		System.out.println();
@@ -551,14 +506,16 @@ private  void printTanotiParameters()
 				{
 					if(i<= this.getSplits())
 					{
-						/*blastCmd1[j] = wkDir+"\\tan_blast -p blastn -e 0.001 -F F -d "+
-					                   file+"\\tnt_5_"+this.getPID()+" -i "+file+"\\tnt_1_3_"+
-								       this.getPID()+"_"+i+" -o "+file+"\\tnt_1_6_"+this.getPID()+
-								       "_"+i+" -m 7 ";*/
+						//Windows OS
 						blastCmd1[j] = libDir+"/tan_blast -p blastn -e 0.001 -F F -d "+
 				                   file+"/tnt_5_"+this.getPID()+" -i "+file+"/tnt_1_3_"+
 							       this.getPID()+"_"+i+" -o "+file+"/tnt_1_6_"+this.getPID()+
 							       "_"+i+" -m 7 ";
+						/*Comment the above line and uncomment the following line if using Linux and Mac OS
+						blastCmd1[j] = libDir+"/TAN_BLAST -p blastn -e 0.001 -F F -d "+
+				                   file+"/tnt_5_"+this.getPID()+" -i "+file+"/tnt_1_3_"+
+							       this.getPID()+"_"+i+" -o "+file+"/tnt_1_6_"+this.getPID()+
+							       "_"+i+" -m 7 ";*/
 						
 						System.out.println("Mapping...("+i+" of "+this.getSplits()+")");
 						
@@ -566,12 +523,14 @@ private  void printTanotiParameters()
 						task1[j].start();
 						
 						if(this.getPairedEnd()==1){
-							/*blastCmd2 [j]= wkDir+"\\tan_blast -p blastn -e 0.001 -F F -d "+
-					                   file+"\\tnt_5_"+this.getPID()+" -i "+file+"\\tnt_2_3_"+PID+"_"+
-									   i+" -o "+file+"\\tnt_2_6_"+this.getPID()+"_"+i+" -m 7 ";*/
+							//Windows OS
 							blastCmd2 [j]= libDir+"/tan_blast -p blastn -e 0.001 -F F -d "+
 					                   file+"/tnt_5_"+this.getPID()+" -i "+file+"/tnt_2_3_"+PID+"_"+
 									   i+" -o "+file+"/tnt_2_6_"+this.getPID()+"_"+i+" -m 7 ";
+							/*Comment the above line and uncomment the following line if using Linux and Mac OS
+							blastCmd2 [j]= libDir+"/TAN_BLAST -p blastn -e 0.001 -F F -d "+
+					                   file+"/tnt_5_"+this.getPID()+" -i "+file+"/tnt_2_3_"+PID+"_"+
+									   i+" -o "+file+"/tnt_2_6_"+this.getPID()+"_"+i+" -m 7 ";*/
 							
 						    task2[j]= new Thread(new ExecutorTask(blastCmd2[j] ,file));
 						    task2[j].start();
@@ -621,28 +580,30 @@ private  void printTanotiParameters()
   			{
   				if(i<=this.getSplits())
   				{
-  					/*postCmd1[j]=wkDir+"\\tanoti_postprocessor.exe "+file+"\\tnt_1_6_"+
-  				                    this.getPID()+"_"+i+" "+this.getMatchValue()+" "+1+" "+
-  							        i+"  "+this.getIdentity();*/
-  					
+  					//Windows OS
   					postCmd1[j]=libDir+"/tanoti_postprocessor.exe "+file+"/tnt_1_6_"+
 			                    this.getPID()+"_"+i+" "+this.getMatchValue()+" "+1+" "+
 						        i+"  "+this.getIdentity();
-  					
+  					/*Comment the above line and uncomment the following line if using Linux and Mac OS
+  					 postCmd1[j]=libDir+"/TANOTI_POSTPROCESSOR "+file+"/tnt_1_6_"+
+			                    this.getPID()+"_"+i+" "+this.getMatchValue()+" "+1+" "+
+						        i+"  "+this.getIdentity();
+  					 */
   					System.out.println("Post-Processing...("+i+" of "+this.getSplits()+")");					
   					
       				task1[j] = new Thread(new ExecutorTask(postCmd1[j] ,file));
       				task1[j].start();
       				
       				if(this.getPairedEnd() == 1) {
-      				     /*postCmd2 [j] =wkDir+"\\tanoti_postprocessor.exe "+file+"\\tnt_2_6_"+
-      				                 this.getPID()+"_"+i+" "+this.getMatchValue()+" "+2+" "+
-      						         i+"  "+this.getIdentity();*/
-      					
+      				    //Windows OS
       					postCmd2 [j] =libDir+"/tanoti_postprocessor.exe "+file+"/tnt_2_6_"+
  				                 this.getPID()+"_"+i+" "+this.getMatchValue()+" "+2+" "+
  						         i+"  "+this.getIdentity();
-      				     
+      					/*Comment the above line and uncomment the following line if using Linux and Mac OS
+      					 postCmd2 [j] =libDir+"/TANOTI_POSTPROCESSOR "+file+"/tnt_2_6_"+
+ 				                 this.getPID()+"_"+i+" "+this.getMatchValue()+" "+2+" "+
+ 						         i+"  "+this.getIdentity();  
+      					 */
       				     task2 [j]= new Thread(new ExecutorTask(postCmd2[j] ,file));
   				         task2[j].start();
       				}
@@ -667,7 +628,6 @@ private  void printTanotiParameters()
 				}
 			}
  			
-  			//System.out.println("Finished post Processing");
   		} catch (InterruptedException e) {
   			 System.err.println("Post_processing is interrupted!");
               e.printStackTrace();
@@ -699,27 +659,32 @@ private  void printTanotiParameters()
   				        String arg6=file+"/tnt_2_4_"+this.getPID()+"_"+i;
   				        String arg7=file+"/tnt_1_7_"+this.getPID()+"_"+i;
   				        String arg8=file+"/tnt_2_7_"+this.getPID()+"_"+i;
-  				   		/*assmPro [j] =wkDir+"\\TanotiAssembler2.exe  "+
-  		   		                     arg1+"  "+arg2+"  "+arg3+"  "+arg4+"  "+
-  		   		                     arg5+"  "+arg6+"  "+arg7+"  "+arg8+"  "+
-  				   				     this.getUnmapped()+"  "+this.getPID()+"  "+i; */
-  				        
-  				      assmPro [j] =libDir+"/TanotiAssembler2.exe  "+
+  				   		//Windows OS
+  				        assmPro [j] =libDir+"/TanotiAssembler2.exe  "+
 	   		                     arg1+"  "+arg2+"  "+arg3+"  "+arg4+"  "+
 	   		                     arg5+"  "+arg6+"  "+arg7+"  "+arg8+"  "+
 			   				     this.getUnmapped()+"  "+this.getPID()+"  "+i; 
+  				      /*Comment the above line and uncomment the following line if using Linux and Mac OS
+  				       assmPro [j] =libDir+"/TANOTI_ASSEMBLER_2  "+
+	   		                     arg1+"  "+arg2+"  "+arg3+"  "+arg4+"  "+
+	   		                     arg5+"  "+arg6+"  "+arg7+"  "+arg8+"  "+
+			   				     this.getUnmapped()+"  "+this.getPID()+"  "+i;
+  				       */
   					}
   					else{
   						String arg1=file+"/tnt_1_1_"+this.getPID()+"_"+i;
   				        String arg2=file+"/tnt_1_2_"+this.getPID()+"_"+i;
   				        String arg3=file+"/tnt_1_4_"+this.getPID()+"_"+i;
   				        String arg4=file+"/tnt_1_7_"+this.getPID()+"_"+i;
-  				        /*assmPro [j] =wkDir+"\\Assembler1.exe  "+
-  		   		                     arg1+"  "+arg2+"  "+arg3+"  "+arg4+"  "+
-  		   		                     this.getUnmapped()+"  "+this.getPID()+"  "+i;*/
-  				      assmPro [j] =libDir+"/Assembler1.exe  "+
+  				        //Windows OS 
+  				        assmPro [j] =libDir+"/Assembler1.exe  "+
 	   		                     arg1+"  "+arg2+"  "+arg3+"  "+arg4+"  "+
 	   		                     this.getUnmapped()+"  "+this.getPID()+"  "+i;
+  				      /*Comment the above line and uncomment the following line if using Linux and Mac OS
+  				       assmPro [j] =libDir+"/TANOTI_ASSEMBLER_1  "+
+	   		                     arg1+"  "+arg2+"  "+arg3+"  "+arg4+"  "+
+	   		                     this.getUnmapped()+"  "+this.getPID()+"  "+i;
+  				       */
   					}
   				
 		   		    System.out.println("Assembling...("+i+" of "+splits+")");
@@ -746,8 +711,7 @@ private  void printTanotiParameters()
     	return exitVal;
     }
     
- private  void deleteTempFolder(File dir)
-    {
+ private  void deleteTempFolder(File dir) {
 	 
 	   System.out.println("Removing temporary files...."); 
    	     
@@ -760,28 +724,9 @@ private  void printTanotiParameters()
              }
         }
         dir.delete();
-	  
-        //For testing purposes
-	   /*String[] files;    
-       if(dir.isDirectory()){
-           files = dir.list();
-           for (int i=0; i<files.length; i++) {
-              File aFile = new File(dir,files[i]); 
-              
-              if(aFile.delete()) {
-            	 System.out.println(aFile.getName() + " is deleted!");
-              }else{
-            	  System.out.println("Delete operation is failed for "+ aFile.getName());
-              }
-             
-            }
-       }
-       dir.delete();*/
-	 
-    }
+	 }
     
-    private  void printallToFile (String dir)
-		{
+    private  void printallToFile (String dir){
     	  String input =dir+"/"+this.getPID()+"/tnt_9_"+this.getPID()+"_";
 		  String output = dir+"/"+this.getPID()+"/tnt_9_"+this.getPID();
 			
@@ -808,41 +753,7 @@ private  void printTanotiParameters()
 	        } 
 	}
    
-   /* private  void getOutput (String dir, String outputFile, String [] cl){
-    	
-	    String comment = getComment(cl); 
-		String input =dir+"\\"+this.getPID()+"\\tnt_9_"+this.getPID();
-		String output = dir+"\\"+outputFile;
-			
-		try {
-			 PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(output))); 
-				
-			 
-			 String firstComment =getFirstComment(dir);
-			 if(firstComment!= null){ //only print this comment to the file if it is not null
-				 //System.out.println("First Comment: "+firstComment);
-				 pw.println(firstComment); 
-			 }
-			 				
-			 //Second line in the file is the comment
-			 pw.println(comment);
-			
-			 BufferedReader   bf = new BufferedReader(new FileReader(input));
-		     String line;
-		     		    
-		     while ((line = bf.readLine()) != null) 
-		     	{
-		    	 pw.println(line);
-		     	}
-		     	
-		      bf.close();				
-			  pw.flush();
-			  pw.close();				
-		}catch (Exception ex) {
-	        	ex.printStackTrace();
-	    } 
-	}
-    */
+   
     
 private void getOutput (String dir, String [] cl){
     	
@@ -856,7 +767,6 @@ private void getOutput (String dir, String [] cl){
 			 
 			 String firstComment =getFirstComment(dir);
 			 if(firstComment!= null){ //only print this comment to the file if it is not null
-				 //System.out.println("First Comment: "+firstComment);
 				 pw.println(firstComment); 
 			 }
 			 				
@@ -914,10 +824,8 @@ private void getOutput (String dir, String [] cl){
     		} catch (IOException ex) {
     			System.out.println("IO error closing file: "+ ex.getMessage());
     		}
-    		//return; this line might be needed 
+    		
     	}
-    	
-    	//System.out.println("Returing Comment line: "+line);
     	return line;
     }
 		
