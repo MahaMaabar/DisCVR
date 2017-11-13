@@ -1,34 +1,23 @@
 package utilities;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.Math;
-import java.net.URISyntaxException;
-
 import java.net.URL;
 
-import org.omg.CORBA.portable.InputStream;
 
 
 /**
- * @author Maha Maabar
- * 
- *A class to generate all the different permutations of a set of letters to make a word of a certain length.
- *An example: Letter Set ={ 'A','C','G','T'} and word length= 4. So, number of permutations= 4^4 = 256 different words.
- *The class puts all the permutations into an array and it provides methods to populate the array recursively.
- *The class provides a method which splits the lines in a file into a number of files equal to the number permutations.
- *Each file contains the lines that start with one of the permutation.
- *
- */
-/**
- * Splits a large file contains k-mers and their counts into a number 
- * of smaller files so that k-mers are grouped in the files according
- * to their first letters
+ * Splits a large file contains k-mers and their counts into a number of smaller files so that k-mers
+ * are grouped in the files according to their first letters (prefix). 
+ * E,g. Letter Set ={ 'A','C','G','T'} and prefix length= 4. 
+ * Number of permutations= 4^4 = 256 different prefixes.
+ * All k-mers starts AAAA in one file and all k-mers start with TTTT in another file and so on.
  * 
  */
 public class PermutationFiles {
@@ -62,8 +51,6 @@ public class PermutationFiles {
 		long lines = 0; //count lines in the file which corresponds to the number of different kmers in the file
 		long totalKmersCounts =0;//count the total number of kmers in the file by summing up the kmers counts
 		
-		//System.out.println("The db File: "+dbFileName);
-		//System.out.println("The db Option: "+dbOption);
 		try	{
 			BufferedReader in = null;			
 			if(dbOption.equalsIgnoreCase("BuiltInDB")){
@@ -82,15 +69,12 @@ public class PermutationFiles {
 			while ((line = in.readLine())!= null){
 				/*counts the lines and adds K-mers counts*/
 				lines++;
-				//System.out.println("Line["+lines+"]:"+line);	                
 				String words [] = line.split("\t");
-				//System.out.println("Count:"+line.substring(countIndex));
 				long d = (Long.valueOf(words[1])).longValue();	 
 				totalKmersCounts = totalKmersCounts + d;
 				
 				/*prints the line to a file */
 				String perm = line.substring(0,permLen); //get the first characters with the length of the word
-				//System.out.println("Perm: "+perm);
 					                
 				if(!ok)	{ //file is not created 
 					String permsFile =fileNamePrefix+(perm);
@@ -107,19 +91,12 @@ public class PermutationFiles {
 				if(perm.equalsIgnoreCase(permStr)&& ok) {//file already exists, open and the perm is not different
 					pw.println(line); //add the new k-mer to the file
 				}
-			 }//while-end  
+			 }
 					            
 			 pw.close();
 			 in.close();	           
 					    
-			 /*Printing Statement with information about the content of the input file */
-			 /* System.out.println("=================================================================\n");
-			    System.out.println("The total number of their counts in the file is:  "+totalKmersCounts+" ");
-				System.out.println();
-				System.out.println("There are "+lines+" distinct kmers in the "+type+" file.");
-				System.out.println("The total number of their counts in the file is:  "+totalKmersCounts+" ");
-				System.out.println();*/
-					          
+			 		          
 			result=result+"There are ("+String.format("%,d",lines)+") distinct k-mers in the ";
 			if (type=="s"){
 				result=result+"sample file.\n";					  
@@ -153,15 +130,12 @@ public class PermutationFiles {
 			while ((line = in.readLine())!= null) {
 				/*counts the lines and adds K-mers counts*/
 			    lines++;
-			    //System.out.println("Line["+lines+"]:"+line);	                
 			    String words [] = line.split("\t");
-			    //System.out.println("Count:"+line.substring(countIndex));
 			    long d = (Long.valueOf(words[1])).longValue();	 
 			    totalKmersCounts = totalKmersCounts + d;
 			                
 			    /*prints the line to a file */
 			    String perm = line.substring(0,permLen); //get the first characters with the length of the word
-			    //System.out.println("Perm: "+perm);
 			    if(!ok)	{//file is not created 
 			    	String permsFile =fileNamePrefix+(perm);
 			        pw =  new PrintWriter(new BufferedWriter(new FileWriter(permsFile))); 
@@ -177,18 +151,11 @@ public class PermutationFiles {
 			     if(perm.equalsIgnoreCase(permStr)&& ok) {//file already exists, open and the perm is not different
 			    	 pw.println(line); //add the new k-mer to the file
 			     }
-			 }//while-end  
+			 }  
 			 pw.close();
 			 in.close();	           
 			    
-			 /*Printing Statement with information about the content of the input file*/
-			 /* System.out.println("=================================================================\n");
-			    System.out.println("The total number of their counts in the file is:  "+totalKmersCounts+" ");
-				System.out.println();
-				System.out.println("There are "+lines+" distinct kmers in the "+type+" file.");
-				System.out.println("The total number of their counts in the file is:  "+totalKmersCounts+" ");
-				System.out.println();*/
-			          
+			        
 			 result=result+"There are "+lines+" distinct kmers in the ";
 			 if (type=="s")
 			    result=result+"sample file.\n";
@@ -230,7 +197,6 @@ public class PermutationFiles {
 	public void printAllKLengthRec(char set[], String prefix, int n, int k, String [] perms) {
         // Base case: k is 0, print prefix
         if (k == 0) {
-            //System.out.println(prefix);             
             perms[permPosition++]= prefix;  //Add the prefix to the array             
             return;
         }
