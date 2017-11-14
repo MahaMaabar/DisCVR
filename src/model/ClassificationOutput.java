@@ -1,34 +1,31 @@
 package model;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.Map.Entry;
-
 import java.net.URL;
 
-/*creating tree maps of a taxa ID as a key and number of kmer counts as a value
- *as well as a tree map of a taxa ID as a key and virus name as a value.
+/***
+ * Creates treemaps from the classification output
+ * 
+ * @author Maha Maabar
+ *
  */
 
 public class ClassificationOutput {
 	public static final String DIR_PROPERTY_NAME = "discvrJAR.rootDir";
 	public static final String currentDir = System.getProperty("user.dir");
-	//key:taxaID
-	private TreeMap<Integer,String>  virusNameMap; 
-	private TreeMap<Integer, String> virusRankMap;
-	private TreeMap<Integer, Integer> totalCountsDistinctKmersMap; 
-    private TreeMap<Integer, Integer> distinctKmerMap; 
-    private TreeMap<Integer, Integer> sharedKmerMap; 
-    private TreeMap<Integer, Integer> DBtotalCountsMap; 
-    private TreeMap<Integer, Integer> DBdistinctKmerMap;
+	//treemap<key,value>
+	private TreeMap<Integer,String>  virusNameMap; //<taxID,virusName>
+	private TreeMap<Integer, String> virusRankMap; //<taxID,virusRank>
+	private TreeMap<Integer, Integer> totalCountsDistinctKmersMap; //<taxID,total counts of distinct k-mers>
+    private TreeMap<Integer, Integer> distinctKmerMap; //<taxID, number of distinct k-mers>
+    private TreeMap<Integer, Integer> sharedKmerMap;   //<taxID, number of shared k-mers>
+    private TreeMap<Integer, Integer> DBtotalCountsMap; //<taxID, total counts of k-mers in DB>
+    private TreeMap<Integer, Integer> DBdistinctKmerMap;//<taxID, number of distinct k-mers in DB>
     private String [] highestScoresNames ;
     private int [] highestScoresSpecific;
     private int [] highestScoresShared;
@@ -83,10 +80,8 @@ public int [] setKmersTrees(String matchFileName) 	{
 	    
 	   	//reads the match file     
 	    try (BufferedReader bf = new BufferedReader(new FileReader(matchFileName))) {
-	    	int num=0;
 	    	String line;
 	 		 while ((line = bf.readLine()) != null) {
-	 			 num++;
 	 			 //one line: kmer count taxID(s) lengthOfTaxID(s)
 	 			 String [] words = line.split("[ \t]");
 	 			 int wordsLen = words.length;
@@ -101,13 +96,10 @@ public int [] setKmersTrees(String matchFileName) 	{
 	 			 if(idListLen ==1) {//it is a specific kmer ==> adds to the distinct k-mers
 	 				String idList = words[2];
 	 				int taxID = Integer.parseInt(idList);
-	 				//System.out.println(num+" Single taxID: "+idList);
 	 				
 	 				if(distinctKmerMap.get(taxID) != null) {//key exists in the map
 	 					int value = distinctKmerMap.get(taxID).intValue();
-	 					//System.out.println("to be added to the distinct kmers map:"+taxID+"\t"+value);
 	 					distinctKmerMap.put(taxID,value+1);
-	 					//System.out.println("Added to the distinct kmers map:"+taxID+"\t"+ (value+1));
 	 					//update the total count map
 	 					int countSum = totalCountsDistinctKmersMap.get(taxID).intValue();
 	 					totalCountsDistinctKmersMap.put(taxID, countSum+count);
@@ -117,32 +109,22 @@ public int [] setKmersTrees(String matchFileName) 	{
 	 					totalCountsDistinctKmersMap.put(taxID, count);
 	 				 }
 	 				numOfSpecificKmers++;
-	 			 }
-	 	    	
+	 			 }	 	    	
 	 			 else {//it is a shared k-mer between multiple taxIDS
-	 				//System.out.println("Number of IDs: "+idListLen);
 	 				for (int i=2; i< wordsLen-1;i++){
-	 					//System.out.println(num+" Shared ("+(i-1)+"):"+words[i]);
 	 					int taxID = Integer.parseInt(words[i]);
 	 					if(sharedKmerMap.get(taxID) != null) {//key exists in the map
 		 					int value = sharedKmerMap.get(taxID).intValue();
-		 					//System.out.println("to be added to the shared kmers map:"+taxID+"\t"+value);
-		 					sharedKmerMap.put(taxID,value+1);
-		 					//System.out.println("Added to the shared kmers map:"+taxID+"\t"+ (value+1));
+		 					sharedKmerMap.put(taxID,value+1);		 					
 		 				 }
 		 				 else {//create a new entry
 		 					sharedKmerMap.put(taxID,1);		 					
 		 				 }
 	 				}
 	 				numOfSharedKmers++;
-	 			 }
-	 		     
-	 		   } //end-while
-	 		 
-	 		 /*System.out.println("There are "+allMatchedKmers.size()+" distinct matched k-mers in the sample.");
-	 		 System.out.println("There are "+numOfSpecificKmers+" specific Kmers in the matched kmers.");
-	 		 System.out.println("There are "+numOfSharedKmers+" shared Kmers in the matched kmers.");
-	 		 */	 		 
+	 			 }	 		     
+	 		   } 	 
+	 		 	 		 
 	 		 bf.close();  
 	 	}catch (IOException ex) {
 	   	     System.out.println("Errors reading the file "+matchFileName);
@@ -163,8 +145,7 @@ public ArrayList<Kmers> getAllMatchedKmersList () {
 	 //Display elements
 	 while (i.hasNext())
 	 {
-		 Map.Entry me =(Map.Entry)i.next();
-		 
+		 Map.Entry me =(Map.Entry)i.next();		 
 		 String kmerString = (String)me.getKey();
 		 int count = (Integer) me.getValue();
 		 
@@ -172,9 +153,6 @@ public ArrayList<Kmers> getAllMatchedKmersList () {
 		 
 		 if(!kmersList.contains(akmer)) kmersList.add(akmer);
 		
-		 /*for(Kmers kmer:kmersList)
-			System.out.println("Kmer: "+kmer.getKmer()+"\tCount: "+kmer.getCount());
-		 System.out.println("===============================");*/
 	 }
 	return kmersList;
 }
@@ -186,7 +164,6 @@ public void setDBIDsMap(String dbFileName, String dbOption){
 	//<key:taxID,value: total number of distinct k-mers with that taxID>
 	this.DBdistinctKmerMap = new TreeMap<Integer,Integer>(); 
 	
-	int numOfLines =0;
 	BufferedReader bf;
 	try{
 		
@@ -199,11 +176,9 @@ public void setDBIDsMap(String dbFileName, String dbOption){
 	   }
 	   String line; 		    
 	   while ((line = bf.readLine()) != null) {
-		   numOfLines++;
-		   //one line: kmer count taxaID(s) lengthOfTaxaID(s)
+		    //one line: kmer count taxaID(s) lengthOfTaxaID(s)
 			String [] words = line.split("[ \t]"); 
 			int count = Integer.parseInt(words[1])	;
-		 	//System.out.println("There are "+taxIDsList.length+" taxIDs");
 		 	int idListLen = Integer.parseInt(words[3]);
 		 	
 		 	if(idListLen == 1) {//looking for only specific(=distinct) k-mers in the db
@@ -221,7 +196,7 @@ public void setDBIDsMap(String dbFileName, String dbOption){
 			         DBtotalCountsMap.put(taxID,count);//create a new key and initialise it to count of the k-mer
 			     }
 			  }
-		  } //end-while
+		  } 
 		  bf.close(); 
 	}
 	catch (IOException ex)	{
@@ -246,14 +221,12 @@ public void createNamesMap (String namesDmpFile, String dbOption) {
 		String nameLine;
 	  			
 	  	while((nameLine= br.readLine())!= null)	{
-	  		String [] names = nameLine.split("\t\\|\t");
-	  			  				
+	  		String [] names = nameLine.split("\t\\|\t");	  			  				
 	  		//add the nodes to the parent map//
 	  		if (names[3].contains("scientific"))  {
-	  			//System.out.println("<TaxaID,VirusName,>: <"+names[0]+","+names[1]+">");
- 			    virusNameMap.put(Integer.parseInt(names[0]), names[1]);
+	  			virusNameMap.put(Integer.parseInt(names[0]), names[1]);
 	  		 }
-		 }//end-while		
+		 }	
 	  	br.close();
 	 }
 	 catch (IOException ex)	{
@@ -278,9 +251,8 @@ public void createRankMap (String nodedDmpFile, String dbOption) {
 		String nodeLine;	  			
 	  	while((nodeLine= br.readLine())!= null)	{
 	  		String [] words = nodeLine.split("\t\\|\t");
-	  		//System.out.println("<TaxaID,VirusRank>: <"+words[0]+","+words[2]+">");
- 		    virusRankMap.put(Integer.parseInt(words[0]), words[2]);
-	  	}//end-while		
+	  		virusRankMap.put(Integer.parseInt(words[0]), words[2]);
+	  	}		
 	  	br.close();
 	}
 	catch (IOException ex)	{
@@ -302,14 +274,12 @@ public ArrayList<VirusResult> getVirusMapResults () {
 		 String name = virusNameMap.get(me.getKey());
 		 int taxaID = (Integer)me.getKey();
 		 int distNum = (Integer) me.getValue();
-		 int totalNum = totalCountsDistinctKmersMap.get(me.getKey());
-		
+		 int totalNum = totalCountsDistinctKmersMap.get(me.getKey());		
 		 String rank = virusRankMap.get(me.getKey());
 		 
 		 int dbTotNum= DBdistinctKmerMap.get(me.getKey()); 
 		 int dbDisNum=DBtotalCountsMap.get(me.getKey());
 		 
-		 //String result = name+": "+taxaID+": "+dbTotNum+": "+dbDisNum+": "+distNum+": "+totalNum+": "+rank+"\n";
 		 VirusResult vr = new VirusResult(name, ""+taxaID, distNum, totalNum,rank,dbDisNum,dbTotNum);
 		 virusResults.add(vr);
 	 }
@@ -368,8 +338,7 @@ public String getSummaryMaps () {
 	       	this.highestScoresNames[numOfScores-1] = virusName;
 	        this.highestScoresSpecific[numOfScores-1] = specific;
 	       	this.highestScoresShared[numOfScores-1] = shared;
-	      }
-	         
+	      }	         
 	   }
 	   summary = summary+virusNameLen+"\n"+result;
 		return summary;
@@ -479,13 +448,10 @@ private TreeMap<Integer, Integer>getSumKmers(){
 	while(i.hasNext()) {
 		Map.Entry me = (Map.Entry)i.next();
 		int taxID = (Integer)me.getKey();
-		//System.out.println("Taxa ID:"+taxID);
 		int specific = (Integer)me.getValue();
-		//System.out.println("Specific:"+specific);
 		int shared =0;
 		if(sharedKmerMap.get(taxID) != null ){
-			shared = sharedKmerMap.get(taxID).intValue();
-		    //System.out.println("Shared:"+shared);
+			shared = sharedKmerMap.get(taxID).intValue();		    
 		 }
 		 sumDisKmers.put(taxID,specific+shared);
 		}	
@@ -547,6 +513,6 @@ private <K, V extends Comparable<V>> Map<K, V> sortByValues(final Map<K, V> map)
 	   Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
 	   sortedByValues.putAll(map);
 	   return sortedByValues;
- }
+    }
 
 }

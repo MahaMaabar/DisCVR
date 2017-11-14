@@ -4,10 +4,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/*provides a list of KAnalyze k-mer counter tool output file
- * Two lists are provided, one contains the k-mers (as strings).
- * The other list contains the counter of the k-mers (as integers)
+/***
+ * Creates two lists from KAnalyze output.
+ * One list contains k-mers 
+ * Another list contains their corresponding counts.
+ * 
+ * @author Maha Maabar
+ *
  */
+
 public class KmersList {
 	
 	ArrayList <String> kmers;
@@ -27,54 +32,28 @@ public class KmersList {
            
 		/*populate the kmers and the counts lists*/
         String line;
-        while ((line = in.readLine())!= null)
-            {
+        while ((line = in.readLine())!= null){
             	String words [] = line.split("\t");
             	           	
             	kmers.add(words[0]);
             	counts.add(Integer.parseInt(words[1]));
-             }//end-while
+             }
 			  
             in.close();
 	}
 	
-	public ArrayList<String> getKmersList ()
-	{
+	public ArrayList<String> getKmersList (){
 		return this.kmers;		
 	}
 	
-	public int getKmersListSize()
-	{
+	public int getKmersListSize(){
 		
 		return this.kmers.toArray().length;
 	}
 	
-	public ArrayList<Integer> getCountsList ()
-	{
+	public ArrayList<Integer> getCountsList ()	{
 		return this.counts;
-	}
+	}	
 	
-	
-	/*For testing purposes*/
-	public static void main(String[] args) throws IOException{
-		
-		String filename = "D:/Eclipse_WorkSpace/DisCVR_PrototypeIII/src/virusKmersTest_4";
-		int k = 4;
-		KmersList KL = new KmersList (filename,k);
-		
-		ArrayList<String> kList  = KL.getKmersList();
-		ArrayList<Integer> countList = KL.getCountsList();
-		
-		for (String kmer: kList)
-		{
-			System.out.println(kmer);
-		}
-		
-		for (int count: countList)
-		{
-			System.out.println(count);
-		}
-
-	}
 
 }

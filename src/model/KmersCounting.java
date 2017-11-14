@@ -7,15 +7,18 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-//import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-//import java.io.Reader;
-//import java.io.StringWriter;
 import java.util.zip.GZIPInputStream;
 import utilities.EntropyFilter;
 
-/*Uses KAnalyze tool to extract k-mers and their counts from a file.*/
+/***
+ * Uses KAnalyze tool to extract k-mers and their counts from a sample file.
+ * Removes low entropy and single copies k-mers from the output.
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class KmersCounting {
 
 	private int numOfReads;
@@ -28,7 +31,6 @@ public class KmersCounting {
 
 	public KmersCounting (String [] parms) 	{
 		setNumOfReads(parms[0]);
-		//System.out.println("There are "+numOfReads+" reads in the file.");				
 		
 		numKmers =0;
 		totalKmersCounts =0;		
@@ -36,21 +38,20 @@ public class KmersCounting {
 		goodKmers =0;
 		totalGoodKmers =0;		
 		double entropyThreshold = Double.parseDouble(parms[5]);
-		//System.out.println("EntropyThreshold: "+entropyThreshold);
 		
-		if(entropyThreshold > 0) { //Apply denoising only if threshold > 0
-			String [] tempParms = {parms[0],parms[1],parms[2],"TempFiles/TempKmers",parms[4]}; //TempKmers contains the results of KAnalyze
 			
-			runKmersCounting(tempParms);
-			
-			String outFile1 = "TempFiles/badKmers";
-			denoiseKmers(tempParms[3], outFile1, parms[3],entropyThreshold);
-		}
-		else{
-			runKmersCounting(parms);
-			setNumKmers (parms[3]);
-		}
+		/*denoise k-mers:
+		 * 1st: remove any k-mer in the file with count is 1 (single-copies k-mers)
+		 * 2nd: remove any k-mer in the file with entropy <= entropythreshold (low-entropy k-mers) 
+		 */
 		
+		String [] tempParms = {parms[0],parms[1],parms[2],"TempFiles/TempKmers",parms[4]}; //TempKmers contains the results of KAnalyze
+			
+		runKmersCounting(tempParms);
+			
+		String outFile1 = "TempFiles/badKmers";
+		denoiseKmers(tempParms[3], outFile1, parms[3],entropyThreshold);
+				
 		//delete temporary files
 		deleteFiles("TempFiles","badKmers");
 		deleteFiles("TempFiles","TempKmers");		
@@ -71,14 +72,11 @@ public class KmersCounting {
         // This has to be the default settings for KAnalyze, otherwise it will not run on machine with small RAM
         String command ="java -jar -Xmx1024m "+kAnalyzeDir+"/kanalyze.jar count  -k "+kSize+
         		            " -o "+ outputFile+" -f "+inputFormat+" "+inputFile+" -rcanonical";
-        //System.out.println(command);
         try {
         	proc = rt.exec(command);
 
-            // Wait for the command to complete.
             int interVal = proc.waitFor();
             if (interVal == 0){
-               //System.out.println("K-mers counting is finished.");
             }
             else{
               System.out.println("K-mers counting encounted some errors: "+interVal);
@@ -97,8 +95,7 @@ public class KmersCounting {
    		    final String[] allFiles = dir.list();
    		    for (final String file : allFiles) {
    		        if (file.startsWith(fileN)) {
-   		           //System.out.println("The file to be deleted is: "+file);
-   		            new File(dirName + "/" + file).delete();
+   		           new File(dirName + "/" + file).delete();
    		        }
    		    }
    	}
@@ -124,44 +121,17 @@ public class KmersCounting {
         	         	 			 
         	 String firstLine= r.readLine();   //get the first character from the header
         	 String headerPrefix = firstLine.substring(0,1).trim();
-			 //System.out.println("First line("+firstLine+")"+"with Prefix: "+headerPrefix);
-				
+			 	
 			 String hostLine=""; 				
 			 while((hostLine = r.readLine()) != null) {
 				 if(hostLine.length()>headerPrefix.length()  && 
 					(hostLine.substring(0,1)).equals(headerPrefix)){
 						numOfReads++;	
-						//System.out.println("Line["+numOfReads+"]: "+hostLine);
-				 } 	
+				} 	
               }
 			  r.close();		
 		 } 
 		 catch (IOException ex)
-	     {
-	    	System.out.println("Errors reading from "+file);	   
-	     }
-		
-	}
-	
-	//counts the number of k-mers in the sample file
-	private void setNumKmers (String file)
-	{
-		try(BufferedReader kmerFile  = new BufferedReader(new FileReader(file))){
-			String kmerLine=""; 				
-			
-			while((kmerLine = kmerFile.readLine()) != null) {
-				int countIndex = kmerLine.indexOf("\t");
-				int count = Integer.parseInt(kmerLine.substring(countIndex+1));
-				
-				numKmers++;	
-				totalKmersCounts += count ;
-			}			
-			/*System.out.println("There are "+numKmers+" distinct K-mers in the file.");
-			System.out.println("The sum of their counts is "+totalKmersCounts+".");*/
-			
-			kmerFile.close();		
-		}
-		catch (IOException ex)
 	     {
 	    	System.out.println("Errors reading from "+file);	   
 	     }
@@ -186,7 +156,6 @@ public class KmersCounting {
 				String [] words =kmerLine.split("\t");
 				String kmer= words[0];
 				int count = Integer.parseInt(words[1]);
-				//System.out.println(kmer+"\t"+count);			
 				numKmers++;	
 				totalKmersCounts += count ;
 					
@@ -200,8 +169,7 @@ public class KmersCounting {
 						lowEntropyKmers++;						
 					}	
 					else{	//count k-mers with entropy >threshold
-						pw2.println(kmerLine);
-							
+						pw2.println(kmerLine);							
 						//count k-mers with count >1
 						goodKmers++;
 						totalGoodKmers += count;							

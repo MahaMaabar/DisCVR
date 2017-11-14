@@ -1,6 +1,11 @@
 package model;
-import java.util.ArrayList;
 
+/***
+ * An instance of this class is a k-mer and its count
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class Kmers {
 
 	private String kmer;
@@ -10,8 +15,7 @@ public class Kmers {
 		this.kmer = kmer;
 		this.count = count;
 	}
-	
-	
+		
 	public String getKmer() {
 		return kmer;
 	}
@@ -20,32 +24,12 @@ public class Kmers {
 		this.kmer = kmer;
 	}
 
-
 	public int getCount() {
 		return count;
 	}
 
-
 	public void setCount(int count) {
 		this.count = count;
-	}
-
-
-	public static void main(String[] args) {
-		String [] kmersName = {"AAAA","CCCC","GGGG","TTTT"};
-	    int [] counts = {2,4,5,1};
-	    
-	    ArrayList<Kmers> kmersList = new ArrayList<Kmers>();
-	    
-	    for(int i=0 ; i< kmersName.length;i++)
-	    {
-	    	Kmers kmer = new Kmers(kmersName[i],counts[i]);
-	    	kmersList.add(kmer);
-	    }
-        
-	    for(Kmers k:kmersList){
-	    	System.out.println("Kmer: "+k.getKmer()+"\tCount: "+k.getCount());
-	    }
 	}
 
 }

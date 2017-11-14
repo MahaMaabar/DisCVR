@@ -2,28 +2,26 @@ package model;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-/**
+/***
+ * To store the virusResult from the classification process. 
+ * It is used by the classification worker.
  * 
  * @author Maha Maabar
- * to store the virus results from the classification process.
- * 
+ *  
  */
 public class VirusResultDatabase {
 	
 	private ArrayList<VirusResult> virusResults;
 	
 	public VirusResultDatabase () {
-		virusResults = new ArrayList<VirusResult> ();
-		
+		virusResults = new ArrayList<VirusResult> ();		
 	}
 	
 	public void addVirusResult (VirusResult vResult){
@@ -38,6 +36,7 @@ public class VirusResultDatabase {
 		return virusResults.size();
 	}
 	
+	//To save results to a file from the GUI 
 	public void saveToFile(File file)  {
 		//add the extension .csv if not there
 		String filename =file.getAbsolutePath();

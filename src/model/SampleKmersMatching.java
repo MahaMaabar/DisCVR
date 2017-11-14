@@ -9,12 +9,21 @@ import java.io.PrintWriter;
 import java.util.*;
 import utilities.PermutationFiles;
 
+/***
+ * Carries out exact matching between sample k-mers and database k-mers:
+ * Sample k-mers are split into smaller files according to their first five bases.
+ * e.g. all k-mers start with AAAAA are in one file and k-mers start with AAAAC are in another file and so on.
+ * Database k-mers are split in the same manner. 
+ * Matches between corresponding files is carried out and only k-mers found in both database and sample
+ * files are written to the output file along with their taxonomy lables taken from the database file.
+ *  
+ * @author Maha Maabar
+ *
+ */
 public class SampleKmersMatching {
 	
-	private String[] getPermsArray(int k )
-	{
-		/* variables*/
-	    char set[] = {'A', 'C', 'G', 'T'};
+	private String[] getPermsArray(int k ){
+		char set[] = {'A', 'C', 'G', 'T'};
 		
 		PermutationFiles PF = new PermutationFiles(k,set.length);
 		String [] perms = PF.getPermsArray();
@@ -37,7 +46,6 @@ public class SampleKmersMatching {
 
 				File f = new File(sampleFileName);
 				if(!f.exists()) {//No need to carry search with the corresponding file from the database
-					//System.out.println("The file "+sampleFileName+" Does NOT Exists!");
 					continue;
 				}
 
@@ -65,9 +73,9 @@ public class SampleKmersMatching {
 
 	                /*carries out a search for matches
 				  	 * Open the sample file and read it line by line.
-				  	 * Extract the kmer and search for it in the trie.
-				  	 * If it exists, write it out the matches to the file from the trie.
-				  	 * Else write out the line to the no matches file.
+				  	 * Extract the kmer and search for it in the list of database k-mers.
+				  	 * If it exists, write its info to the output file.
+				  	 * Info is: k-mer, count in the sample file, taxID(s) from the database file
 				  	 */
 					BufferedReader bf = new BufferedReader( new FileReader(sampleFileName));
 					String kmerInstance ;
@@ -90,26 +98,14 @@ public class SampleKmersMatching {
 	                    }
 	                 }
 					bf.close();
-	 	  		}//end-for
-
-			}//end-first for
-
+				}
+			}
 			pw.close();
 			
 			//delete temp files
 			deleteAllFiles (dir,"dbKmers_");
 			deleteAllFiles (dir,"sKmers_");
 			
-			/*System.out.println("=================================================================" );
-	  		System.out.println("There are "+numOfMatches[0]+" distinct K-mers in the sample matched with the database."+
-	  				           "The sum of their counts is "+numOfMatches[1]+".");
-	  		System.out.println();
-	  		System.out.println();
-	  		System.out.println("*****************************************************************" );
-	  		System.out.println("There are "+numOfNonMatches+" distinct K-mers in the sample Do NOT match with the database." );
-	  		System.out.println();
-	  		System.out.println();*/
-
 		}
 		catch (IOException ex){
 			System.out.println("Errors reading/writing to files.");

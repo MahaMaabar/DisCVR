@@ -8,13 +8,18 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
-
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import utilities.PermutationFiles;
 
+/***
+ * Carries out the process for sample classification.
+ * Either through GUI or command line.
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class SampleClassification {
 	
 	public static final String DIR_PROPERTY_NAME = "discvrJAR.rootDir";
@@ -64,12 +69,10 @@ public class SampleClassification {
 	
 public String getSummaryText(){
 		return summary;		
-	}
-	
+	}	
 	public String [] getHighestScoresVirus(){
 		return highestScoresNames;
-	}
-	
+	}	
 	public int [] getHighestScoresSpecific(){
 		return highestScoresSpecific;
 	}	
@@ -80,32 +83,30 @@ public String getSummaryText(){
 		return this.allMatchedKmers;
 	}
 	
-	public ArrayList<VirusResult> getVirusResultsList ()
-	{
+	public ArrayList<VirusResult> getVirusResultsList (){
 		 return virusResults ;
 	}
 	
-	public int getResultSize ()
-	{
+	public int getResultSize ()	{
 		return virusResults.size();
 	}
 	
-	//get the classification results in terms of virus info and their scores to be displayed
+	//get the classification results in terms of virus info and their scores 
 	//to be used by DisCVR's GUI
 	public String printingMatchingResults(String matchFile,String dbFile,String dbOption) {
 		 return setVirusResultsList (dbFile,dbOption,matchFile);
 	}
 	
-	//get the classification results in terms of virus info and their scores to be displayed
+	//get the classification results in terms of virus info and their scores
 	//to be used when a folder of samples is supplied and not using DisCVR's GUI	
 	public void printingMatchingResults2(String matchFile,String sampleInfo, String dbFile,String dbOption, String outFile) {
 		setVirusResultsList2 (dbFile,dbOption,matchFile);
 		
-		//prints out classification results to the output file
+		//prints out classification results to an output file (comma separated)
 		try {
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(outFile))); 
 		    	 
-		    //Add the string for the reads
+		    //Add info about the reads
 		    pw.println(sampleInfo);
 		    pw.println("TOTAL_COUNTS_K-MERS"+","+"(%) OF_TOTAL_COUNTS_K-MERS"+","+
 		    	       "NUMBER_OF_DISTINCT_K-MERS"+","+"(%) OF_DISTINCT_K-MERS"+","+
@@ -149,6 +150,7 @@ public void setkC(KmersCounting kC) {
 public SampleKmersMatching getkC2() {
 	return kM;
 }
+
 public void setKM(SampleKmersMatching kC2) {
 	this.kM = kM;
 }
@@ -156,12 +158,12 @@ public void setKM(SampleKmersMatching kC2) {
 //To run DisCVR's sample classification from command line 
 public static void main(String[] args) throws Exception{
 	/*args [] =
-	   samplesFolder= "E:/Datasets/RespVirus/RespRef/TestData"
+	   samplesFolder= "D:/path/to/the/samples"
 	   kSize ="31"
 	   inputFileFormat = "fastq"
-	   databaseName= "HaemorrhagicVirusDB" or "E:/Eclipse_WorkSpace/DisCVR_AlphaVersion/customisedDB/TestDBHaemorrhagic_18" 
+	   databaseName= "HaemorrhagicVirusDB" or "D:/path/to/DisCVR/customisedDB/TestDBHaemorrhagic_18" 
 	   dbOption= "BuiltInDB" or "customisedDB"
-	   entropyThreshold= 2.5 (if dbOption="BuiltInDB") otherwise can be 0 or any double num
+	   entropyThreshold= 2.5 (if dbOption="BuiltInDB") otherwise can be 0 or any number between (0.0-3.0)
 	 */
 	System.out.println("=================================================================");
 	System.out.println();
@@ -216,84 +218,66 @@ public static void main(String[] args) throws Exception{
 
 /******************** Helpers methods *******************/
 
-//to be used with command line for DisCVR's sample classification
+//Extracts information from classification output (used with DisCVR's command line)
 private void setVirusResultsList2 (String dbFile,String dbOption, String matchFile) {
 		virusResults = new ArrayList<VirusResult>();
 		
-		//This sets up the virus names, virus ranks, and dbkmers maps
-      ClassificationOutput classOutput = new ClassificationOutput(dbOption);
-      //System.out.println("dbFile: "+dbFile);
-      classOutput.setDBIDsMap(dbFile,dbOption);
+		//sets up the virus names, virus ranks, and dbkmers maps
+        ClassificationOutput classOutput = new ClassificationOutput(dbOption);
+        classOutput.setDBIDsMap(dbFile,dbOption);
       
-      //System.out.println("match File: "+matchFile);
-      int [] numOfKmers=classOutput.setKmersTrees(matchFile);
+       int [] numOfKmers=classOutput.setKmersTrees(matchFile);
       
-      allMatchedKmers = classOutput.getAllMatchedKmers();        
-      virusResults = classOutput.getVirusMapResults ();
+       allMatchedKmers = classOutput.getAllMatchedKmers();        
+       virusResults = classOutput.getVirusMapResults ();
 		
 		for(VirusResult v:virusResults){
-			v.setPercentage(v.getDisKmers(),kC.getGoodKmers(), 0); //First percentage is % of total k-mers
-			v.setPercentage(v.getTotKmers(), kC.getTotalGoodKmers(), 1); //First percentage is % of total k-mers
+			v.setPercentage(v.getDisKmers(),kC.getGoodKmers(), 0); //First is % of distinct k-mers
+			v.setPercentage(v.getTotKmers(), kC.getTotalGoodKmers(), 1); //Second is % of total k-mers
 		}		
 }
 
-//to be used with DisCVR's GUI for sample classification
+
+//Extracts information from classification output (used with DisCVR's GUI)
 private String setVirusResultsList (String dbFile,String dbOption, String matchFile) {
 		virusResults = new ArrayList<VirusResult>();
 		
-		//This sets up the virus names, virus ranks, and dbkmers maps
-      ClassificationOutput classOutput = new ClassificationOutput(dbOption);
+		//sets up the virus names, virus ranks, and db-kmers treemaps
+        ClassificationOutput classOutput = new ClassificationOutput(dbOption);
+        classOutput.setDBIDsMap(dbFile,dbOption);
       
-      //System.out.println("dbFile: "+dbFile);
-      classOutput.setDBIDsMap(dbFile,dbOption);
+        //sets up the matchedkmers, distinct(=specific), and shared (=non specific) 
+        int [] numOfKmers=classOutput.setKmersTrees(matchFile);
       
-      //This sets up the matchedkmers, distinct(=specific), and shared kmers 
-      //System.out.println("match File: "+matchFile);
-      int [] numOfKmers=classOutput.setKmersTrees(matchFile);
+        allMatchedKmers = classOutput.getAllMatchedKmers();
       
-     //System.out.println("The number of specific kmers: "+numOfKmers[0]);
-     //System.out.println("The number of shared kmers: "+numOfKmers[1]);
-      
-      allMatchedKmers = classOutput.getAllMatchedKmers();
-      
-      virusResults = classOutput.getVirusMapResults ();
+        virusResults = classOutput.getVirusMapResults ();
 		
 		for(VirusResult v:virusResults){
-			v.setPercentage(v.getDisKmers(),kC.getGoodKmers(), 0); //First percentage is % of total k-mers
-			v.setPercentage(v.getTotKmers(), kC.getTotalGoodKmers(), 1); //First percentage is % of total k-mers
+			v.setPercentage(v.getDisKmers(),kC.getGoodKmers(), 0); //First is % of distinct k-mers
+			v.setPercentage(v.getTotKmers(), kC.getTotalGoodKmers(), 1); //Second is % of total k-mers
 		}
 		
 		String results =classOutput.printVirusMapResults();
-      //System.out.println("Results: "+results);
-       
-     
-      String summaryResults = classOutput.getSummaryMaps ();
-      summary =classOutput.formatSummaryText(summaryResults);
-      //System.out.println(summary);
-      
-      highestScoresNames = classOutput.getHighestScoresName();
-      highestScoresSpecific = classOutput.getHighestScoresSpecific();
-      highestScoresShared = classOutput.getHighestScoresShared();
+        
+		String summaryResults = classOutput.getSummaryMaps ();
+        summary =classOutput.formatSummaryText(summaryResults);
+        
+        highestScoresNames = classOutput.getHighestScoresName();
+        highestScoresSpecific = classOutput.getHighestScoresSpecific();
+        highestScoresShared = classOutput.getHighestScoresShared();
 
       return results ;    
 		
 	}
 
 private void classifySample (String []parameters) {
-	/*String savingDir = prams [0]; 
-	String sampleFile = prams [1];
-	String kSize = prams [2];
-	String inputFormat = prams [3];
-	String kAnalyzeDir = prams [4];
-	String dbLibrary = prams [5];
-	String dbOption = prams [6];
-	String entropyThrshld = prams [7];*/		
 	
-	String savingDir = parameters[0]; //"D:/Eclipse_WorkSpace/DisCVR_Prototype_IV/DatabaseData/"
-	String sampleFile = parameters[1];//"D:/Eclipse_WorkSpace/DisCVR_Prototype_IV/SampleData/SRR1735246_EbolaSample.fq"
-	String kSize = parameters[2];     //"31"
+	String savingDir = parameters[0]; //e.g. "D:/path/to/savingDir"
+	String sampleFile = parameters[1];//e.g. "D:/path/to/samplefile.fq"
+	String kSize = parameters[2];     //e.g. "30"
 	String inputFileFormat = parameters[3];//"fastq"
-	String kAnalyzeDir = parameters[4];//"D:/KAnalyze_WorkSpace/kanalyze-0.9.7"
+	String kAnalyzeDir = parameters[4];//"D:/path/to/KAnalyzeDir"
 	String databaseName= parameters[5];//"HaemorrhagicVirusDB"
 	String dbOption = parameters [6]; //"BuiltInDB" to use DisCVR's db or "customisedDB" to use user's db
 	String entropyThrshld = parameters [7]; //specifies the entropythreshold 
@@ -316,7 +300,7 @@ private void classifySample (String []parameters) {
 	 +"There are "+kC.getNumKmers()+" distinct K-mers in the file. The sum of their counts is "+kC.getTotalKmersCounts()+".\n"
 	 +"There are "+kC.getGoodKmers()+" K-mers in the file with count > 1. The sum of their counts is "+kC.getTotalGoodKmers()+".\n"
 	 +"There are "+kC.getBadKmers()+" K-mers in the file with count 1.\n";
-	 
+	 	 
 	 System.out.println("******************************************");
 	 System.out.println("Splitting sample and database k-mers into smaller batches...");
 	 
@@ -326,26 +310,20 @@ private void classifySample (String []parameters) {
 	 String databaseKmersFile= "";		 
 	 if (dbOption.equals("BuiltInDB")){
 		 databaseKmersFile= "/resources/"+databaseName;
-		 //System.out.println("Database Kmers File: "+databaseKmersFile);		
 		 outputDir = outputDir+databaseName;
 	 }
 	 if(dbOption.equals("customisedDB")){
-		//System.out.println("Database File: "+databaseName);
 		databaseKmersFile=databaseName;		
 		//extracting only the dbName from the full path
 		Path p = Paths.get(databaseName);
 		String file = p.getFileName().toString();
-		//System.out.println("DB File name from full path: "+file);
 		int kSizeIndex = file.indexOf('_');
 		String filename = file.substring(0,kSizeIndex);
-		//System.out.println("DB File Sample File Name: "+filename);
 		outputDir = outputDir+filename;
 	 }
 		 
 	 String fileNamePrefix = savingDir+"db"+"Kmers_"; //prefix for all file names
 	 statement=dbFileSplitting (databaseKmersFile, fileNamePrefix, dbOption, "db",permsPower);
-	 //System.out.println(statement);
-	 
 	 
 	 System.out.println("******************************************");
 	 System.out.println("Matching Sample k-mers with the Database k-mers...");
@@ -358,7 +336,6 @@ private void classifySample (String []parameters) {
 	 File file = new File(outputDir);
      if (!file.exists()) {
         if (file.mkdir()) {
-           //System.out.println("Directory is created!");
         }
         else {
            System.out.println("Failed to create directory!");
@@ -366,8 +343,7 @@ private void classifySample (String []parameters) {
       }
 	  
       String outFile = outputDir+"/"+filename+"_ClassificationOutput_"+kSize+".csv";
-	  //System.out.println("OutputFile: "+outFile);		  
-	 
+	  
 	  SampleKmersMatching sKM =new SampleKmersMatching();
 	  setKM(sKM);
 	  int []numOfMatches = sKM.searchForKmersMatches(savingDir, Integer.parseInt(kSize), permsPower, filename);
@@ -399,14 +375,12 @@ private void classifySample (String []parameters) {
 }
 
  private void deleteTempFolder(String dirName) {	 
-	   //System.out.println("Removing temporary files...."); 
 	   final File dir = new File(dirName);
 	   final String[] allFiles = dir.list();   
        for (int i=0; i<allFiles.length; i++) {
                File aFile = new File(dir,allFiles[i]); 
                aFile.delete();
         }
-       //System.out.println("Removing temporary folder...."); 
        dir.delete();
 	}
 	
@@ -415,7 +389,6 @@ private double roundTwoDecimals2(double t){
 		nf.setMaximumFractionDigits(6);
 		nf.setMinimumFractionDigits(6);
 		nf.setRoundingMode(RoundingMode.HALF_UP);
-		//System.out.print(nf.format(t));
 		return Double.valueOf(nf.format(t));
 	}
 

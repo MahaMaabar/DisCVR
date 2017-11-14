@@ -1,23 +1,22 @@
 package model;
 
-import java.io.Serializable;
-
-//public class VirusResult implements Serializable{
+/***
+ * A class represents a virus k-mer in the result of the sample classification.
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class VirusResult {
 	
-	/**
-	 * 
-	 */
-	//private static final long serialVersionUID = 1L;
 	private String name; //name of the virus
-	private String taxaID; //taxa ID assigned to the virus
+	private String taxaID; //taxID assigned to the virus
 	private long disKmers ; //number of distinct k-mers represent the virus in the sample
-	private long totKmers; //total counts of distinct k-mers represent the virus appears in the sample;
+	private long totKmers; //total counts of distinct k-mers represent the virus in the sample;
 	private String rank; //rank of the virus 
 	
-	private long disKmersDB; //number of distinct k-mers represent the virus in the db
-	private long totKmersDB; //total counts of distinct k-mers represent the virus appears in the db.
-	private double [] percentage; //percentage of one of the att
+	private long disKmersDB; //number of distinct k-mers represent the virus in DisCVR's db
+	private long totKmersDB; //total counts of distinct k-mers represent the virus in DisCVR's db.
+	private double [] percentage; //percentage of distinct and total counts of k-mers
 	
 	public void setPercentage(long virAttr,long num, int index){
 		this.percentage [index]=((double)virAttr/(double)num)*100;
@@ -67,16 +66,13 @@ public class VirusResult {
 		this.disKmersDB = disKmersDB;
 	}
 
-
 	public long getTotKmersDB() {
 		return totKmersDB;
 	}
 
-
 	public void setTotKmersDB(long totKmersDB) {
 		this.totKmersDB = totKmersDB;
 	}
-
 
 	public String getName() {
 		return name;
