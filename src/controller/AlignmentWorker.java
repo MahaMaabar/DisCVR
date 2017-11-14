@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -9,20 +8,25 @@ import javax.swing.SwingWorker;
 import gui.AlignmentPanel;
 import gui.TextPanel;
 import model.ReferenceGenomeAlignment;
-//import model.ReferenceGenomeFile;
 
+/***
+ * A class to pass the results for reference genome alignment by the sample reads from 
+ * sample classification output to the GUI.
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class AlignmentWorker extends SwingWorker <List<Integer>, String> {		
 	private List<Integer> assemblyResults ; 
 	private String assemblyText ;
-	private TextPanel textPanel;
+	private TextPanel textPanel; //to publish results on the GUI
 	private String virusName;	
 	private String [] assemblyPrams;
 	
 public AlignmentWorker (final String [] assemblyPrams, final TextPanel textPanel, String virusName){
 	this.textPanel = textPanel;	
 	this.assemblyPrams = assemblyPrams;
-	this.virusName = virusName;
-		
+	this.virusName = virusName;		
 	assemblyResults = null;		
 		
 }
@@ -36,18 +40,19 @@ protected List<Integer> doInBackground() throws Exception {
 		String sampleFile = assemblyPrams [2];
 		String dbOption = assemblyPrams[3];
 		
+		//First: get the reference genome from the reference genome library in DisCVR 
+		//into a separate file in a temp directory
 		ReferenceGenomeAlignment rga = new ReferenceGenomeAlignment();
         boolean found = rga.refGenExists (taxaID, referenceGenomesFile,dbOption);
         if (found){        	
-        	//if the taxaID exists in the referenceGenomes file
+        	//if taxaID exists in the referenceGenomes file
 			//create a directory in the current directory to hold temporary files
-			//System.out.println("Creating Temp folder for alignment...");
 			String outputPath = System.getProperty("user.dir")+"/temp_"+taxaID+"/";
 			File directory = new File(outputPath);
 			
+						
 			if (directory.mkdir()) {
-				System.out.println("Directory is created!");
-				
+				System.out.println("Directory is created!");				
 			} else {
 				System.out.println("Failed to create directory!");
 			}
@@ -58,18 +63,14 @@ protected List<Integer> doInBackground() throws Exception {
 			textPanel.appendText("\nStarting Reads Assembly to Reference Genome ("+virusName+")\n");//update text panel
 			publish("\nStarting Reference Genome Alignment.\n");//update text panel
 			
-			// if directory is created, make a fasta file to hold the sequence corresponds to the taxa ID
+			// if directory is created, make a fasta file to contain the reference genome for the taxa ID
 			String refFile = outputPath+"refGenome_"+taxaID+".fa";
-			//System.out.println("RefGenome file: "+refFile);
-			String refFileOutput =outputPath+"referenceAlignement_"+taxaID+".sam";
-			//System.out.println("SAM output file: "+refFileOutput);
+			String refFileOutput =outputPath+"referenceAlignment_"+taxaID+".sam";
 			rga.alignToRefGenome(taxaID,sampleFile,refFile,refFileOutput,outputPath);
 			
+			//Publish results of the alignment stats on the GUI
 			assemblyResults = rga.getRefGenomeScores();
 			assemblyText = rga.getAlignementStats();
-    		
-    		//System.out.println("The results are: "+assemblyText);
-    		
     		
     		textPanel.appendText("\nFinished Reference Alignment.\n");
     		
@@ -84,12 +85,11 @@ protected List<Integer> doInBackground() throws Exception {
     		
     		String text = String.format("%02d:%02d:%02d", hours, minutes, seconds);
     		
-    		
     		textPanel.appendText("\nTime taken (hh:mm:ss): "+text+"\n");
     		publish("\nTime taken (hh:mm:ss): "+text+"\n");
     		textPanel.appendText("\n**************************************************************\n");
     		
-    		//deleteTempFolder(directory);
+    		deleteTempFolder(directory);
         }	
 		
 		return assemblyResults;
@@ -106,9 +106,10 @@ protected List<Integer> doInBackground() throws Exception {
 			SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+            	//show a graph of coverage and depth of the reference genome by sample reads 
                 new AlignmentPanel(assemblyResults,assemblyText,virusName).setVisible(true);
             }
-           });		
+          });		
 	    }
 	    else {
 	    	JOptionPane.showMessageDialog(null, "Our database does not have a complete reference genome for the "+virusName,
