@@ -21,25 +21,25 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisLocation;
-import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.labels.XYItemLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StackedXYBarRenderer;
 import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
-import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.DefaultTableXYDataset;
 import org.jfree.data.xy.TableXYDataset;
 import org.jfree.data.xy.XYSeries;
-import org.jfree.ui.RectangleEdge;
 
-/*
- * The frame for alignment of the k-mers to the reference genome.
+/***
+ * A class to show a graph of mapping matched k-mers to a reference genome.
+ * It uses JFreechart package to create a bar graph.
+ * 
+ * @author Maha Maabar
+ *
  */
 public class KmersMappingPanel extends JFrame {
 
@@ -48,14 +48,11 @@ public class KmersMappingPanel extends JFrame {
     public KmersMappingPanel (int [][] positions,String name, String text){
 		 super("Reference Genome Alignment");
 		 
-		 
 		 StyledDocument document = setStyle(text);
 	     
 		 JTextPane textPane = new JTextPane(document);
 	     textPane.setEditable(false);
-	     
-	   
-	        
+	     	        
 	     JTextArea textArea = new JTextArea(text,6,6);
 	     textArea.setPreferredSize(new Dimension(50,50));
 	     textArea.setLineWrap(true);
@@ -65,7 +62,6 @@ public class KmersMappingPanel extends JFrame {
 	     textArea.setForeground(Color.BLACK);
 	        
 	     add(textArea, BorderLayout.NORTH);
-		 
 		 
 		 TableXYDataset tablexydataset = createDataset(positions);
 	    
@@ -80,7 +76,7 @@ public class KmersMappingPanel extends JFrame {
 	     setLocationRelativeTo(null);
 	 }
 
-    //creates the dataset for the stacked bar graph
+    //creates the dataset for the bar graph
 	private TableXYDataset createDataset(final int [][] data) {
     	DefaultTableXYDataset defaulttablexydataset = new DefaultTableXYDataset();   
         
@@ -121,35 +117,16 @@ public class KmersMappingPanel extends JFrame {
     
     
     private JPanel createChart(final TableXYDataset  dataset, String VirusName) {
-    	
-    	/*================================
-    	 final JFreeChart chart = ChartFactory.createStackedBarChart(	        
-    	            "",         // chart title
-    	            "Virus Name",                 // domain axis label
-    	            "Number of Distinct classified K-mers", // range axis label
-    	            dataset,                    // data
-    	            PlotOrientation.HORIZONTAL, // orientation
-    	            false,                       // include legend
-    	            false,//true,
-    	            false
-    	        );
-    	
-    	/*================================*/
-    	
-    	
-    	
-    	
-    	 final JFreeChart chart = ChartFactory.createStackedXYAreaChart(
+    	final JFreeChart chart = ChartFactory.createStackedXYAreaChart(
     			"Matched K-mers Mapping to "+VirusName,  // chart title
-                "Reference Genome Positions",                  // domain axis label
-                "Counts of Mapped K-mers",                     // range axis label
+                "Reference Genome Positions",            // domain axis label
+                "Counts of Mapped K-mers",               // range axis label
                 dataset,                     // data
                 PlotOrientation.VERTICAL,    // the plot orientation
                 true,                        // legend
                 true,                        // tooltips
                 false                        // urls
          );
-    	 /*========================================*/
     	 
     	 XYBarRenderer renderer = new StackedXYBarRenderer(0.0);
          renderer.setBarPainter(new StandardXYBarPainter());
@@ -193,48 +170,7 @@ public class KmersMappingPanel extends JFrame {
  	     axis.setTickLabelFont(new Font("verdana",Font.BOLD, 15));
  	     axis2.setTickLabelFont(new Font("verdana",Font.BOLD,15));
  	     
- 	    /* //set the font for the legend
- 	     LegendTitle legend = new LegendTitle(plot.getRenderer());
- 	     Font newfont = new Font("Arial",Font.BOLD,16); 
- 	     legend.setItemFont(newfont); 
- 	     legend.setPosition(RectangleEdge.BOTTOM); 
- 	     chart.addLegend(legend);
-*/
-    	 
-    	 
-    	 /*=============================================*/
-    	 
-    	 
-    	 
-    	
-        
-    /*    XYPlot plot = new XYPlot(dataset,
-              new NumberAxis("Reference Genome Positions"),
-              new NumberAxis("Counts of Mapped K-mers"), 
-              renderer);
-
-        plot.getDomainAxis().setLowerMargin(0.0);
-        plot.getDomainAxis().setUpperMargin(0.0);
-        
-        chart.setBackgroundPaint(Color.white);
-
-
-        // get a reference to the plot for further customisation...
-        plot.setBackgroundPaint(Color.lightGray);
-   
-        plot.setDomainGridlinePaint(Color.white);
-        plot.setRangeGridlinePaint(Color.white);
-      
-        //change the auto tick unit selection to integer units only...
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());        
-        
-        rangeAxis.setAutoRangeIncludesZero(true);
-        
-        final NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
-        xAxis.setAutoRange(true);
-        */
-        // label the points
+ 	    // label the points
         NumberFormat format = NumberFormat.getNumberInstance();
         format.setMaximumFractionDigits(2);
         XYItemLabelGenerator generator =
@@ -248,7 +184,7 @@ public class KmersMappingPanel extends JFrame {
         
     }
 
-    /*sets the icon for the frame to be the CVR logo */
+    //sets the icon for the frame 
 	private Image createIcon (String path) {
 			URL url = getClass().getResource(path);
 			
@@ -275,7 +211,7 @@ public class KmersMappingPanel extends JFrame {
 	    try {
 	      document.insertString(document.getLength(), text, style);
 	    } catch (BadLocationException badLocationException) {
-	        System.err.println("Oops");
+	        System.err.println("Bad Location!");
 	    }
 	      return document;
 	}

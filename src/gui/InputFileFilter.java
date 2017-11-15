@@ -4,9 +4,13 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
+/***
+ * sets the filter for the input file extension.
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class InputFileFilter extends FileFilter {
-
-	@Override
 	public boolean accept(File file) {
 		
 		if(file.isDirectory()) {
@@ -28,10 +32,8 @@ public class InputFileFilter extends FileFilter {
 			return false;
 	}
 
-	@Override
 	public String getDescription() {
 		return "Sequence files (*.fasta;*.fastq;*.fasta.gz;*.fastq.gz)\n";
-			 
 	}
 
 }

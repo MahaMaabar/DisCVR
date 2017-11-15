@@ -9,8 +9,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -21,33 +19,29 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.EventObject;
-
 import javax.swing.AbstractCellEditor;
-import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-
 import org.jfree.ui.RefineryUtilities;
 
-import gui.TableHyperLink.URLTableCellEditor;
-import gui.TableHyperLink.URLTableCellRenderer;
-
+/***
+ * Sets the contents for the Menu bar icons in DisCVR's GUI main frame.
+ * The Help and Database icons.
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class MenuBarFrame extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
@@ -63,7 +57,7 @@ public class MenuBarFrame extends JFrame{
 		
 		
 		String text = "DisCVR: A Viral Diagnostic Tool\n\n"
-				+ "Copyright (C) 2016  Maha Maabar <Maha.Maabar@glasgow.ac.uk>\n\n"
+				+ "Copyright (C) 2017  Maha Maabar <Maha.Maabar@glasgow.ac.uk>\n\n"
 				+ "This program is free software: you can redistribute it and/or modify it \n"
 				+ "under the terms of the GNU General Public License as published by the \n"
 				+ "Free Software Foundation, either version 3 of the License, or \n"
@@ -105,27 +99,37 @@ public class MenuBarFrame extends JFrame{
 		JPanel panel = new JPanel();		 
 		panel.setLayout (new BorderLayout ());
 		
+        JTextArea textArea = new JTextArea (2,10);	
+		
+		Font font = new Font("Verdana", Font.BOLD, 18);
+		textArea.setFont(font);
+		textArea.setForeground(Color.RED);
+		
+		//print a message about date of data downloading
+		String str = "The information listed here was last updated on: 29/4/2017\n";
+		textArea.append(str);
+		
+		
 		String virusFilePath = "/resources/"+virusFile;
 				
 		//upload the file into a table 
 		ArrayList<String> columns = new ArrayList<String>();
 		
 		columns.add("Family");
-		columns.add("Genus");
 		columns.add("Total Number of Sequences");
 		columns.add("Virus Name"); 
 		columns.add("Virus Rank"); 
 		columns.add("Reference Genome Information");	
 		
-		
-		
+				
 		String[] columnNames = columns.toArray(new String[columns.size()]);		
 	   
 		String [][] vItems = getVirusList(virusFilePath);	
 			
 		DefaultTableModel model= new DefaultTableModel(vItems, columnNames);
 		JTable table = new JTable (model){
-	            @Override
+	         private static final long serialVersionUID = 1L;
+				@Override
 	            public Dimension getPreferredScrollableViewportSize() {
 	                return new Dimension(350, 150);
 	            }
@@ -144,13 +148,7 @@ public class MenuBarFrame extends JFrame{
 	            	
 	                return c;
 	            }
-	           /* public boolean isCellEditable(int row,int col) {
-	                if(col == 5) {
-	                    return true;
-	                }
-	                return false;
-	            }
-	           */
+	          
 	        };		
 		
 		
@@ -174,18 +172,15 @@ public class MenuBarFrame extends JFrame{
 		
 		columnModel.getColumn(0).setPreferredWidth(80);
 		columnModel.getColumn(1).setPreferredWidth(80); 
-		columnModel.getColumn(2).setPreferredWidth(80);
-		columnModel.getColumn(3).setPreferredWidth(400); //wide column
-		columnModel.getColumn(4).setPreferredWidth(80); 
-		columnModel.getColumn(5).setPreferredWidth(400);
-		
+		columnModel.getColumn(2).setPreferredWidth(400); //wide column
+		columnModel.getColumn(3).setPreferredWidth(80); 
+		columnModel.getColumn(4).setPreferredWidth(400);		
 	
 		//make  all cells unselectable
 		table.setFocusable(false);
 		table.setRowSelectionAllowed(false);
 			
-		table.setPreferredScrollableViewportSize(new Dimension(750,200));
-		
+		table.setPreferredScrollableViewportSize(new Dimension(750,200));		
 		
 		//add actionListener to table to open link to reference genome
 		table.addMouseListener(new MouseAdapter() {
@@ -194,19 +189,15 @@ public class MenuBarFrame extends JFrame{
 				int row = table.rowAtPoint(pt);
 				int col = table.columnAtPoint(pt);
 				
-				//allow col 5 to be selected 
-				if (col == 5) {
+				//allow last col to be selected 
+				if (col == 4) {
 					 URI uri;
 					 String address = "https://www.ncbi.nlm.nih.gov/nuccore/";
 			        //create the address from the link value in the table
                     String accLink = (String) table.getValueAt(row, col);
                     accLink = accLink.replaceAll("\\s","");
-                    //System.out.println("Acc: "+accLink);
-                   
-                    String [] links = accLink.split("\\+");
                     
-                    /*for(int i= 0;i<links.length;i++)
-                    	System.out.println("link :"+links[i]);*/
+                    String [] links = accLink.split("\\+");
                     
                     if(links.length == 1){
                     	address = address+links[0];                    	 
@@ -218,8 +209,7 @@ public class MenuBarFrame extends JFrame{
                     			address = address+links[i];	
                     		else
                     			address = address+links[i]+",";	
-                    	}
-                    	
+                    	}                    	
                     }
                     try {
                     	uri = new URI(address);
@@ -235,6 +225,7 @@ public class MenuBarFrame extends JFrame{
 		
 		
 		//add table to panel with scrollPane
+		panel.add(textArea, BorderLayout.BEFORE_FIRST_LINE);
 		panel.add(new JScrollPane(table), BorderLayout.CENTER);
 		 
 		add(panel,BorderLayout.CENTER);
@@ -278,7 +269,6 @@ public class MenuBarFrame extends JFrame{
 			String line = null;
 			
 			while((line = br.readLine()) != null){
-				//System.out.println("Line: "+line);
 				vItems.add(line);
 			}
 		br.close();
@@ -286,35 +276,33 @@ public class MenuBarFrame extends JFrame{
 			e.printStackTrace();
 		}
 		
-		//System.out.println("The size of items: "+vItems.size());
-		String [][] vList = new String[vItems.size()][6];
-		
+		String [][] vList = new String[vItems.size()][5];
 		
 		for(int row=0; row<vItems.size();row++){
 			String [] vInfo = vItems.get(row).split(":");
-			//System.out.println("Number of words in the line: "+vInfo.length);
 			for(int col=0; col<vInfo.length;col++){
 				vList[row][col]= vInfo[col];
-				//System.out.println("["+row+"]["+col+"]: "+vList[row][col]);
 			}
 		}
 		return vList;		
 	}
 	
 	private static void launchAddress(URI uri) {
-		  if (Desktop.isDesktopSupported()) {
-			  System.out.println(uri);
+		  if (Desktop.isDesktopSupported()) {			  
 		    try {
 		       Desktop.getDesktop().browse(uri);
-		      } catch (IOException e) { /* TODO: error handling */ }
+		      } catch (IOException e) { 
+		    	  e.printStackTrace();
+		      }
 		   } else { 
 			   System.out.println("Platform is not supported");
 			   }
 		 }
 	
 	public class URLTableCellRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
 
-        public URLTableCellRenderer() {
+		public URLTableCellRenderer() {
             setForeground(Color.BLUE);
         }
 
@@ -331,8 +319,8 @@ public class MenuBarFrame extends JFrame{
 
     }
 	 public class URLTableCellEditor extends AbstractCellEditor implements TableCellEditor {
-
-	        private URL url;
+		 private static final long serialVersionUID = 1L;
+			private URL url;
 
 	        @Override
 	        public Object getCellEditorValue() {
@@ -343,12 +331,7 @@ public class MenuBarFrame extends JFrame{
 	        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 	            JLabel editor = new JLabel("Clicked");
 	            String str = (String)table.getValueAt(row, column);
-	            System.out.println("str: "+str);
 	            editor.setText("<html><ul>" + str + "</ul></html>");
-	            /*if (value instanceof URL) {
-	                url = (URL) value;
-	                editor.setText("<html><ul>" + url.toString() + "</ul></html>");
-	            }*/
 	            SwingUtilities.invokeLater(new Runnable() {
 	                @Override
 	                public void run() {

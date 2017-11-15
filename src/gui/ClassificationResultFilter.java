@@ -1,23 +1,21 @@
 package gui;
 
 import java.io.File;
-
 import javax.swing.filechooser.FileFilter;
 
-/*To save the output results from classification to a file with csv foramt */
-
+/***
+ * Applies a filter to the file extension when saving classification results to a file.
+ * 
+ * @author Maha Maabar
+ * 
+ */
 public class ClassificationResultFilter extends FileFilter {
-
-	@Override
-	public boolean accept(File file) {
-		
+	public boolean accept(File file) {		
 		if(file.isDirectory()) {
 			return true;
-		}
-		
+		}		
 		String name = file.getName();
-		
-		String extension = Utils.getFileExtension(name);
+		String extension = getFileExtension(name);
 		
 		if (extension == null) {
 			return false;
@@ -29,10 +27,24 @@ public class ClassificationResultFilter extends FileFilter {
 		
 		return false;
 	}
-
-	@Override
+   
 	public String getDescription() {
 		return "Classification Result files (*.csv)";
 	}
+	
+	private String getFileExtension (String name) {
+		int pointIndex = name.lastIndexOf(".");
+		
+		if (pointIndex == -1) {
+			return null;
+		}
+			
+		if (pointIndex == name.length() -1){
+			return null;
+		}
+		
+		return name.substring(pointIndex+1, name.length());
+	}
+
 
 }

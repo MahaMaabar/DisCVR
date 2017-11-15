@@ -1,9 +1,14 @@
 package gui;
 import java.util.EventObject;
 
-
+/***
+ * Creates an option event from DisCVR's GUI input for classification
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class OptionEvent extends EventObject {
-	
+	private static final long serialVersionUID = 1L;
 	private String kSize;
 	private String dbOption;
 	private String dbLibrary;
@@ -11,10 +16,6 @@ public class OptionEvent extends EventObject {
 	private String fileFormat;
 	private String entropyThrshld;
 	
-	/**
-	 * constructors
-	 * @param source
-	 */
 	public OptionEvent (Object source) {
 		super (source);
 	}

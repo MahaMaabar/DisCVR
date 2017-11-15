@@ -4,16 +4,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+/***
+ * Creates the panel for the progress bar in DisCVR's GUI
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class ProgressPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;

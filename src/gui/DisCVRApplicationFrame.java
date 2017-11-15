@@ -1,25 +1,14 @@
 package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -30,39 +19,35 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
-import javax.swing.SwingWorker;
-
 import controller.AlignmentWorker;
 import controller.ClassificationWorker;
 import controller.KmersMappingWorker;
-//import gui.WorkDemo.Worker;
-
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
+/***
+ * Formats the main frame for DisCVR's GUI.
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class DisCVRApplicationFrame extends JFrame {
 	
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 1L;	
 	private InputPanel inputPanel;	
 	private ProgressPanel progressPanel;	
-	private TextPanel progressText;
-	private TextPanel summaryText;	
-	private JPanel scoring;
-    private TablePanel tablePanel; 	
+	private TextPanel progressText; //to upload progress information
+	private TextPanel summaryText;	//to upload summary results
+	private JPanel scoring;         //to show the viruses with the highest scores
+    private TablePanel tablePanel; 	//to upload full analysis of hits in the sample
 	private JSplitPane splitPane;
 	private JSplitPane splitPane2;	
-	private JTabbedPane tabPane;
-	
-	private JFileChooser fileChooser;
-	
-	private ClassificationWorker controller;	
-	private AlignmentWorker aligner; 
-	private KmersMappingWorker kmerAligner; 
-	
-	private boolean isStarted = false;
+	private JTabbedPane tabPane;	
+	private JFileChooser fileChooser;	
+	private ClassificationWorker controller;//to run classification	
+	private AlignmentWorker aligner;       //to run read assembly
+	private KmersMappingWorker kmerAligner;//to run k-mer assembly
 	
 	public static final String DIR_PROPERTY_NAME = "discvrJAR.rootDir";
 	public static final String currentDir = System.getProperty("user.dir");
@@ -113,13 +98,12 @@ public class DisCVRApplicationFrame extends JFrame {
 					if (!directory.exists()) {
 				    	if (directory.mkdir()) {
 				    		   //System.out.println("Temporary Folder: "+directory+" is created to hold intermediate files.");
-						       hide(directory);
-					     } else {
-						//System.err.println("Failed to create temporary folder to hold intermediate files.");
+						 } else {
+						   System.err.println("Failed to create temporary folder to hold intermediate files.");
 					    }
 				     }
 		    		 
-					//get the parameters for the sample classification
+					//get the parameters for the sample classification from the GUI
 					String sampleFileName = e.getInputFile();
 		       	    String inputFormat = e.getFileFormat();
 		       		String dbOption = e.getDbOption();
@@ -132,7 +116,7 @@ public class DisCVRApplicationFrame extends JFrame {
 		            	entropyThrshld= "2.5";
 		            }
 				
-		            //make an array of the parameters for the classification process
+		            //make an array of the parameters to pass for the classification process
 		       	      String [] prams = new String [8];
 		              prams [0] = savingDir;
 		       	      prams [1] = sampleFileName;
@@ -143,20 +127,15 @@ public class DisCVRApplicationFrame extends JFrame {
 		       	      prams [6] = dbOption;
 		       	      prams [7] = entropyThrshld;
 		       	      
-		       	      /*for(int i=0; i < prams.length; i++)
-		       	    	  System.out.println(prams[i]);*/
-		      	
-		          	 tablePanel.reset();
-		          	 
-		          	 summaryText.setText ();
-		          	 progressText.setText ();
-		      
-		          	 scoring.removeAll();
+		       	      tablePanel.reset(); //reset table from previous run
+		          	  summaryText.setText ();
+		          	  progressText.setText ();
+		              scoring.removeAll();
 		            
-		             revalidate();
-		             repaint();
+		              revalidate();
+		              repaint();
 		       	
-		        	 tablePanel.setVirusTableListener(new VirusTableListener () {
+		        	  tablePanel.setVirusTableListener(new VirusTableListener () {
 		        		public void rowDetected (int row, String virusName, String virusTaxaID, int assemblyOption){
 		        			String referenceGenomesFile = "";
 		        			if(dbOption.equalsIgnoreCase("BuiltInDB")){
@@ -165,21 +144,17 @@ public class DisCVRApplicationFrame extends JFrame {
 		        			if(dbOption.equalsIgnoreCase("customisedDB")){
 		        				Path p = Paths.get(dbLibrary);
 		        				String file = p.getFileName().toString();
-		        				//System.out.println("File name from DB File: "+file);
 		        				int kSizeIndex = file.indexOf('_');
 		        				String dbName = file.substring(0,kSizeIndex);
-		        				//System.out.println("DB File Name: "+dbName);
 		        				referenceGenomesFile = actualPath+"/customisedDB/"+dbName+"_referenceGenomesLibrary";
-			        			//System.out.println("reference Genomes File: "+referenceGenomesFile);
-		        			}
-		        			//Reads Mapping 
+			        		}
+		        			//run read Assembly 
 		       			   if(assemblyOption == 1){
-		       				   //String [] args = {virusTaxaID, referenceGenomesFile,sampleFileName};
 		       				   String [] args = {virusTaxaID, referenceGenomesFile,sampleFileName,dbOption};	
 		       				   aligner = new AlignmentWorker(args,progressText, virusName);		                                
 		                       aligner.execute();
 		       		    	}
-		       			  //K-mers Mapping 
+		       			  //run k-mer Assembly 
                           if(assemblyOption == 2){
                         	  controller.setMatchedKmersMap();//loads all the matched k-mers 
                         	  String [] args = {virusTaxaID, referenceGenomesFile,virusName, dbOption};	
@@ -189,25 +164,20 @@ public class DisCVRApplicationFrame extends JFrame {
 		       		}
 		       	});
 		       	
-		        if(!isStarted) { 
-		        	controller = new ClassificationWorker(prams,progressText,summaryText,scoring,tablePanel,progressPanel);	
-		        	controller.execute();
-		            isStarted = false;
-		         }	
-		        	
+		         //run classification process 
+		         controller = new ClassificationWorker(prams,progressText,summaryText,scoring,tablePanel,progressPanel);	
+		         controller.execute();
 		  }
 		});
-		
 		
 		add(progressPanel, BorderLayout.NORTH);
 		
 		add(splitPane2, BorderLayout.CENTER);
 		pack();
 		
-		//set the logo for the frame		
+		//add the CVR logo to the frame		
 		setIconImage(createIcon("/resources/cvr_logo.gif"));
 		
-		//settings for the frame
 		setSize(800,800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
@@ -217,7 +187,7 @@ public class DisCVRApplicationFrame extends JFrame {
 	}
 	
 		
-	/*sets the icon for the frame to be the CVR logo */
+	//set the icon for the frame
 	private Image createIcon (String path) {
 		URL url = getClass().getResource(path);		
 		if(url == null) {
@@ -228,6 +198,7 @@ public class DisCVRApplicationFrame extends JFrame {
 		return icon;
 	}
 	
+	//set the Menu bar for the frame
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		
@@ -240,7 +211,7 @@ public class DisCVRApplicationFrame extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(exitItem);
 		
-		//Add mnemonics to the File Menu and its items
+		//add mnemonics to the File Menu and its items
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		exportDataItem.setMnemonic(KeyEvent.VK_S);
 		exitItem.setMnemonic(KeyEvent.VK_X);		
@@ -272,17 +243,21 @@ public class DisCVRApplicationFrame extends JFrame {
 		
 		//add Database Icon and its items
 		JMenu dbMenu = new JMenu("Database");		
-		JMenuItem dbItem1 = new JMenuItem("Haemorrhagic");
-		JMenuItem dbItem2 = new JMenuItem("Respiratory");
+		JMenuItem dbItem1 = new JMenuItem("Haemorrhagic Viruses");
+		JMenuItem dbItem2 = new JMenuItem("Respiratory Viruses");
+		JMenuItem dbItem3 = new JMenuItem("Human Pathogenic Viruses");
 		
 		dbMenu.add(dbItem1);
 		dbMenu.addSeparator();
 		dbMenu.add(dbItem2);
+		dbMenu.addSeparator();
+		dbMenu.add(dbItem3);
 		
-		//Add mnemonics to the Database Menu and its items
+		//add mnemonics to the Database Menu and its items
 		dbMenu.setMnemonic(KeyEvent.VK_D);
 		dbItem1.setMnemonic(KeyEvent.VK_M);
-		dbItem2.setMnemonic(KeyEvent.VK_R);		
+		dbItem2.setMnemonic(KeyEvent.VK_R);	
+		dbItem3.setMnemonic(KeyEvent.VK_P);
 		
 		
 		//add ActionListener to the database items
@@ -294,6 +269,11 @@ public class DisCVRApplicationFrame extends JFrame {
 		dbItem2.addActionListener(new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				new MenuBarFrame("List of Respiratory Viruses","RespiratoryViruses");  
+			}
+		});
+		dbItem3.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+				new MenuBarFrame("List of Human Pathogenic Viruses","HSEViruses");  
 			}
 		});
 		
@@ -316,23 +296,8 @@ public class DisCVRApplicationFrame extends JFrame {
 		menuBar.add(dbMenu);
 		menuBar.add(helpMenu);
 		
-		
 		return menuBar;
 	}
 	
- private void hide(File src)  {
-	    
-	    Process p;
-		try {
-			p = Runtime.getRuntime().exec("attrib +h " + src.getPath());
-			 p.waitFor(); // p.waitFor() important, so that the file really appears as hidden immediately after function exit.
-		} catch (IOException e) {
-			System.err.println("Cannot hide the folder "+src.getPath());
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			System.err.println("Creating a hidden directory is interrrupted");
-	        e.printStackTrace();
-		}
-	}
-
+ 
 }

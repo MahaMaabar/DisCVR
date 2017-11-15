@@ -19,8 +19,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.title.LegendTitle;
-
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
@@ -29,7 +27,14 @@ import javax.swing.text.StyleContext;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RectangleEdge;
+
+/***
+ * A class to show a graph of mapping sample reads to a reference genome.
+ * It uses JFreechart package to create a line graph.
+ * 
+ * @author Maha Maabar
+ *
+ */
  
 public class AlignmentPanel extends JFrame {
 	
@@ -37,8 +42,7 @@ public class AlignmentPanel extends JFrame {
 
 	public AlignmentPanel (List<Integer> scores, String text, String name){
 		 super("Reference Genome Alignment");		 
-		 
-		 
+		 		 
          StyledDocument document = setStyle(text);
          
          JTextPane textPane = new JTextPane(document);
@@ -70,49 +74,34 @@ public class AlignmentPanel extends JFrame {
 	 private JPanel createChartPanel (List<Integer> scores, String name){
 		 String chartTitle = "Sample Reads Mapping to "+name;
 		 String yAxisLabel = "Genome Positions";
-		 String xAxisLabel = "Number of Reads";
-		 
+		 String xAxisLabel = "Number of Reads";		 
 		
-		 final XYDataset dataset =createDataset(scores,name);
-		 
+		 final XYDataset dataset =createDataset(scores,name);		 
 		 
 		 JFreeChart chart = ChartFactory.createXYLineChart(chartTitle,
 		                    yAxisLabel, xAxisLabel, dataset, PlotOrientation.VERTICAL, false, true, false);
 		
-		 //customise the graph
-		 chart.setBackgroundPaint(Color.white);
-        
-		 // get a reference to the plot for further customisation...
-	     final XYPlot plot = chart.getXYPlot();
-	     plot.setBackgroundPaint(Color.lightGray);
-	   
+		 //format the graph
+		 chart.setBackgroundPaint(Color.white);        
+		 final XYPlot plot = chart.getXYPlot();
+	     plot.setBackgroundPaint(Color.lightGray);	   
 	     plot.setDomainGridlinePaint(Color.white);
 	     plot.setRangeGridlinePaint(Color.white);
 	      
-	     // change the auto tick unit selection to integer units only...
+	     //change the auto tick unit selection to integer units only...
 	     final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-	     rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-	        
-	        
+	     rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());	        
 	     rangeAxis.setAutoRangeIncludesZero(true);
 	        
 	     final NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
          xAxis.setAutoRange(true);
          
-         /*===============================================================*/
          //set the font for the axes titles
  	     Font font = new Font("Dialog", Font.BOLD,25); 
  	     plot.getDomainAxis().setLabelFont(font);
  	     plot.getRangeAxis().setLabelFont(font);
- 	     	     
-
  	     xAxis.setTickLabelFont(new Font("verdana",Font.BOLD, 15));
  	     rangeAxis.setTickLabelFont(new Font("verdana",Font.BOLD,15));
-          
-         
-         /*======================================================================*/
-        
-         
          
          return new ChartPanel(chart);
 	}
@@ -123,8 +112,7 @@ public class AlignmentPanel extends JFrame {
 	        
 		for(int i =0;i<scores.size();i++){
 			series.add(i,scores.get(i));
-		}
-	      
+		}	      
 	    final XYSeriesCollection dataset = new XYSeriesCollection();
 	    dataset.addSeries(series);	       
 	                
@@ -133,7 +121,7 @@ public class AlignmentPanel extends JFrame {
 	}
 	 
 	 
-	/*sets the icon for the frame to be the CVR logo */
+	//sets the icon for the frame 
 	private Image createIcon (String path) {
 		URL url = getClass().getResource(path);
 			
@@ -145,6 +133,7 @@ public class AlignmentPanel extends JFrame {
 		return icon;
 	}
 	 
+	//formats the style of the text above the graph
 	private static StyledDocument setStyle(String text){
 		StyleContext context = new StyleContext();
 		StyledDocument document = new DefaultStyledDocument(context);
@@ -158,7 +147,7 @@ public class AlignmentPanel extends JFrame {
 		try {
 			document.insertString(document.getLength(), text, style);
 		} catch (BadLocationException badLocationException) {
-			System.err.println("Oops");
+			System.err.println("Bad Location!");
 		}
 		return document;
 	}

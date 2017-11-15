@@ -9,18 +9,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,14 +21,18 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
+/***
+ * Formats the input panel for DisCVR's GUI
+ * 
+ * @author Maha Maabar
+ *
+ */
 
 public class InputPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	private TextListener fileListener;
-	
+	private TextListener fileListener;	
 	private JLabel sampleFileLabel;
 	private JTextField sampleFileField;
 	private JButton sampleFileButton;
@@ -80,19 +77,18 @@ public class InputPanel extends JPanel implements ActionListener {
 		//set up the database libraries
 		dbButton1 = new JRadioButton("Haemorrhagic Viruses");
 		dbButton2 = new JRadioButton("Respiratory Viruses");
-		dbButton3 = new JRadioButton("HSE Viruses");
+		dbButton3 = new JRadioButton("Human Pathogenic Viruses");
 				
 		dbButton1.setActionCommand("HaemorrhagicVirusDB");
 		dbButton2.setActionCommand("RespiratoryVirusDB");
 		dbButton3.setActionCommand("HSEVirusDB");
 		dbLibraryGroup = new ButtonGroup();
 				
-		//set up DB radio buttons
 		dbLibraryGroup.add(dbButton1);
 		dbLibraryGroup.add(dbButton2);
 		dbLibraryGroup.add(dbButton3);	
 		
-		//set up the fields for customised DB
+		//set up the fields for customised DB 
 		customisedDB = new JCheckBox();
 		dbNameLabel = new JLabel("Database Name:");
 		dbNameButton = new JButton ("Browse");
@@ -101,7 +97,7 @@ public class InputPanel extends JPanel implements ActionListener {
 		dbNameField = new JTextField(15);
 		entropyField = new JTextField(5);
 		
-		//set up all the fields to be disabled
+		//default setting: all its fields are disabled
 		dbNameLabel.setEnabled(false);
 		dbNameButton.setEnabled(false);
 		entropyLabel.setEnabled(false);
@@ -109,8 +105,8 @@ public class InputPanel extends JPanel implements ActionListener {
 		dbNameField.setEnabled(false);
 		entropyField.setEnabled(false);
 		
-		//setup the customised DB checkBox so that if it is checked the fields are editable 
-		//The Database Library fields becomes unavailable
+		//When the customised DB checkBox is checked, its fields are editable 
+		//and the Database Library buttons become unavailable
 		customisedDB.addActionListener(new ActionListener(){
                  public void actionPerformed(ActionEvent e) {
                 	 boolean isTicked = customisedDB.isSelected();
@@ -120,11 +116,14 @@ public class InputPanel extends JPanel implements ActionListener {
              		 dbNameField.setEnabled(isTicked);
              		 entropyField.setEnabled(isTicked);
              		 
+             		 //empty the fields when customised DB is unchecked
+             		 dbNameField.setText(""); 
+             		 entropyField.setText("");
+             		 
              		 dbButton1.setEnabled(!isTicked);
              		 dbButton2.setEnabled(!isTicked);
              		 dbButton3.setEnabled(!isTicked);
-			}
-			
+			}			
 		});
 				
 		//set up the classify button
@@ -143,22 +142,18 @@ public class InputPanel extends JPanel implements ActionListener {
 				int retVal = inputFileChooser.showOpenDialog((Component)e.getSource());
 				if (retVal ==JFileChooser.APPROVE_OPTION){
 					String sampleFilePath = inputFileChooser.getSelectedFile().getAbsolutePath();
-					//System.out.println("Selected File: "+sampleFilePath);
 					sampleFileField.setText(sampleFilePath);
 				}
-			}
-			
+			}			
 		});
 		
 		//When the customisedDB Browse button is clicked
 		dbNameButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser inputFileChooser = new JFileChooser();
-				
+				JFileChooser inputFileChooser = new JFileChooser();				
 				int retVal = inputFileChooser.showOpenDialog((Component)e.getSource());
 				if (retVal ==JFileChooser.APPROVE_OPTION){
 					String dbFilePath = inputFileChooser.getSelectedFile().getAbsolutePath();
-					//System.out.println("Selected DB File: "+dbFilePath);
 					dbNameField.setText(dbFilePath);
 				}
 			}		
@@ -168,12 +163,9 @@ public class InputPanel extends JPanel implements ActionListener {
 		classifyButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				String inputFile = sampleFileField.getText();
-				//System.out.println("Input File: "+ inputFile);
 				String format ="";
 				
 				if(!inputFile.equalsIgnoreCase("")){
-									
-					//System.out.println("Input File: "+ inputFile);					
 					if(inputFile.endsWith(".fa")||inputFile.endsWith(".fasta"))
 						format = "fasta";
 					if (inputFile.endsWith(".fq")||inputFile.endsWith(".fastq"))
@@ -182,8 +174,6 @@ public class InputPanel extends JPanel implements ActionListener {
 						format = "fastagz";
 					if (inputFile.endsWith(".fq.gz")||inputFile.endsWith(".fastq.gz"))
 						format = "fastqgz";	
-															
-					//System.out.println("Input Format: "+format);
 					
 					//create an optionEvent object
 					String dbOption = null ;
@@ -194,40 +184,40 @@ public class InputPanel extends JPanel implements ActionListener {
 					if(customisedDB.isSelected()){
 					  dbOption ="customisedDB";
 					  dbLibrary=dbNameField.getText();
-					  //System.out.println("DB Name field: "+dbLibrary);
-					  
+					  					  
 					  //get the kSize from the name of the dbLibrary
 					  kSize = dbLibrary.substring(dbLibrary.lastIndexOf('_')+1,dbLibrary.length());
-					  //System.out.println("customised k size: "+kSize);
+					  //if no value is specified for entropy, then default value is used
 					  entropyThrshld = entropyField.getText();
+					  if(entropyThrshld.isEmpty()){
+						  entropyThrshld = "2.5";
+						  entropyField.setText(entropyThrshld);
+					  }					 
 					}
 					else{
 						dbOption ="BuiltInDB";
 						dbLibrary = dbLibraryGroup.getSelection().getActionCommand();
+					}					
+					if(dbLibrary.isEmpty()){
+						JOptionPane.showMessageDialog(null, "You have not selected a customised database file!", "Information",
+					            JOptionPane.INFORMATION_MESSAGE);						
 					}
-					
-					//System.out.println("Database Option:"+dbOption);
-					//System.out.println("Database Name:"+dbLibrary);
-					//System.out.println("K Size:"+kSize);
-					//System.out.println("Entropy Threshold:"+entropyThrshld);
-					
-					OptionEvent oe = new OptionEvent(this, inputFile, format, dbOption, dbLibrary, kSize, entropyThrshld);
-					if(optionListener != null) 
-					{
-						optionListener.optionEventOccurred(oe);					
-					}	
+					else{
+						OptionEvent oe = new OptionEvent(this, inputFile, format, dbOption, dbLibrary, kSize, entropyThrshld);
+						if(optionListener != null) 	{
+							optionListener.optionEventOccurred(oe);					
+						}
+					}						
 				}				
 				else{
 					JOptionPane.showMessageDialog(null, "You have not selected a file!", "Information",
 				            JOptionPane.INFORMATION_MESSAGE);
-
 				}
-			}
-			
-		});
-		
+			}			
+		});		
 	}
 
+	//listens to sample file selection
 	public void actionPerformed(ActionEvent e) {
 		String fileName = sampleFileField.getText(); //sample file name
 		
@@ -243,6 +233,7 @@ public class InputPanel extends JPanel implements ActionListener {
 		this.fileListener = listener;
 	}
 	
+	//formats the panel with the different components
 	private void initComponents() {
         
        setLayout (new GridBagLayout());

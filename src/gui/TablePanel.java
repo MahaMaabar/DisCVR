@@ -1,6 +1,4 @@
 package gui;
-import controller.AlignmentWorker;
-
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,50 +8,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.List;
 import java.util.ArrayList;
-
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import controller.VirusResult;
 
-import controller.ClassificationWorker;
-import model.ReferenceGenomeAlignment;
-import model.VirusResult;
+/***
+ * A class to set the full analysis panel in DisCVR's GUI.
+ * It uses the ResultTableModel to format the table.
+ * 
+ * @author Maha Maabar
+ *
+ */
 public class TablePanel extends JPanel {
-
+	private static final long serialVersionUID = 1L;
 	private JTable table;
-	private ResultsTableModel tableModel;
-	
-	//for Tanoti
-	//private String sampleFile;
-	//private String taxaID;
-	//private TextPanel textPanel;
-	
-	/*private ProgressPanel progressPanel;
-	
-	private AlignmentWorker assembler;*/
-	
-	private VirusTableListener virusTableListener;
-	
-	private JPopupMenu popup;
+	private ResultsTableModel tableModel;	
+	private VirusTableListener virusTableListener;	
+	private JPopupMenu popup; 
 	
 	public TablePanel () {
 		
@@ -61,25 +43,21 @@ public class TablePanel extends JPanel {
 		dim.width = 400;
 		dim.height = 200;
 		setPreferredSize(dim);
-		setMinimumSize(dim);
-		
+		setMinimumSize(dim);		
 		
 		tableModel = new ResultsTableModel();
 		table = new JTable(tableModel);
 		
 		popup = new JPopupMenu();
-		
+		//for reference-assembly selection
 		JMenuItem  assemblyItem1 = new JMenuItem("Read Assembly");
 		JMenuItem  assemblyItem2 = new JMenuItem("K-mer Assembly");
 		popup.add(assemblyItem1);
-		popup.add(assemblyItem2);
-		
+		popup.add(assemblyItem2);		
 		
 		Border innerBorder = BorderFactory.createTitledBorder(null, "Classification Results",TitledBorder.LEFT, TitledBorder.TOP, new Font("Verdana",Font.BOLD,12), Color.BLACK);
 		Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
 		setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
-		
-		//table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 16));
 		table.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -100,6 +78,7 @@ public class TablePanel extends JPanel {
 		sorter.setSortKeys(sortKeys);
 		sorter.sort();
 		
+		//when mouse is pressed on a row
 		table.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				
@@ -108,7 +87,6 @@ public class TablePanel extends JPanel {
 				table.getSelectionModel().setSelectionInterval(row, row);				
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					popup.show(table,e.getX(), e.getY());
-					//System.out.println("You want to carry reference alignment");
 				}
 			}
 		});
@@ -124,8 +102,7 @@ public class TablePanel extends JPanel {
 				if (virusTableListener != null) {
 					virusTableListener.rowDetected(row, virusName, taxaID,1);
 				}
-			}
-			
+			}			
 		});
 		
 		assemblyItem2.addActionListener(new ActionListener() {
@@ -139,23 +116,16 @@ public class TablePanel extends JPanel {
 				if (virusTableListener != null) {
 					virusTableListener.rowDetected(row, virusName, taxaID,2);
 				}
-			}
-			
-		});
-		
+			}			
+		});		
 				
 		setLayout (new BorderLayout ());
-		add(new JScrollPane(table), BorderLayout.CENTER);
-		
+		add(new JScrollPane(table), BorderLayout.CENTER);		
 	}
 	
 		
 	public void setData(ArrayList<VirusResult> vDB){
 		tableModel.setData(vDB);
-		/*System.out.println("There are "+vDB.size()+" viruses in the sample (TablePanel)");
-		for(VirusResult v:vDB)
-			System.out.println(v.getName()+" :: "+v.getTaxaID()+" :: "+v.getDisKmers()+" :: "+v.getTotKmers()+"\n");
-        */
 	}
 	
 	public void refresh() {
@@ -167,8 +137,7 @@ public class TablePanel extends JPanel {
 	}
 	
 	public void setVirusTableListener (VirusTableListener listener){
-		this.virusTableListener = listener;
-		
+		this.virusTableListener = listener;		
 	}
 	
 }
