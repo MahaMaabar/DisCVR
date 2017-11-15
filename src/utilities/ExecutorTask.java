@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 /***
- * Handles the execution of a thread to run a sub-processor; used by tantoi package 
+ * Handles the execution of multi sub-processor; used by Tanoti program to execut blast and other C executables 
  * @author Maha Maabar
  *
  */
