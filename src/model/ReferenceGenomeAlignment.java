@@ -1,6 +1,7 @@
 package model;
 
 
+import java.io.File;
 import java.util.List;
 /***
  * Carries out the process of reference genome alignment in relation to the sample reads.
@@ -74,6 +75,71 @@ public class ReferenceGenomeAlignment {
 
 	public String getAlignementStats() {
 		return alignementStats;
-	}	
+	}
+	
+	private static void deleteTempFolder(File dir) {
+		String[] files;    
+        if(dir.isDirectory()){
+            files = dir.list();
+            for (int i=0; i<files.length; i++) {
+               File aFile = new File(dir,files[i]); 
+               aFile.delete();
+             }
+        }
+        dir.delete();
+	 }
+	
+//to be used for validation output when using command line to run DisCVR classification
+public static void main(String[] args) {
+		
+		String taxID = args[0]; //e.g. 186538
+		String referenceGenomesFile = args[1]; //e.g. "referenceGenomes"
+		String sampleFile = args [2];//e.g. full/path/to/sample.fq
+		String dbOption = args[3]; //e.g. "customisedDB" or "BuiltInDB";
+		
+		 ReferenceGenomeAlignment rga = new ReferenceGenomeAlignment();
+			
+	     boolean found = rga.refGenExists (taxID, referenceGenomesFile,dbOption);
+	     if (found){
+	    	 
+	    	  String currentDir = System.getProperty("user.dir");
+	    	  String outputPath = currentDir+"/temp_"+taxID+"/";
+	    	  
+	    	  File directory = new File(outputPath);			
+				
+			  if (directory.mkdir()) {
+					System.out.println("Directory is created!");				
+				} else {
+					System.out.println("Failed to create directory!");
+				}
+	    	  
+	    	  String refFile = "refGenome_"+taxID+".fa";
+			  System.out.println("RefGenome file: "+refFile);
+			  String refFileOutput ="referenceAlignement_"+taxID+".sam";
+			  System.out.println("SAM output file: "+refFileOutput);
+			  rga.alignToRefGenome(taxID,sampleFile,refFile,refFileOutput, outputPath);
+	    	
+			  String	alignementStats = rga.getAlignementStats();
+	    		
+	    	  System.out.println("The results are: "+alignementStats);
+	    	  
+	    	  deleteTempFolder(directory);
+	    	  
+	    	  //delete temp files
+	    	  deleteFiles (currentDir, ".sam");
+	    	  deleteFiles (currentDir, ".fa");
+	    	  
+	     }
+     }
 
+private static void deleteFiles (String dirName, String fileN)
+	{
+		final File dir = new File(dirName);
+		    final String[] allFiles = dir.list();
+		    for (final String file : allFiles) {
+		        if (file.endsWith(fileN)) {
+		           new File(dirName + "/" + file).delete();
+		        }
+		    }
+	}
 }
