@@ -18,7 +18,6 @@ import model.Kmers;
 import model.KmersCounting;
 import model.SampleClassification;
 import model.SampleKmersMatching;
-import model.VirusResult;
 import model.VirusResultDatabase;
 import gui.ProgressPanel;
 import gui.TablePanel;
