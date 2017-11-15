@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.Map.Entry;
 import java.net.URL;
-
+import controller.VirusResult;
 /***
  * Creates treemaps from the classification output
  * 

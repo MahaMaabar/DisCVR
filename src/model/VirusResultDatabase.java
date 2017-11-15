@@ -9,6 +9,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+import controller.VirusResult;
 /***
  * To store the virusResult from the classification process. 
  * It is used by the classification worker.

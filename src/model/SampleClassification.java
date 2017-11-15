@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import utilities.PermutationFiles;
+import controller.VirusResult;
 
 /***
  * Carries out the process for sample classification.
