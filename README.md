@@ -5,6 +5,8 @@ DisCVR can be downloaded from [here](http://bioinformatics.cvr.ac.uk/discvr.php)
 
 The download includes information for installing and running the tool. 
 
+* [Classification using DisCVR GUI] (DisCVR_GUI.htm)
+
 
 DisCVR was developed by [Maha Maabar](https://github.com/MahaMaabar)
 
