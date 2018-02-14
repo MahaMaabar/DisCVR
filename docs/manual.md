@@ -7,12 +7,15 @@ DisCVR is designed to run on machines with low processing capacity and small mem
 ## System Requirements
 
 * Disk Space: DisCVR.jar requires ~700MB space for installation with the built-in databases. It is recommended to have space for 2x sample size when using DisCVR for classification as the process involves writing temporary files to disk. When building a customised database, the amount of space depends on the size of the viral sequences and the k size. For example, extracting k-mers of size 32 from the human genomes generates a file that is 80GB in size. If the viral data sequences are 3GB in size, then the minimum disk space needed to build a customised database is 200GB. 
+
 * Memory: DisCVR runs efficiently on a machine with 4GB RAM, which is the current standard for PCs. It is much faster on machines with higher RAM such as 8GB RAM. However, the amount of RAM depends on the number of the sequences used and the size of the k-mer. The larger the dataset and the k-mer, the larger the amount of RAM needed. Therefore, in the case of "out of memory" errors, the Java heap space should be increased. 
 
 ## Installation
 
 * Operating System: DisCVR runs on both Windows and Linux platforms. To use DisCVR, the users need first to download the appropriate folder for their operating system. 
+
 * Java: Java (1.8 or above) must be installed and the full path to the jre\bin folder should be included in the system variables. Java can be downloaded from: http://www.oracle.com/technetwork/java/javase/downloads/jre8- downloads-2133155.html 
+
 * DisCVR.jar: After downloading the DisCVR zipped folder, it is recommended to use a tool, such as 7-zip, to unzip the Windows OS version and extract all files to a local directory. For Linux and Mac version, open a command prompt and move to the location of the zipped folder. Type the following commands to unzip the folder:
    `tar -xzvf DisCVR_Linux.tar.gz`
 This creates a folder, called DisCVR. The contents of DisCVR consists of one jar: DisCVR.jar and a lib folder which are used to run the classification. The script file: downloadDataAndRefSeq.sh and the folders: bin, customisedDB, and TestData which are needed to build a customised database. 
