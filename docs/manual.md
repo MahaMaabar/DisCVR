@@ -6,8 +6,12 @@ DisCVR has a user-friendly Graphical User Interface (GUI) which runs the analysi
 
 DisCVR is designed to run on machines with low processing capacity and small memory.
 
+## Getting started
+
 [System Requirements](#system-requirements)  
 [Installation](#installation)
+[DisCVR Built-in Databases](#discvr-builtin-db)
+[DisCVR Classification](#discvr-classification)
 
 ## [System Requirements](#system-requirements)
 
@@ -41,8 +45,30 @@ JFreechart packages, for graphs plotting. It makes use of Tanoti, a Blast-based 
     * This should state java version 1.8.0_<some number>
 
   * To see if Java is added to the path: java  
-    * If the jre\bin is not added to the path, you will see the following message: "java is not
-recognized as an internal or external command, operable program or batch file". 
+    * If the jre\bin is not added to the path, you will see the following message: "java is not recognized as an internal or external command, operable program or batch file".
 
   * To see if eutilities tools is added to the path: esearch  
     * This should state "Must supply -db database on command line"
+
+## [DisCVR Built-in Databases](#discvr-builtin-db)
+
+DisCVR tool has three virus k-mers (k=22) databases which are built in DisCVR.jar:
+1. Human Hemorrhagic virus dataset (hemorrhagic dataset)
+2. Human Respiratory virus dataset (respiratory dataset)
+3. Human Pathogenic viruses dataset (pathogenic dataset)
+
+The hemorrhagic and respiratory datasets consist of a list of selected circulating viruses. 
+The pathogenic datatset consist of a list of all human pathogenic viruses identified as biological agents from by the Health and Safety Executive (HSE) in the UK available at: [http://www.hse.gov.uk/pubns/misc208.pdf](http://www.hse.gov.uk/pubns/misc208.pdf)
+
+Both the hemorrhagic and respiratory datasets overlap with the HSE database but are smaller in size and therefore are faster to use in classification.
+Moreover, each dataset has a list of viral reference genomes that is associated with the viruses in the database. The reference genomes are used in the validation stage of DisCVR.
+Information about the viruses in the databases can be obtained from the Database icon on the menu bar from DisCVR GUI. The information includes the virus rank on the taxonomy tree, 
+the number of sequences used in the database build to represent it, and the accession number of its reference genome. Segmented viruses have their reference genome accession number listed 
+in decreasing order of the segment size. The accession numbers of the reference genomes are linked to their webpages on the NCBI which can be viewed by clicking on the reference genome accession.
+
+## [DisCVR Classification](#discvr-classification)
+
+The DisCVR GUI can be used to carry out a single sample classification. To launch the DisCVR GUI, either double click on DisCVR.jar, or open a command prompt and type the following commands:
+    cd full/path/to/DisCVR folder
+    java –jar full/path/to/DisCVR.jar
+
