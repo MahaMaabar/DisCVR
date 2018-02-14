@@ -75,3 +75,38 @@ The DisCVR GUI can be used to carry out a single sample classification. To launc
 ```cd full/path/to/DisCVR folder
 java –jar full/path/to/DisCVR.jar```
 
+
+Once DisCVR is launched, there are 4 panels in the graphical interface:
+
+1. Progress Bar: shows the progression of the classification process.
+
+2. Input Sources: allows the user to choose the sample file and a k-mers database for classification.
+
+3. Classification Results: shows the classification output in three sub-panels.
+
+4. Progress Information: updates the user about classification output.
+
+To start a classification process, the user needs to first select the sample file they wish to 
+investigate. Currently, DisCVR supports .fasta, .fa, .fastq, and .fq formats. It allows for the selection 
+of one file hence, for paired-end files, it is recommended to concatenate both files. The second step is to 
+choose the database for the classification. The default setting is to select one of the three built-in databases. 
+This sets the k-mer size to 22 and removes all sample k-mers with entropy ≤ 2.5. On the other hand, if the user 
+chooses to use a customised database for the classification, then the box next to the **Customised Database** label 
+must be checked. The fields for this selection are then activated for the user to upload the customised database 
+file which MUST be in the customisedDB folder that is in the same path as DisCVR.jar. The k-mer size for the 
+classification is extracted from the database name and the threshold to filter out low-entropy k-mers from the 
+sample should be entered in its corresponding field. The entropy threshold should be the same value used in the 
+build of the customised database which is recommended to be in the range of [0, 3.0]. If the users choose not to 
+specify a value for the entropy threshold then the default value, 2.5, is displayed in the field and used in the 
+classification.
+Once, the database library is selected, the user clicks the classify button to start the classification process.
+There are 4 stages in the classification process and the progress bar is updated after the completion of each 
+stage. Messages in relation to the output of each stage are displayed in the progress information panel. 
+This includes the number of reads in the sample, the number of distinct k-mers and their total counts in 
+the database and the sample file, the number of sample k-mers after removing single copies and low entropy 
+k-mers, and the number of classified k-mers and their total counts. The final message shows the number of 
+viruses with classified k-mers found in the sample and the time taken to finish the classification process. 
+Figure 1 shows screenshots of the sample classification process using the DisCVR GUI.
+
+![alt text](https://github.com/josephhughes/DisCVR/tree/master/docs/img/img1.png "Logo Title Text 1")
+
