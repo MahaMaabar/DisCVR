@@ -1,5 +1,4 @@
-## Introduction
-DisCVR: Rapid Viral Diagnostic Tool
+## DisCVR: Rapid Viral Diagnostic Tool
 
 DisCVR is a viral detection tool which allows the identification of known human viruses in clinical samples from high-throughput sequencing (HTS) data. It uses the k-mers approach in which the sample reads are decomposed into k-mers and then matched against a virus k-mers database. The built-in database is a list consists of all k-mers (k=22) that are not low-complexity and only found in the viral genomes but not in the human genome. Each k-mer is assigned the taxonomic label of all viral genomes that contain that k-mer in the NCBI taxonomy tree. These assignments are made at the species and strains taxonomic level.
 
@@ -7,8 +6,7 @@ DisCVR has a user-friendly Graphical User Interface (GUI) which runs the analysi
 
 DisCVR is designed to run on machines with low processing capacity and small memory.
 
-[System Requirements](#system-requirements)
-
+[System Requirements](#system-requirements)  
 [Installation](#installation)
 
 ## [System Requirements](#system-requirements)
