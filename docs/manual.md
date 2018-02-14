@@ -99,7 +99,9 @@ sample should be entered in its corresponding field. The entropy threshold shoul
 build of the customised database which is recommended to be in the range of [0, 3.0]. If the users choose not to 
 specify a value for the entropy threshold then the default value, 2.5, is displayed in the field and used in the 
 classification.
+
 Once, the database library is selected, the user clicks the classify button to start the classification process.
+
 There are 4 stages in the classification process and the progress bar is updated after the completion of each 
 stage. Messages in relation to the output of each stage are displayed in the progress information panel. 
 This includes the number of reads in the sample, the number of distinct k-mers and their total counts in 
@@ -108,6 +110,17 @@ k-mers, and the number of classified k-mers and their total counts. The final me
 viruses with classified k-mers found in the sample and the time taken to finish the classification process. 
 Figure 1 shows screenshots of the sample classification process using the DisCVR GUI.
 
-![Figure 1a](https://josephhughes.github.io/DisCVR/img/img1.png "Screenshots of a sample classification process using DisCVR GUI: sample file is uploaded")
+![Figure 1a](https://josephhughes.github.io/DisCVR/img/img1.png "sample file is uploaded")
 *Figure1a: Screenshots of a sample classification process using DisCVR GUI. First the sample file is uploaded*
+
+![Figure 1b](https://josephhughes.github.io/DisCVR/img/img2.png "the k-mers database is then selected from the DisCVR database library")
+*Figure1b: Screenshots of a sample classification process using DisCVR GUI. The k-mers database is then selected from the DisCVR database library*
+
+![Figure 1c](https://josephhughes.github.io/DisCVR/img/img3.png "the k-mers database is selected from the user customised database")
+*Figure1b: Screenshots of a sample classification process using DisCVR GUI. The k-mers database is then selected from the user customised database*
+
+![Figure 1d](https://josephhughes.github.io/DisCVR/img/img4.png "the classification results are displayed")
+*Figure1b: Screenshots of a sample classification process using DisCVR GUI. The classification results are displayed*
+
+
 
