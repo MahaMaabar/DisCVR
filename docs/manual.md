@@ -32,7 +32,7 @@ This creates a folder, called DisCVR. The contents of DisCVR consists of one jar
 
 4. Dependencies: DisCVR uses external libraries such as KAnalyze, for k-mers counting, and JFreechart packages, for graphs plotting. It makes use of Tanoti, a Blast-based tool for reference assembly. These are 10 files in total and they are in the lib folder. It is important not to alter the lib folder or its contents and to ensure that it is in the same path as the jar file.
 
-5. If you want to build a customised database, the following NCBI tools and files must be downloaded and installed:
+5. If you want to build a customised database, the following NCBI tools and files must be downloaded and installed:  
 
   * The NCBI eutilities tools are used to download data. The tools can be found at: ([ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/](ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/)). The full path to the edirect folder should be added to the system variables  
 
