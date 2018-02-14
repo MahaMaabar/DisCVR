@@ -108,4 +108,6 @@ k-mers, and the number of classified k-mers and their total counts. The final me
 viruses with classified k-mers found in the sample and the time taken to finish the classification process. 
 Figure 1 shows screenshots of the sample classification process using the DisCVR GUI.
 
-![Figure 1a: Screenshots of a sample classification process using DisCVR GUI. First the sample file is uploaded](https://josephhughes.github.io/DisCVR/img/img1.png "Screenshots of a sample classification process using DisCVR GUI: sample file is uploaded")
+![Figure 1a](https://josephhughes.github.io/DisCVR/img/img1.png "Screenshots of a sample classification process using DisCVR GUI: sample file is uploaded")
+*Figure1a: Screenshots of a sample classification process using DisCVR GUI. First the sample file is uploaded*
+
