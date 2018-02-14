@@ -40,7 +40,7 @@ This creates a folder, called DisCVR. The contents of DisCVR consists of one jar
 
 6. To test if the tools are installed properly, open a command prompt and type the following:
 
-  * To know what Java version is installed: `java –version`  
+  * To know what Java version is installed: `java –version`
 
     * This should state `java version 1.8.0_<some number>`
 
@@ -56,11 +56,11 @@ This creates a folder, called DisCVR. The contents of DisCVR consists of one jar
 
 DisCVR tool has three virus k-mers (k=22) databases which are built in DisCVR.jar:
 
-1. Human Hemorrhagic virus dataset (hemorrhagic dataset)  
+1. Human Hemorrhagic virus dataset (hemorrhagic dataset)
 
-2. Human Respiratory virus dataset (respiratory dataset)  
+2. Human Respiratory virus dataset (respiratory dataset)
 
-3. Human Pathogenic viruses dataset (pathogenic dataset)  
+3. Human Pathogenic viruses dataset (pathogenic dataset)
 
 The hemorrhagic and respiratory datasets consist of a list of selected circulating viruses. 
 The pathogenic datatset consist of a list of all human pathogenic viruses identified as biological agents from by the Health and Safety Executive (HSE) in the UK available at: [http://www.hse.gov.uk/pubns/misc208.pdf](http://www.hse.gov.uk/pubns/misc208.pdf)
