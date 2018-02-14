@@ -53,8 +53,11 @@ JFreechart packages, for graphs plotting. It makes use of Tanoti, a Blast-based 
 ## [DisCVR Built-in Databases](#discvr-builtin-db)
 
 DisCVR tool has three virus k-mers (k=22) databases which are built in DisCVR.jar:
+
 1. Human Hemorrhagic virus dataset (hemorrhagic dataset)  
+
 2. Human Respiratory virus dataset (respiratory dataset)  
+
 3. Human Pathogenic viruses dataset (pathogenic dataset)  
 
 The hemorrhagic and respiratory datasets consist of a list of selected circulating viruses. 
@@ -69,6 +72,7 @@ in decreasing order of the segment size. The accession numbers of the reference 
 ## [DisCVR Classification](#discvr-classification)
 
 The DisCVR GUI can be used to carry out a single sample classification. To launch the DisCVR GUI, either double click on DisCVR.jar, or open a command prompt and type the following commands:
-    cd full/path/to/DisCVR folder
-    java –jar full/path/to/DisCVR.jar
+
+```cd full/path/to/DisCVR folder
+java –jar full/path/to/DisCVR.jar````
 
