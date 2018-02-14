@@ -42,12 +42,15 @@ JFreechart packages, for graphs plotting. It makes use of Tanoti, a Blast-based 
 6. To test if the tools are installed properly, open a command prompt and type the following:
 
     * To know what Java version is installed: `java –version`  
+    
       * This should state java version 1.8.0_<some number>
 
     * To see if Java is added to the path: java  
+    
       * If the jre\bin is not added to the path, you will see the following message: "java is not recognized as an internal or external command, operable program or batch file".
 
     * To see if eutilities tools is added to the path: esearch  
+    
       * This should state "Must supply -db database on command line"
 
 ## [DisCVR Built-in Databases](#discvr-builtin-db)
