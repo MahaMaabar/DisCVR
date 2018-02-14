@@ -12,6 +12,8 @@ DisCVR is designed to run on machines with low processing capacity and small mem
 [Installation](#installation)  
 [DisCVR Built-in Databases](#discvr-builtin-db)  
 [DisCVR Classification](#discvr-classification)  
+[Classification Output](#classification-output)  
+
 
 ## [System Requirements](#system-requirements)
 
@@ -122,5 +124,44 @@ Figure 1 shows screenshots of the sample classification process using the DisCVR
 ![Figure 1d](https://josephhughes.github.io/DisCVR/img/img4.png "the classification results are displayed")
 *Figure1b: Screenshots of a sample classification process using DisCVR GUI. The classification results are displayed*
 
+
+## [Classification Output](#classification-output)
+
+At the end of the classification process, the progress information panel states the number of viruses with matched k-mers to the database. 
+Detailed information about the classification results are displayed on the centre panel.
+
+The classification results panel consists of three sub-panels: Scoring, Summary, and Full Analysis. Once the classification is completed, a bar 
+chart showing up to three viruses is displayed on the scoring panel. These are the viruses with the most number of classified distinct k-mers 
+found in the sample. The chart shows for each virus, the number of distinct k-mers that are specific to the virus as well as the number of shared 
+k-mers with other viruses in the sample, which are referred to as non-specific k-mers. The Summary panel gives a list of the viruses found in the 
+sample along with their number of specific and non-specific distinct k-mers. The Full Analysis panel shows a table with taxonomic and detailed 
+information about the viruses with classified k-mers from the sample. The results are uploaded on the table such that the first row shows the virus 
+with the highest number of k-mers found in the sample. However, the users can click on any column heading to sort out the results in the table 
+according to the information in the column. The full analysis table consists of 8 columns:
+
+1. Virus Name: the scientific name for the virus taking from the NCBI names.dmp file.
+
+2. Taxa ID: the taxonomy identification for the virus in the NCBI taxonomy tree.
+
+3. Virus Rank: the rank of the virus according to the NCBI nodes.dmp file.
+
+4. Total counts of k-mers in DB: the total counts of k-mers that represent the virus in DisCVR’s
+database.
+
+5. No. of distinct Classified k-mers: the number of distinct k-mers that represent the virus in the
+sample after removing single copies and low entropy k-mers and matched with the k-mers
+database.
+
+6. (%) of distinct Classified k-mers: the percentage of distinct classified k-mers that represent the
+virus in the sample.
+
+7. Total counts of Classified k-mers: the total number of k-mers that represent the virus in the
+sample; some distinct k-mers can occur in the reads multiple times.
+
+8. (%) of total classified k-mers: the percentage of the total number of k-mers that represent the
+virus in the sample’s total number of k-mers.
+
+The table can be saved as .csv file from the File icon on the GUI tool bar. Figure 2 shows screenshots
+of the classification results sub-panels.
 
 
