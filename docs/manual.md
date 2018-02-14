@@ -57,7 +57,9 @@ This creates a folder, called DisCVR. The contents of DisCVR consists of one jar
 DisCVR tool has three virus k-mers (k=22) databases which are built in DisCVR.jar:
 
 1. Human Hemorrhagic virus dataset (hemorrhagic dataset)  
+
 2. Human Respiratory virus dataset (respiratory dataset)  
+
 3. Human Pathogenic viruses dataset (pathogenic dataset)  
 
 The hemorrhagic and respiratory datasets consist of a list of selected circulating viruses. 
