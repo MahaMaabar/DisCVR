@@ -28,14 +28,18 @@ This creates a folder, called DisCVR. The contents of DisCVR consists of one jar
 JFreechart packages, for graphs plotting. It makes use of Tanoti, a Blast-based tool for reference assembly. These are 10 files in total and they are in the lib folder. It is important not to alter the lib folder or its contents and to ensure that it is in the same path as the jar file.
 
 5. If you want to build a customised database, the following NCBI tools and files must be downloaded and installed:
+
   * The NCBI eutilities tools are used to download data. The tools can be found at: ([ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/](ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/)). The full path to the edirect folder should be added to the system variables
+
   * The NCBI taxdump files are used for taxonomy information retrieval when building a customised database. The file can be downloaded from ([ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/](ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/)). The file taxdump.tar.gz should be downloaded and unzipped. The two files: names.dmp and nodes.dmp MUST be copied to the customised database folder: customisedDB which is in the same path as DisCVR.jar.
 
 6. To test if the tools are installed properly, open a command prompt and type the following:
+
   * To know what Java version is installed: `java –version`
     * This should state java version 1.8.0_<some number>
-  * To see if Java is added to the path: java
+  * To see if Java is added to the path: java  
     * If the jre\bin is not added to the path, you will see the following message: "java is not
 recognized as an internal or external command, operable program or batch file". 
+
   * To see if eutilities tools is added to the path: esearch
     * This should state "Must supply -db database on command line"
