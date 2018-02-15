@@ -14,6 +14,7 @@ DisCVR is designed to run on machines with low processing capacity and small mem
 [DisCVR Classification](#discvr-classification)  
 [Classification Output](#classification-output)  
 [DisCVR Command Line](#discvr-command-line)
+[Customised Database](#customised-database)
 
 ## [System Requirements](#system-requirements)
 
@@ -206,11 +207,12 @@ results for each sample in a separate .csv file. The results consist of informat
 of matched k-mers. The following commands show an example of using DisCVR to classify multiple files. The user needs to generate a java 
 executable first before running the SampleClassification program on all the sample files.
 
-```javac -d ./bin src/model/*.java src/utilities/*.java src/tanotipackage/*.java
-java -cp ./bin model.SampleClassification <samples folder> <k> <file format> <Database name> <database option> <entropy threshold>```
-
 ---
 ```
+javac -d ./bin src/model/*.java src/utilities/*.java src/tanotipackage/*.java  
+java -cp ./bin model.SampleClassification <samples folder> <k> <file format> <Database name> <database option> <entropy threshold>
+
+
 <samples folder>: is the full path to the folder which contains sample files to be classified.  
 <k>: is the k-mer size.  
 <file format>: is the format of the sample files e.g. fastq  
@@ -219,5 +221,46 @@ java -cp ./bin model.SampleClassification <samples folder> <k> <file format> <Da
 <entropy threshold>: is the threshold to use to remove low- entropy k-mers.  
 ```
 ---
+
+Using the command line, DisCVR allows the validation of the classification results only when a customised database file is used 
+in the classification. Users need to provide the taxonomy ID for the virus reference genome and the reference genomes file which is 
+generated during the build of the database. In addition, only read assembly validation is available through command line because users 
+have no access to the matched k-mers at the end of the process. The validation output does not show a graph of the reference genome 
+alignment. Instead, it prints out at the command prompt a summary of the coverage and depth of the reads in relation to the reference 
+genome. The following commands execute the read assembly validation from the command line.
+
+---
+```
+javac -d ./bin src/model/*.java src/utilities/*.java src/tanotipackage/*.java  
+java -cp ./bin model.ReferenceGenomeAlignment <taxID> <reference_Genome file> <sample file> <database option>
+
+
+<taxID>: is the taxonomy ID for the virus whose reference genome will be used in the alignment.  
+<reference_Genome file>: is the full path to the reference genome library in the customised database.  
+<input file>: is the sample file to be investigated.  
+<database option>: it must be customisedDB.  
+```
+---
+
+## [Customised Database](#customised-database)
+
+DisCVR allows the users to build their own customised database from a list of viruses that are of interest. This section explains 
+the steps to generate the users customised database files. Refer to the Installation section to ensure the required tools are downloaded 
+and installed properly before proceeding to customise your k-mers database. The NCBI files, i.e. names.dmp and nodes.dmp, must be copied 
+to the customisedDB folder. The NCBI website ([https://www.ncbi.nlm.nih.gov](https://www.ncbi.nlm.nih.gov)) is used for downloading the data. The following table lists all 
+the files and parameters needed to build a customised database.
+
+| Files/Parameters     | Description
+|----------------------|---------------
+| Input File           | A file containing information about the set of viruses to build the database from 
+| NCBI Taxdump Files   | Two files (names.dmp and nodes.dmp) to be downloaded into the customisedDB folder
+| Host genomes file    | A fasta file containing the host DNA sequences
+| Entropy threshold    | A number in the range [0,3] to act as a low-complexity threshold
+| Data Location        | The path to the folder containing the data to build the database from
+| Name of the database | The given name to the customised database. This should be a single word that does NOT contain (_)
+| K size               | The length of k-mers to be used in the build of the database.
+| Number of threads    | The number of threads to use during the build of the database.
+| File counter         | The number of virus files to process at one time during the build of the database.
+*Table 1: Files and parameters needed to build DisCVR’s customised database*
 
 
