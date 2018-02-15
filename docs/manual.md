@@ -263,4 +263,13 @@ the files and parameters needed to build a customised database.
 | File counter         | The number of virus files to process at one time during the build of the database.
 *Table 1: Files and parameters needed to build DisCVR’s customised database*
 
+The process starts by providing a list of the viruses of interest and the information of their complete genomes, if they exist. This input is a tab-delimited file which contains the taxonomy ID of the virus and the accession number for its reference sequence. In DisCVR, the three built-in databases use only human viral sequences at the species and subspecies levels on the taxonomy tree. However, the customised-database does not require the viruses to be of a particular rank in the taxonomy tree nor the host to be human. In addition, the input file should not have duplicate taxonomy IDs but multiple taxonomy IDs in the list can have the same reference sequence. Table 2 shows an example of the input file.
+
+**IMPORTANT:** the accession number of the virus reference sequence MUST be the exact accession number provided in the header of the reference sequence.
+
+There are three steps to build the customised database which must be executed sequentially:  
+1. Data Download; which involves obtaining the data required to build the two database files.  
+2. Generating the reference genome library file using the information of the reference sequences.  
+3. Generating the virus k-mers database from the downloaded sequences.  
+
 
