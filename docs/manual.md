@@ -13,7 +13,7 @@ DisCVR is designed to run on machines with low processing capacity and small mem
 [DisCVR Built-in Databases](#discvr-builtin-db)  
 [DisCVR Classification](#discvr-classification)  
 [Classification Output](#classification-output)  
-
+[DisCVR Command Line](#discvr-command-line)
 
 ## [System Requirements](#system-requirements)
 
@@ -163,5 +163,61 @@ virus in the sample’s total number of k-mers.
 
 The table can be saved as .csv file from the File icon on the GUI tool bar. Figure 2 shows screenshots
 of the classification results sub-panels.
+
+## [Output Validation](#output-validation)
+
+DisCVR allows the validation of the classification output using the reference-assembly technique to assess significance of matches. 
+During the build of the virus k-mers database in DisCVR, a library that contains the complete reference genomes of some of the viruses, 
+which are represented by k-mers in the database, is generated. The tool allows two validations using the extracted reference genome library:
+
+1. k-mer Assembly: maps all classified k-mers to a reference genome.
+
+2. Read Assembly: maps all sequence reads to a reference genome using Tanoti (a BLAST-guided
+aligner).
+
+The validation takes place from the Full Analysis panel when the user right-click on the virus, which they wish to validate. A list with two 
+items: k-mer Assembly and Read Assembly appears and once the user makes a selection, the reference-assembly starts. When the alignment is 
+finished, a line graph showing the coverage and depth of the sequence data in the sample is displayed. A full coverage of the reference genome 
+indicates strong evidence for the presence of the virus in the sample. The graphs can be saved as a PNG file for future reference. Figure 3 
+shows an example of the validation stage and its outputs.
+
+![Figure 2a](https://josephhughes.github.io/DisCVR/img/img6.png "The scoring panel shows the three viruses with the highest number of matched k-mers")
+*Figure2a: Screenshots showing sample classification output on the results sub-panels. The scoring panel shows the three viruses with the highest number of matched k-mers*
+
+![Figure 2b](https://josephhughes.github.io/DisCVR/img/img5.png "The summary panel")
+*Figure2b: Screenshots showing sample classification output on the results sub-panels. The summary panel*
+
+![Figure 2c](https://josephhughes.github.io/DisCVR/img/img7.png "The full analysis panel with detailed information about the viruses found in the sample")
+*Figure2c: Screenshots showing sample classification output on the results sub-panels. The full analysis panel with detailed information about the viruses found in the sample*
+
+![Figure 3a](https://josephhughes.github.io/DisCVR/img/img8.png "Right-clicking on a row from the Full Analysis table provides a pop-up list of choices to start reference assembly")
+*Figure3a: Screenshots showing how to assess the significance of matches from the sample classification results. Right-clicking on a row from the Full Analysis table provides a pop-up list of choices to start reference assembly*
+
+![Figure 3b](https://josephhughes.github.io/DisCVR/img/img9.png "Right- clicking on a graph e.g. Read-Assembly graph shows the number of reads at a certain reference genome position.")
+*Figure3b: Screenshots showing how to assess the significance of matches from the sample classification results. Right-clicking on a graph e.g. Read-Assembly graph shows the number of reads at a certain reference genome position.*
+
+![Figure 3c](https://josephhughes.github.io/DisCVR/img/img10.png "Right-clicking on a graph e.g. k-mer assembly allows the users to save it as a PNG file.")
+*Figure3c: Screenshots showing how to assess the significance of matches from the sample classification results. Right-clicking on a graph e.g. k-mer assembly allows the users to save it as a PNG file.*
+
+## [DisCVR Command Line](#discvr-command-line)
+
+DisCVR can be used to classify multiple samples at once using the command line. In this case, a folder is generated containing the 
+results for each sample in a separate .csv file. The results consist of information about the reads in the sample and the full analysis 
+of matched k-mers. The following commands show an example of using DisCVR to classify multiple files. The user needs to generate a java 
+executable first before running the SampleClassification program on all the sample files.
+
+```javac -d ./bin src/model/*.java src/utilities/*.java src/tanotipackage/*.java
+java -cp ./bin model.SampleClassification <samples folder> <k> <file format> <Database name> <database option> <entropy threshold>```
+
+---
+```
+<samples folder>: is the full path to the folder which contains sample files to be classified.  
+<k>: is the k-mer size.  
+<file format>: is the format of the sample files e.g. fastq  
+<database name>: is the name of the database to be used in the classification. If DisCVR’s built-in database to be used then use HaemorrhagicVirusDB, RespiratoryVirusDB, or HSEVirusDB. In case of a customisedDB, the full path to the database file must be provided.  
+<database option>: if it is one of DisCVR’s database then use BuiltInDB and if it is a customised database file then use customisedDB.  
+<entropy threshold>: is the threshold to use to remove low- entropy k-mers.  
+```
+---
 
 
