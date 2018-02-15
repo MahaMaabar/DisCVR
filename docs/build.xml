@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<project name="Ant-Test" default="main" basedir=".">
+  <!-- Sets variables which can later be used. -->
+  <!-- The value of a property is accessed via ${} -->
+  <property name="src.dir" location="src" />
+  <property name="bin.dir" location="bin" />
+  <property name="build.dir" location="build" />
+  <property name="classes.dir" location="${build.dir}/classes" />
+  <property name="classes.lib.dir" location="${classes.dir}/lib" />
+  <property name="classes.res.dir" location="${classes.dir}/resources" />
+  <property name="dist.dir" location="dist" />
+  <property name="dist.lib.dir" location="${dist.dir}/lib" />
+  <property name="lib.dir" location="${basedir}/lib" />
+  <property name="res.dir" location="${basedir}/resources" />
+  <property name="customisedDB.dir" location="${basedir}/customisedDB" />	
+  <property name="dist.customisedDB.dir" location="${dist.dir}/customisedDB" />
+
+  <path id="classpath.path">
+  	   <pathelement location="${classes.dir}"/>
+  	   <fileset dir="lib">
+  	    <include name="*.jar"/>
+  	   </fileset>
+	   <fileset dir="resources">
+	  	    <include name="**"/>
+	   </fileset>
+  	   <!--fileset dir="images">
+  		  	    <include name="**"/>
+  	   </fileset-->
+  	   <!--pathelement location="../lib/httpunit.jar"/>
+  	   <pathelement location="../lib/Tidy.jar"/>
+  	   <pathelement location="../lib/xerces.jar"/-->
+  </path>
+ 	
+  <!-- Deletes the existing build, docs and dist directory -->
+	<target name="clean">
+	    <delete dir="${classes.dir}" />
+	    <delete dir="${build.dir}" />
+	    <delete dir="${dist.dir}" />
+	</target>
+  
+  <!-- Creates the  build, and dist directory-->
+	<target name="makedir">
+	    <mkdir dir="${build.dir}" />
+	    <mkdir dir="${classes.dir}" />
+	    <mkdir dir="${dist.dir}" />
+	    <mkdir dir="${classes.lib.dir}" />
+	    <mkdir dir="${classes.res.dir}" />
+	    <mkdir dir="${dist.lib.dir}" />
+            <mkdir dir="${dist.customisedDB.dir}" />
+	</target>
+
+  <!-- Compiles the java code -->
+	<target name="compile" depends="clean, makedir">
+	    <javac srcdir="${src.dir}" destdir="${classes.dir}"
+		 deprecation="on" debug="on">
+		 <classpath><path refid="classpath.path"/></classpath>
+	    </javac>
+	</target>
+
+ 	<target name="copy-dependencies" >
+		<copy todir="${build.dir}">
+			<fileset dir="${src.dir}"
+			 includes="**"
+			 excludes="**/*.java"/>
+		</copy>
+	</target>
+	
+	<target name="copy-lib" >
+			<copy todir="${classes.lib.dir}">
+			 	<fileset dir="${lib.dir}"
+			 		 includes="**"/>			 		
+			 </copy>
+	</target>
+
+    <target name="copy-res" >
+			<copy todir="${classes.res.dir}">
+			 	<fileset dir="${res.dir}"
+			 		 includes="**"/>
+			 		
+			 </copy>
+	</target>	
+	
+	<target name="copy-externalLibraries" >
+            <copy todir="${dist.lib.dir}">
+		<fileset dir="${lib.dir}" 
+		  includes="**"/>                                
+	    </copy>
+            
+	</target>
+	
+<!--set permission on a folder -->
+<target name="set-perms" >
+ <chmod file="${dist.lib.dir}/**" perm="775" type="both"/>
+ <chmod file="${dist.customisedDB.dir}/**" perm="775" type="both"/>
+ <!--chmod  perm="ou+rx">
+   <fileset dir="${dist.dir}/{lib.dir}" >
+   </fileset>
+ </chmod-->
+</target>
+
+<!--Creates the deployable jar file  -->
+	  <target name="jar" depends="compile, copy-lib, copy-res, copy-externalLibraries, set-perms">
+	  
+	    <!--jar destfile="${classes.dir}/DisCVR.jar" basedir="${classes.dir}"-->
+             <jar destfile="${dist.dir}/DisCVR.jar" basedir="${classes.dir}">
+	      <manifest>
+	        <attribute name="Main-Class" value="gui.DisCVRApp" />
+	      
+	     </manifest>
+	      <!-- Add the JFreeChart jars-->
+	      <zipfileset src="${basedir}/lib/jfreechart-1.0.19.jar"/>
+	      <zipfileset src="${basedir}/lib/jcommon-1.0.23.jar"/>
+	      <zipfileset src="${basedir}/lib/kanalyze.jar" />
+	      <zipfileset src="${basedir}/lib/java-getopt-1.0.14.jar" />
+	      <!--zipfileset dir="${basedir}/resources" prefix="resources" includes="**"/-->
+	     </jar>
+	  </target>
+
+  <target name="main" depends="compile, copy-lib, copy-res, jar">
+  
+		    <description>Main target</description>
+  </target>
+  	
+</project>
