@@ -28,7 +28,7 @@ DisCVR is designed to run on machines with low processing capacity and small mem
 
 2. Java: Java (1.8 or above) must be installed and the full path to the jre\bin folder should be included in the system variables. Java can be downloaded from: http://www.oracle.com/technetwork/java/javase/downloads/jre8- downloads-2133155.html 
 
-3. DisCVR.jar: After downloading the DisCVR zipped folder, it is recommended to use a tool, such as 7-zip, to unzip the Windows OS version and extract all files to a local directory. For Linux and Mac version, open a command prompt and move to the location of the zipped folder. Type the following commands to unzip the folder:
+3. DisCVR.jar: After downloading the DisCVR zipped folder, it is recommended to use a tool, such as 7-zip, to unzip the Windows OS version and extract all files to a local directory. For Linux and Mac version, open a command prompt and move to the location of the zipped folder. Type the following commands to unzip the folder:  
    `tar -xzvf DisCVR_Linux.tar.gz`
 This creates a folder, called DisCVR. The contents of DisCVR consists of one jar: DisCVR.jar and a lib folder which are used to run the classification. The script file: downloadDataAndRefSeq.sh and the folders: bin, customisedDB, and TestData which are needed to build a customised database.  
 **IMPORTANT:** The full path to DisCVR directory must NOT contain space nor the dot "." to avoid conflict with the files naming during the classification process.
@@ -250,17 +250,18 @@ and installed properly before proceeding to customise your k-mers database. The 
 to the customisedDB folder. The NCBI website ([https://www.ncbi.nlm.nih.gov](https://www.ncbi.nlm.nih.gov)) is used for downloading the data. The following table lists all 
 the files and parameters needed to build a customised database.
 
-| Files/Parameters     | Description
-|----------------------|---------------
-| Input File           | A file containing information about the set of viruses to build the database from 
-| NCBI Taxdump Files   | Two files (names.dmp and nodes.dmp) to be downloaded into the customisedDB folder
-| Host genomes file    | A fasta file containing the host DNA sequences
-| Entropy threshold    | A number in the range [0,3] to act as a low-complexity threshold
-| Data Location        | The path to the folder containing the data to build the database from
-| Name of the database | The given name to the customised database. This should be a single word that does NOT contain (_)
-| K size               | The length of k-mers to be used in the build of the database.
-| Number of threads    | The number of threads to use during the build of the database.
-| File counter         | The number of virus files to process at one time during the build of the database.
+| Files/Parameters     | Description                                                                                        |
+|----------------------|----------------------------------------------------------------------------------------------------|
+| Input File           | A file containing information about the set of viruses to build the database from                  |
+| NCBI Taxdump Files   | Two files (names.dmp and nodes.dmp) to be downloaded into the customisedDB folder                  |
+| Host genomes file    | A fasta file containing the host DNA sequences                                                     |
+| Entropy threshold    | A number in the range [0,3] to act as a low-complexity threshold                                   |
+| Data Location        | The path to the folder containing the data to build the database from                              |
+| Name of the database | The given name to the customised database. This should be a single word that does NOT contain (_)  |
+| K size               | The length of k-mers to be used in the build of the database.                                      |
+| Number of threads    | The number of threads to use during the build of the database.                                     |
+| File counter         | The number of virus files to process at one time during the build of the database.                 |
+
 *Table 1: Files and parameters needed to build DisCVR’s customised database*
 
 The process starts by providing a list of the viruses of interest and the information of their complete genomes, if they exist. This input is a tab-delimited file which contains the taxonomy ID of the virus and the accession number for its reference sequence. In DisCVR, the three built-in databases use only human viral sequences at the species and subspecies levels on the taxonomy tree. However, the customised-database does not require the viruses to be of a particular rank in the taxonomy tree nor the host to be human. In addition, the input file should not have duplicate taxonomy IDs but multiple taxonomy IDs in the list can have the same reference sequence. Table 2 shows an example of the input file.
@@ -272,4 +273,10 @@ There are three steps to build the customised database which must be executed se
 2. Generating the reference genome library file using the information of the reference sequences.  
 3. Generating the virus k-mers database from the downloaded sequences.  
 
+Taxid  Accession Number  | Description
+--- | ---
+121791  NC_002728.1 | The virus taxonomy ID is followed by the accession number of the virus’s reference sequence.
+499556  NC_010563.1,NC_010562.1 | It is a segmented virus. The accession numbers for the reference sequences segments are comma-separated and listed in order so that the first segment is the largest.
+11598 | Only the virus taxonomy ID is provided because the virus does not have a reference sequence.
 
+*Table 2: An example of the input file for the customised database builds stage. Left column shows an example of a line in the input file. Right column explains the components of the line.*
