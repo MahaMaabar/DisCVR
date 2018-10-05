@@ -5,7 +5,7 @@ DisCVR can be downloaded from [here](http://bioinformatics.cvr.ac.uk/discvr.php)
 
 The download includes information for installing and running the tool. 
 
-For more information on how to run DisCVR, here is the [manual](https://mahamaabar.github.io/DisCVR/manual)
+For more information on how to run DisCVR, here is the [manual](https://centre-for-virus-research.github.io/DisCVR/manual)
 
 DisCVR was developed by [Maha Maabar](https://github.com/MahaMaabar)
 
