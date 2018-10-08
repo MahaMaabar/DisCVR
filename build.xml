@@ -101,6 +101,23 @@
 <!--Creates the deployable jar file  -->
 	  <target name="jar" depends="compile, copy-lib, copy-res, copy-externalLibraries, set-perms">
 	  
+	    
+             <jar destfile="${dist.dir}/DisCVR_CL.jar" basedir="${classes.dir}">
+	      <manifest>
+	        <attribute name="Main-Class" value="model.SampleClassification" />
+	      
+	     </manifest>
+	      <!-- Add the JFreeChart jars-->
+	      <zipfileset src="${basedir}/lib/jfreechart-1.0.19.jar"/>
+	      <zipfileset src="${basedir}/lib/jcommon-1.0.23.jar"/>
+	      <zipfileset src="${basedir}/lib/kanalyze.jar" />
+	      <zipfileset src="${basedir}/lib/java-getopt-1.0.14.jar" />
+	      <!--zipfileset dir="${basedir}/resources" prefix="resources" includes="**"/-->
+	     </jar>
+	  </target>
+
+<target name="gui-jar" depends="compile, copy-lib, copy-res, copy-externalLibraries, set-perms">
+	  
 	    <!--jar destfile="${classes.dir}/DisCVR.jar" basedir="${classes.dir}"-->
              <jar destfile="${dist.dir}/DisCVR.jar" basedir="${classes.dir}">
 	      <manifest>
@@ -116,7 +133,8 @@
 	     </jar>
 	  </target>
 
-  <target name="main" depends="compile, copy-lib, copy-res, jar">
+
+  <target name="main" depends="compile, copy-lib, copy-res, gui-jar, jar">
   
 		    <description>Main target</description>
   </target>
