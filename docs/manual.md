@@ -17,13 +17,14 @@ DisCVR is designed to run on machines with low processing capacity and small mem
 ## Getting started
 
 [System Requirements](#system-requirements)  
-[Installation](#installation) 
+[Installation](#installation)  
 [Quick GUI overview](#GUIoverview)  
 [DisCVR Built-in Databases](#discvr-builtin-db)  
 [DisCVR Classification](#discvr-classification)  
 [Classification Output](#classification-output)  
-[DisCVR Command Line](#discvr-command-line)
-[Customised Database](#customised-database)
+[DisCVR Command Line](#discvr-command-line)  
+[Customised Database](#customised-database)  
+[Source code on Github](https://github.com/centre-for-virus-research/DisCVR)
 
 ## [System Requirements](#system-requirements)
 
@@ -93,10 +94,10 @@ important not to alter the lib folder or its contents and to ensure that it is i
 
 The screenshots below provide an overview demonstration of DisCVR GUI and how to use it to classify a clinical sample from HTS data and validate the results using reference genome alignment.  
 
-![Figure 1a](https://josephhughes.github.io/DisCVR/img/SampleClassification.png "sample classification")
+![Figure 1a](https://centre-for-virus-research.github.io/DisCVR/img/SampleClassification.png "sample classification")
 *Figure1a: Guide for the sample classification process using DisCVR GUI*
 
-![Figure 1b](https://josephhughes.github.io/DisCVR/img/ResultValidation.png "result validation")
+![Figure 1b](https://centre-for-virus-research.github.io/DisCVR/img/ResultValidation.png "result validation")
 *Figure1b: Guide for the result validation using DisCVR GUI*
 
 
@@ -164,16 +165,16 @@ the database and the sample file, the number of sample *k*-mers after removing s
 viruses with classified *k*-mers found in the sample and the time taken to finish the classification process. 
 Figure 1 shows screenshots of the sample classification process using the DisCVR GUI.
 
-![Figure 2a](https://josephhughes.github.io/DisCVR/img/img1.png "sample file is uploaded")
+![Figure 2a](https://centre-for-virus-research.github.io/DisCVR/img/img1.png "sample file is uploaded")
 *Figure2a: Screenshots of a sample classification process using DisCVR GUI. First the sample file is uploaded*
 
-![Figure 2b](https://josephhughes.github.io/DisCVR/img/img2.png "the *k*-mers database is then selected from the DisCVR database library")
+![Figure 2b](https://centre-for-virus-research.github.io/DisCVR/img/img2.png "the *k*-mers database is then selected from the DisCVR database library")
 *Figure2b: Screenshots of a sample classification process using DisCVR GUI. The *k*-mers database is then selected from the DisCVR database library*
 
-![Figure 2c](https://josephhughes.github.io/DisCVR/img/img3.png "the *k*-mers database is selected from the user customised database")
+![Figure 2c](https://centre-for-virus-research.github.io/DisCVR/img/img3.png "the *k*-mers database is selected from the user customised database")
 *Figure2b: Screenshots of a sample classification process using DisCVR GUI. The *k*-mers database is then selected from the user customised database*
 
-![Figure 2d](https://josephhughes.github.io/DisCVR/img/img4.png "the classification results are displayed")
+![Figure 2d](https://centre-for-virus-research.github.io/DisCVR/img/img4.png "the classification results are displayed")
 *Figure2b: Screenshots of a sample classification process using DisCVR GUI. The classification results are displayed*
 
 
@@ -216,13 +217,13 @@ virus in the sample’s total number of *k*-mers.
 The table can be saved as .csv file from the File icon on the GUI tool bar. Figure 2 shows screenshots
 of the classification results sub-panels.
 
-![Figure 3a](https://josephhughes.github.io/DisCVR/img/img6.png "The scoring panel shows the three viruses with the highest number of matched *k*-mers")
+![Figure 3a](https://centre-for-virus-research.github.io/DisCVR/img/img6.png "The scoring panel shows the three viruses with the highest number of matched *k*-mers")
 *Figure3a: Screenshots showing sample classification output on the results sub-panels. The scoring panel shows the three viruses with the highest number of matched *k*-mers*
 
-![Figure 3b](https://josephhughes.github.io/DisCVR/img/img5.png "The summary panel")
+![Figure 3b](https://centre-for-virus-research.github.io/DisCVR/img/img5.png "The summary panel")
 *Figure3b: Screenshots showing sample classification output on the results sub-panels. The summary panel*
 
-![Figure 3c](https://josephhughes.github.io/DisCVR/img/img7.png "The full analysis panel with detailed information about the viruses found in the sample")
+![Figure 3c](https://centre-for-virus-research.github.io/DisCVR/img/img7.png "The full analysis panel with detailed information about the viruses found in the sample")
 *Figure3c: Screenshots showing sample classification output on the results sub-panels. The full analysis panel with detailed information about the viruses found in the sample*
 
 
@@ -243,13 +244,13 @@ finished, a line graph showing the coverage and depth of the sequence data in th
 indicates strong evidence for the presence of the virus in the sample. The graphs can be saved as a PNG file for future reference. Figure 3 
 shows an example of the validation stage and its outputs.
 
-![Figure 4a](https://josephhughes.github.io/DisCVR/img/img8.png "Right-clicking on a row from the Full Analysis table provides a pop-up list of choices to start reference assembly")
+![Figure 4a](https://centre-for-virus-research.github.io/DisCVR/img/img8.png "Right-clicking on a row from the Full Analysis table provides a pop-up list of choices to start reference assembly")
 *Figure4a: Screenshots showing how to assess the significance of matches from the sample classification results. Right-clicking on a row from the Full Analysis table provides a pop-up list of choices to start reference assembly*
 
-![Figure 4b](https://josephhughes.github.io/DisCVR/img/img9.png "Right- clicking on a graph e.g. Read-Assembly graph shows the number of reads at a certain reference genome position.")
+![Figure 4b](https://centre-for-virus-research.github.io/DisCVR/img/img9.png "Right- clicking on a graph e.g. Read-Assembly graph shows the number of reads at a certain reference genome position.")
 *Figure4b: Screenshots showing how to assess the significance of matches from the sample classification results. Right-clicking on a graph e.g. Read-Assembly graph shows the number of reads at a certain reference genome position.*
 
-![Figure 4c](https://josephhughes.github.io/DisCVR/img/img10.png "Right-clicking on a graph e.g. *k*-mer assembly allows the users to save it as a PNG file.")
+![Figure 4c](https://centre-for-virus-research.github.io/DisCVR/img/img10.png "Right-clicking on a graph e.g. *k*-mer assembly allows the users to save it as a PNG file.")
 *Figure4c: Screenshots showing how to assess the significance of matches from the sample classification results. Right-clicking on a graph e.g. *k*-mer assembly allows the users to save it as a PNG file.*
 
 ## [DisCVR Command Line](#discvr-command-line)
