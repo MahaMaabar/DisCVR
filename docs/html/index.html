@@ -1,0 +1,653 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Welcome to DisCVR’s documentation! &#8212; DisCVR 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">DisCVR 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <h2>Contents</h2>
+    <div class="sidebar-localtoc">
+      <ul>
+<li><a class="reference internal" href="#">Welcome to DisCVR’s documentation!</a></li>
+<li><a class="reference internal" href="#requiremenents">Requiremenents</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#quick-gui-overview">Quick GUI overview</a></li>
+<li><a class="reference internal" href="#discvr-built-in-databases">DisCVR Built-in Databases</a></li>
+<li><a class="reference internal" href="#discvr-classification">DisCVR Classification</a></li>
+<li><a class="reference internal" href="#classification-output">Classification Output</a></li>
+<li><a class="reference internal" href="#output-validation">Output Validation</a></li>
+<li><a class="reference internal" href="#discvr-command-line">DisCVR Command Line</a></li>
+<li><a class="reference internal" href="#building-custom-databases">Building custom databases</a></li>
+<li><a class="reference internal" href="#customised-database">Customised Database</a><ul>
+<li><a class="reference internal" href="#data-download">Data Download</a></li>
+<li><a class="reference internal" href="#database-files-generation">Database Files Generation</a></li>
+<li><a class="reference internal" href="#reference-genome-library">Reference Genome Library</a></li>
+<li><a class="reference internal" href="#virus-k-mers-database">Virus <em>k</em>-mers database</a></li>
+<li><a class="reference internal" href="#data-filtering-optional">Data Filtering (Optional)</a></li>
+<li><a class="reference internal" href="#k-mers-database-file"><em>k</em>-mers database file</a></li>
+<li><a class="reference internal" href="#an-example">An example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+    </div>
+  </div>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="#">Docs</a></li>
+              
+              <li>Welcome to DisCVR’s documentation!</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="welcome-to-discvr-s-documentation">
+<h1>Welcome to DisCVR’s documentation!<a class="headerlink" href="#welcome-to-discvr-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>DisCVR is a viral detection tool which allows the identification of known human viruses in clinical
+samples from high-throughput sequencing (HTS) data. It uses the k-mers approach in which the
+sample reads are decomposed into <em>k</em>-mers and then matched against a virus k-mers database. The
+built-in database is a list consists of all <em>k</em>-mers (<em>k</em>=22) that are not low-complexity and only found in
+the viral genomes but not in the human genome. Each <em>k</em>-mer is assigned the taxonomic label of all
+viral genomes that contain that <em>k</em>-mer in the NCBI taxonomy tree. These assignments are made at the
+species and strains taxonomic level.</p>
+<p>DisCVR has a user-friendly Graphical User Interface (GUI) which runs the analysis on the sample and
+shows the results interactively. It enables the visualisation of the coverage of the virus genomes found
+in the sample in order to validate the significance of the results. In addition, DisCVR is a generic tool
+which can be used with other non-human viruses by facilitating the build and use of customised kmers
+database.</p>
+<p>DisCVR is designed to run on machines with low processing capacity and small memory.</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="requiremenents">
+<h1>Requiremenents<a class="headerlink" href="#requiremenents" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><strong>Disk Space</strong>: DisCVR.jar requires <strong>~700MB space</strong> for installation with the built-in databases. It is
+recommended to have space for 2x sample size when using DisCVR for classification as the
+process involves writing temporary files to disk. When building a customised database, the
+amount of space depends on the size of the viral sequences and the <em>k</em> size. For example,
+extracting <em>k</em>-mers of size 32 from the human genomes generates a file that is 80GB in size. If
+the viral data sequences are 3GB in size, then the minimum disk space needed to build a
+customised database is 200GB.</li>
+<li><strong>Memory</strong>: DisCVR runs efficiently on a machine with <strong>4GB RAM</strong>, which is the current standard
+for PCs. It is much faster on machines with higher RAM such as 8GB RAM. However, the
+amount of RAM depends on the number of the sequences used and the size of the k-mer. The
+larger the dataset and the k-mer, the larger the amount of RAM needed. Therefore, in the
+case of “out of memory” errors, the Java heap space should be increased.</li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p class="first">Operating System: DisCVR runs on both Windows and Linux platforms. To use DisCVR, the
+users need first to download the appropriate folder for their operating system.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://bioinformatics.cvr.ac.uk/DisCVR/Downloads/DisCVR_Windows.zip">Windows OS (771Mb)</a></li>
+<li><a class="reference external" href="http://bioinformatics.cvr.ac.uk/DisCVR/Downloads/DisCVR_Linux.tar.gz">Linux OS (786Mb)</a></li>
+<li><a class="reference external" href="http://bioinformatics.cvr.ac.uk/DisCVR/Downloads/DisCVR_Mac.tar.gz">Mac OS (793Mb)</a></li>
+<li><a class="reference external" href="http://bioinformatics.cvr.ac.uk/DisCVR/Downloads/DisCVR_CL.jar">Command-line for multiple classifications (645Mb)</a></li>
+<li><a class="reference external" href="https://centre-for-virus-research.github.io/DisCVR/">View source codes on GitHub</a></li>
+</ul>
+</li>
+<li><p class="first">Java: Java (1.8 or above) must be installed and the full path to the jrebin folder should be
+included in the system variables. Java can be downloaded from:
+<a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html">Link to Oracle</a></p>
+</li>
+<li><p class="first">DisCVR.jar: After downloading the DisCVR zipped folder, it is recommended to use a tool, such
+as 7-zip, to unzip the Windows OS version and extract all files to a local directory. For Linux
+and Mac version, open a command prompt and move to the location of the zipped folder.
+Type the following commands to unzip the folder:
+<code class="docutils literal notranslate"><span class="pre">tar</span> <span class="pre">-xzvf</span> <span class="pre">DisCVR_Linux.tar.gz</span></code></p>
+<p>This creates a folder, called DisCVR. The contents of DisCVR consists of one jar: DisCVR.jar and
+a lib folder which are used to run the classification. The script file: downloadDataAndRefSeq.sh
+and the folders: bin, customisedDB, and TestData which are needed to build a customised
+database.</p>
+<p><strong>IMPORTANT</strong>: The full path to DisCVR directory must NOT contain space nor the dot ‘.’ to avoid
+conflict with the files naming during the classification process.</p>
+</li>
+<li><p class="first">Dependencies: DisCVR uses external libraries such as KAnalyze, for k-mers counting, and
+JFreechart packages, for graphs plotting. It makes use of Tanoti, a Blast-based tool for
+reference assembly. These are 10 files in total and they are in the lib folder. It is important
+not to alter the lib folder or its contents and to ensure that it is in the same path as the jar file.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="testing">
+<h1>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h1>
+<p>To test if the tools are installed properly, open a command prompt and type the following:</p>
+<ul class="simple">
+<li>To know what Java version is installed: <code class="docutils literal notranslate"><span class="pre">java</span> <span class="pre">–version</span></code>. This should state <code class="docutils literal notranslate"><span class="pre">java</span> <span class="pre">version</span> <span class="pre">1.8.0_&lt;some</span> <span class="pre">number&gt;</span></code></li>
+<li>To see if Java is added to the path: <code class="docutils literal notranslate"><span class="pre">java</span></code>.   If the jrebin is not added to the path, you will see the following message:
+<code class="docutils literal notranslate"><span class="pre">java</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">recognized</span> <span class="pre">as</span> <span class="pre">an</span> <span class="pre">internal</span> <span class="pre">or</span> <span class="pre">external</span> <span class="pre">command,</span> <span class="pre">operable</span> <span class="pre">program</span> <span class="pre">or</span> <span class="pre">batch</span> <span class="pre">file</span></code>.</li>
+<li>Download the test samples <a class="reference external" href="http://bioinformatics.cvr.ac.uk/DisCVR/Downloads/TestSamples.zip">here</a></li>
+</ul>
+</div>
+<div class="section" id="quick-gui-overview">
+<h1>Quick GUI overview<a class="headerlink" href="#quick-gui-overview" title="Permalink to this headline">¶</a></h1>
+<p>The screenshots below provide an overview demonstration of DisCVR GUI and how to use it to classify a clinical sample from HTS data and validate the results using reference genome alignment.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="_images/SampleClassification.png"><img alt="_images/SampleClassification.png" src="_images/SampleClassification.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure1a: Guide for the sample classification process using DisCVR GUI.</span></p>
+</div>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="_images/ResultValidation.png"><img alt="_images/ResultValidation.png" src="_images/ResultValidation.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure1b: Guide for the result validation using DisCVR GUI</span></p>
+</div>
+</div>
+<div class="section" id="discvr-built-in-databases">
+<h1>DisCVR Built-in Databases<a class="headerlink" href="#discvr-built-in-databases" title="Permalink to this headline">¶</a></h1>
+<p>DisCVR tool has three virus <em>k</em>-mers (k=22) databases which are built into the DisCVR.jar:</p>
+<ol class="arabic simple">
+<li>Human Hemorrhagic virus dataset (hemorrhagic dataset)</li>
+<li>Human Respiratory virus dataset (respiratory dataset)</li>
+<li>Human Pathogenic viruses dataset (pathogenic dataset)</li>
+</ol>
+<p>The hemorrhagic and respiratory datasets consist of a list of selected circulating viruses.
+The pathogenic datatset consist of a list of all human pathogenic viruses identified as biological agents by the
+Health and Safety Executive (HSE) in the UK available at: <a class="reference external" href="http://www.hse.gov.uk/pubns/misc208.pdf">http://www.hse.gov.uk/pubns/misc208.pdf</a></p>
+<p>Both the hemorrhagic and respiratory datasets overlap with the HSE database but are smaller in size and therefore are faster to use in classification.
+Moreover, each dataset has a list of viral reference genomes that is associated with the viruses in the database. The reference genomes are used in the validation stage of DisCVR.
+Information about the viruses in the databases can be obtained from the Database icon on the menu bar from the DisCVR GUI. The information includes the virus rank on the taxonomy tree,
+the number of sequences used in the database build to represent it, and the accession number of its reference genome. Segmented viruses have their reference genome accession number listed
+in decreasing order of the segment size. The accession numbers of the reference genomes are linked to their webpages on the NCBI, which can be viewed by clicking on the reference genome accession.</p>
+</div>
+<div class="section" id="discvr-classification">
+<h1>DisCVR Classification<a class="headerlink" href="#discvr-classification" title="Permalink to this headline">¶</a></h1>
+<p>The DisCVR GUI can be used to carry out a single sample classification. To launch the DisCVR GUI, either double click on DisCVR.jar, or
+open a command prompt and type the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> full/path/to/DisCVR folder
+java –jar full/path/to/DisCVR.jar
+</pre></div>
+</div>
+<p>Once DisCVR is launched, there are 4 panels in the graphical interface:</p>
+<ol class="arabic simple">
+<li>Progress Bar: shows the progression of the classification process.</li>
+<li>Input Sources: allows the user to choose the sample file and a <em>k</em>-mers database for classification.</li>
+<li>Classification Results: shows the classification output in three sub-panels.</li>
+<li>Progress Information: updates the user about classification output.</li>
+</ol>
+<p>To start a classification process, the user needs to first select the sample file they wish to
+investigate. Currently, DisCVR supports .fasta, .fa, .fastq, and .fq formats. It allows for the selection
+of one file hence, for paired-end files, it is recommended to concatenate both files. The second step is to
+choose the database for the classification. The default setting is to select one of the three built-in databases.
+This sets the <em>k</em>-mer size to 22 and removes all sample <em>k</em>-mers with entropy ≤ 2.5. On the other hand, if the user
+chooses to use a customised database for the classification, then the box next to the <a class="reference internal" href="#customised-database"><span class="std std-ref">Customised Database</span></a> label
+must be checked. The fields for this selection are then activated for the user to upload the customised database
+file, which MUST be in the customisedDB folder that is in the same path as DisCVR.jar. The <em>k</em>-mer size for the
+classification is extracted from the database name and the threshold to filter out low-entropy <em>k</em>-mers from the
+sample should be entered in its corresponding field. The entropy threshold should be the same value used in the
+build of the customised database which is recommended to be in the range of [0, 3.0]. If the users choose not to
+specify a value for the entropy threshold then the default value of 2.5 is displayed in the field and used in the
+classification.</p>
+<p>Once, the database library is selected, the user clicks the classify button to start the classification process.</p>
+<p>There are 4 stages in the classification process and the progress bar is updated after the completion of each stage.
+Messages in relation to the output of each stage are displayed in the progress information panel.
+This includes the number of reads in the sample, the number of distinct <em>k</em>-mers and their total counts in
+the database and the sample file, the number of sample <em>k</em>-mers after removing single copies and low entropy
+<em>k</em>-mers, and the number of classified <em>k</em>-mers and their total counts. The final message shows the number of
+viruses with classified <a href="#id1"><span class="problematic" id="id2">*</span></a>k*mers found in the sample and the time taken to finish the classification process.
+Figure 1 shows screenshots of the sample classification process using the DisCVR GUI.</p>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="_images/img1.png"><img alt="_images/img1.png" src="_images/img1.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure2a: Screenshots of a sample classification process using DisCVR GUI. First the sample file is uploaded</span></p>
+</div>
+<div class="figure align-center" id="id6">
+<a class="reference internal image-reference" href="_images/img2.png"><img alt="_images/img2.png" src="_images/img2.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure2b: Screenshots of a sample classification process using DisCVR GUI. The <em>k</em>-mers database is then selected from the DisCVR database library</span></p>
+</div>
+<div class="figure align-center" id="id7">
+<a class="reference internal image-reference" href="_images/img3.png"><img alt="_images/img3.png" src="_images/img3.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure2b: Screenshots of a sample classification process using DisCVR GUI. The <em>k</em>-mers database is then selected from the user customised database*</span></p>
+</div>
+<div class="figure align-center" id="id8">
+<a class="reference internal image-reference" href="_images/img4.png"><img alt="_images/img4.png" src="_images/img4.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure2b: Screenshots of a sample classification process using DisCVR GUI. The classification results are displayed</span></p>
+</div>
+</div>
+<div class="section" id="classification-output">
+<h1>Classification Output<a class="headerlink" href="#classification-output" title="Permalink to this headline">¶</a></h1>
+<p>At the end of the classification process, the progress information panel states the number of viruses with matched <em>k</em>-mers to the database.
+Detailed information about the classification results are displayed on the centre panel.</p>
+<p>The classification results panel consists of three sub-panels: Scoring, Summary, and Full Analysis. Once the classification is completed, a bar
+chart showing up the top three viruses is displayed on the scoring panel. These are the viruses with the most number of classified distinct <em>k</em>-mers
+found in the sample. The chart shows for each virus, the number of distinct <em>k</em>-mers that are specific to the virus as well as the number of shared
+<em>k</em>-mers with other viruses in the sample, which are referred to as non-specific <em>k</em>-mers. The Summary panel gives a list of the viruses found in the
+sample along with their number of specific and non-specific distinct <em>k</em>-mers. The Full Analysis panel shows a table with taxonomic and detailed
+information about the viruses with classified <em>k</em>-mers from the sample. The results are shown in the table such that the first row shows the virus
+with the highest number of <em>k</em>-mers found in the sample. However, the users can click on any column heading to sort out the results in the table
+according to the information in the column. The full analysis table consists of 8 columns:</p>
+<ol class="arabic simple">
+<li>Virus Name: the scientific name for the virus taking from the NCBI names.dmp file.</li>
+<li>Taxa ID: the taxonomy identification for the virus in the NCBI taxonomy tree.</li>
+<li>Virus Rank: the rank of the virus according to the NCBI nodes.dmp file.</li>
+</ol>
+<p>4. Total counts of <em>k</em>-mers in DB: the total counts of <em>k</em>-mers that represent the virus in DisCVR’s
+database.</p>
+<p>5. No. of distinct Classified <em>k</em>-mers: the number of distinct <em>k</em>-mers that represent the virus in the
+sample after removing single copies and low entropy <em>k</em>-mers and matched with the <em>k</em>-mers
+database.</p>
+<p>6. (%) of distinct Classified <em>k</em>-mers: the percentage of distinct classified <em>k</em>-mers that represent the
+virus in the sample.</p>
+<p>7. Total counts of Classified <em>k</em>-mers: the total number of <em>k</em>-mers that represent the virus in the
+sample; some distinct <em>k</em>-mers can occur in the reads multiple times.</p>
+<p>8. (%) of total classified <em>k</em>-mers: the percentage of the total number of <em>k</em>-mers that represent the
+virus in the sample’s total number of <em>k</em>-mers.</p>
+<p>The table can be saved as .csv file from the File icon on the GUI tool bar. Figure 2 shows screenshots
+of the classification results sub-panels.</p>
+<div class="figure align-center" id="id9">
+<a class="reference internal image-reference" href="_images/img6.png"><img alt="_images/img6.png" src="_images/img6.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure3a: Screenshots showing sample classification output on the results sub-panels. The scoring panel shows the three viruses with the highest number of matched <em>k</em>-mers</span></p>
+</div>
+<div class="figure align-center" id="id10">
+<a class="reference internal image-reference" href="_images/img5.png"><img alt="_images/img5.png" src="_images/img5.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure3b: Screenshots showing sample classification output on the results sub-panels. The summary panel</span></p>
+</div>
+<div class="figure align-center" id="id11">
+<a class="reference internal image-reference" href="_images/img7.png"><img alt="_images/img7.png" src="_images/img7.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure3c: Screenshots showing sample classification output on the results sub-panels. The full analysis panel with detailed information about the viruses found in the sample</span></p>
+</div>
+</div>
+<div class="section" id="output-validation">
+<h1>Output Validation<a class="headerlink" href="#output-validation" title="Permalink to this headline">¶</a></h1>
+<p>DisCVR allows the validation of the classification output using the reference-assembly technique to assess significance of matches.
+During the build of the virus <em>k</em>-mer database in DisCVR, a library that contains the complete reference genomes of some of the viruses,
+which are represented by <em>k</em>-mers in the database, is generated. The tool allows two validations using the extracted reference genome library:</p>
+<ol class="arabic simple">
+<li><em>k</em>-mer Assembly: maps all classified <em>k</em>-mers to a reference genome.</li>
+</ol>
+<p>2. Read Assembly: maps all sequence reads to a reference genome using Tanoti (a BLAST-guided
+aligner).</p>
+<p>The validation takes place from the Full Analysis panel when the user right-clicks on the virus, which they wish to validate. A list with two
+items: <em>k</em>-mer Assembly and Read Assembly appears and once the user makes a selection, the reference-assembly starts. When the alignment is
+finished, a line graph showing the coverage and depth of the sequence data in the sample is displayed. A full coverage of the reference genome
+indicates strong evidence for the presence of the virus in the sample. The graphs can be saved as a PNG file for future reference. Figure 3
+shows an example of the validation stage and its outputs.</p>
+<div class="figure align-center" id="id12">
+<a class="reference internal image-reference" href="_images/img8.png"><img alt="_images/img8.png" src="_images/img8.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure4a: Screenshots showing how to assess the significance of matches from the sample classification results. Right-clicking on a row from the Full Analysis table provides a pop-up list of choices to start reference assembly</span></p>
+</div>
+<div class="figure align-center" id="id13">
+<a class="reference internal image-reference" href="_images/img9.png"><img alt="_images/img9.png" src="_images/img9.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure4b: Screenshots showing how to assess the significance of matches from the sample classification results. Right-clicking on a graph e.g. Read-Assembly graph shows the number of reads at a certain reference genome position.</span></p>
+</div>
+<div class="figure align-center" id="id14">
+<a class="reference internal image-reference" href="_images/img10.png"><img alt="_images/img10.png" src="_images/img10.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-text">Figure4c: Screenshots showing how to assess the significance of matches from the sample classification results. Right-clicking on a graph e.g. <em>k</em>-mer assembly allows the users to save it as a PNG file.</span></p>
+</div>
+</div>
+<div class="section" id="discvr-command-line">
+<h1>DisCVR Command Line<a class="headerlink" href="#discvr-command-line" title="Permalink to this headline">¶</a></h1>
+<p>DisCVR can be used to classify multiple samples at once using the command line. In this case, a folder is generated containing the
+results for each sample in a separate .csv file. The results consist of information about the reads in the sample and the full analysis
+of matched <em>k</em>-mers.
+The jar called DisCVR_CL.jar is used to run classifications on more than one file. Refer to the Installation section to download and install the jar and ensure that it is on the same path as <em>DisCVR.jar</em> and the <em>lib</em> folder.
+The following command can be used to run DisCVR_CL.jar to classify multiple files.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>java –jar full/path/to/DisCVR_CL.jar &lt;samples folder&gt; &lt;k&gt; &lt;file format&gt; &lt;Database name&gt; &lt;database option&gt; &lt;entropy threshold&gt;
+</pre></div>
+</div>
+<p>&lt;samples folder&gt;: is the full path to the folder which contains sample files to be classified.
+&lt;k&gt;: is the <em>k</em>-mer size.  If using the DisCVR built-in database, use 22
+&lt;file format&gt;: is the format of the sample files e.g. fastq
+&lt;database name&gt;: is the name of the database to be used in the classification. If DisCVR’s built-in database is to be used then use <em>HaemorrhagicVirusDB_22</em>, <em>RespiratoryVirusDB_22</em>, or <em>HSEVirusDB_22</em>. In case of a customisedDB, the full path to the database file must be provided.
+&lt;database option&gt;: if it is one of DisCVR’s database then use <em>BuiltInDB</em> and if it is a customised database file then use <em>customisedDB</em>.
+&lt;entropy threshold&gt;: is the threshold to use to remove low- entropy <em>k</em>-mers. If using DisCVR’s built-in database, for consistency use 2.5.</p>
+<p>Using the command line, DisCVR enables the analysis of multiple clinical samples, however
+validation of the results via reference genome alignment is not available at this stage.</p>
+</div>
+<div class="section" id="building-custom-databases">
+<h1>Building custom databases<a class="headerlink" href="#building-custom-databases" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>If you want to build a customised database, the following NCBI tools and files must be
+downloaded and installed:<ul>
+<li>The NCBI eutilities tools are used to download data. The tools can be found on <a class="reference external" href="ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/">NCBI eutlities</a>. The full
+path to the edirect folder should be added to the system variables</li>
+<li>The NCBI taxdump files are used for taxonomy information retrieval when building a
+customised database. The file can be downloaded from <a class="reference external" href="ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/">NCBI taxonomy</a>. The file taxdump.tar.gz
+should be downloaded and unzipped. The two files: names.dmp and nodes.dmp MUST
+be copied to the customised database folder: customisedDB which is in the same path
+as DisCVR.jar.</li>
+</ul>
+</li>
+<li>To see if eutilities tools is added to the path: <code class="docutils literal notranslate"><span class="pre">esearch</span></code>
+This should state``Must supply -db database on command line```</li>
+</ul>
+</div>
+<div class="section" id="customised-database">
+<h1>Customised Database<a class="headerlink" href="#customised-database" title="Permalink to this headline">¶</a></h1>
+<p>DisCVR allows the users to build their own customised database from a list of viruses that are of interest. This section explains
+the steps to generate the users customised database files. Refer to the Installation section to ensure the required tools are downloaded
+and installed properly before proceeding to customise your <em>k</em>-mers database. The NCBI files, i.e. <em>names.dmp</em> and <em>nodes.dmp</em>, must be copied
+to the <em>customisedDB</em> folder. The NCBI website ([<a class="reference external" href="https://www.ncbi.nlm.nih.gov](https://www.ncbi.nlm.nih.gov">https://www.ncbi.nlm.nih.gov](https://www.ncbi.nlm.nih.gov</a>)) is used for downloading the data. The following table lists all
+the files and parameters needed to build a customised database.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Files/Parameters</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Input File</td>
+<td>A file containing information about the set of viruses to build the database from</td>
+</tr>
+<tr class="row-odd"><td>NCBI Taxdump Files</td>
+<td>Two files (<em>names.dmp</em> and <em>nodes.dmp</em>) to be downloaded into the customisedDB folder</td>
+</tr>
+<tr class="row-even"><td>Host genomes file</td>
+<td>A fasta file containing the host DNA sequences</td>
+</tr>
+<tr class="row-odd"><td>Entropy threshold</td>
+<td>A number in the range [0,3] to act as a low-complexity threshold</td>
+</tr>
+<tr class="row-even"><td>Data Location</td>
+<td>The path to the folder containing the data to build the database from</td>
+</tr>
+<tr class="row-odd"><td>Name of the database</td>
+<td>The given name to the customised database. This should be a single word that does NOT contain (_)</td>
+</tr>
+<tr class="row-even"><td>K size</td>
+<td>The length of <em>k</em>-mers to be used in the build of the database.</td>
+</tr>
+<tr class="row-odd"><td>Number of threads</td>
+<td>The number of threads to use during the build of the database.</td>
+</tr>
+<tr class="row-even"><td>File counter</td>
+<td>The number of virus files to process at one time during the build of the database.</td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 1: Files and parameters needed to build DisCVR’s customised database</em></p>
+<p>The process starts by providing a list of the viruses of interest and the information of their complete genomes, if they exist. This input is a tab-delimited
+file which contains the taxonomy ID of the virus and the accession number for its reference sequence. In DisCVR, the three built-in databases use only human
+viral sequences at the species and subspecies levels on the taxonomy tree. However, the customised-database does not require the viruses to be of a particular
+rank in the taxonomy tree nor the host to be human. In addition, the input file should not have duplicate taxonomy IDs but multiple taxonomy IDs in the list
+can have the same reference sequence. Table 2 shows an example of the input file.</p>
+<p><strong>IMPORTANT:</strong> the accession number of the virus reference sequence MUST be the exact accession number provided in the header of the reference sequence.</p>
+<p>There are three steps to build the customised database which must be executed sequentially:</p>
+<ol class="arabic simple">
+<li>Data Download; which involves obtaining the data required to build the two database files.</li>
+<li>Generating the reference genome library file using the information of the reference sequences.</li>
+<li>Generating the virus <em>k</em>-mers database from the downloaded sequences.</li>
+</ol>
+<table border="1" class="docutils">
+<colgroup>
+<col width="3%" />
+<col width="12%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Taxid</th>
+<th class="head">Accession Number</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>121791</td>
+<td>NC_002728.1</td>
+<td>The virus taxonomy ID is followed by the accession number of the virus’s reference sequence.</td>
+</tr>
+<tr class="row-odd"><td>499556</td>
+<td>NC_010563.1,NC_010562.1</td>
+<td>It is a segmented virus. The accession numbers for the reference sequences segments are comma-separated and listed in order so that the first segment is the largest.</td>
+</tr>
+<tr class="row-even"><td>11598</td>
+<td>&#160;</td>
+<td>Only the virus taxonomy ID is provided because the virus does not have a reference sequence.</td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 2: An example of the input file for the customised database builds stage. Left column shows an example of a line in the input file. Right column explains the components of the line.</em></p>
+<div class="section" id="data-download">
+<h2>Data Download<a class="headerlink" href="#data-download" title="Permalink to this headline">¶</a></h2>
+<p>The first step in building the database is to obtain the viral sequences for the viruses of interest. The script downloadDataAndRefSeq.sh
+uses the eutilities tools to download the data from the NCBI using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash downloadDataAndRefSeq.sh &lt;taxIDs_List&gt; &lt;outputDir&gt;
+</pre></div>
+</div>
+<p>&lt;taxIDs_List&gt;: the input file which contains the virus taxonomy IDs and their reference sequence information.
+&lt;outputDir&gt;: the name of the directory for the downloaded data.</p>
+<p>After executing the script, the output directory will have two sub-directories:</p>
+<ol class="lowerroman simple">
+<li><strong>DataSeq</strong> which contains the data to be used to build the virus <em>k</em>-mers file, and</li>
+<li><strong>RefSeq</strong> which contains the data to create the reference sequence library file.</li>
+</ol>
+<p>Each file in both directories includes in its name the taxonomy ID (taxID) of the virus whose data is
+contained in the file. The <strong>DataSeq</strong> directory has two corresponding files for each taxID:</p>
+<ol class="lowerroman simple">
+<li>Virus_taxID.fa is a fasta file which contains all complete and partial viral sequences for the virus with the taxID, and</li>
+<li>Virus_taxID_Info which contains information for the sequences in the corresponding fasta file. The first line states the number of sequences found on NCBI for the taxID followed by information for each sequence. This includes Accession number, title, gi header, update date, length of the sequence, the subtype, and strain.</li>
+</ol>
+<p>Similarly, the <strong>RefSeq</strong> directory contains files for each taxID which has information of its reference sequence in the input file.
+The files which are called Virus_taxID_RefSeq.fa are fasta files that contain one or more sequences (in the case of segmented viruses).
+Information files are used to identify segmented viruses, in the case of <strong>RefSeq</strong>, and to filter out shared sequences, in the case of <strong>DataSeq</strong>.</p>
+<p><strong>IMPORTANT:</strong> ensure that the files in both RefSeq and DataSeq folders are NOT empty. If any of the file are empty, re-run the data download
+script with an input file that contains only the information for the taxIDs with empty files.</p>
+</div>
+<div class="section" id="database-files-generation">
+<h2>Database Files Generation<a class="headerlink" href="#database-files-generation" title="Permalink to this headline">¶</a></h2>
+<p>Java programs are used to generate the two files in the database. These Java programs are found in the folder called ‘bin’.</p>
+</div>
+<div class="section" id="reference-genome-library">
+<h2>Reference Genome Library<a class="headerlink" href="#reference-genome-library" title="Permalink to this headline">¶</a></h2>
+<p>The reference genome library file is used in the validation stage of DisCVR and it contains the reference sequences for the viruses
+in the input file. The reference sequences are identified in the input file by their accession numbers and the corresponding sequences are
+downloaded in the RefSeq directory. The Java program <em>GenomesLibrary</em> is used to generate the reference genome library using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>java –cp ./bin customdatabase.GenomesLibrary &lt;taxIDs_List&gt; &lt;database_Name&gt; &lt;RefSeq_Dir&gt;
+</pre></div>
+</div>
+<p>&lt;taxIDs_List&gt;: the input file which contains the virus taxonomy IDs and their reference sequence information.
+&lt;database_Name&gt;: is the name to be given to the customised database
+&lt; RefSeq_Dir &gt;: is the full path of the RefSeq folder which contains all downloaded data for the reference sequences.</p>
+<p>The output file is called: databaseName_referenceGenomesLibrary and it is in the <strong>RefSeq</strong> folder. Each line in the file consists of
+a virus taxonomy ID, the header, and the sequence of its complete genome. The delimiter “&#64;” is used to separate the three components.
+In the case where the reference sequence is a concatenation of multiple segments, the headers are separated by a comma and the sequences
+are separated by a sequence, 300 in length, of the letter N. For the viruses which share the same reference sequence (i.e. species level
+and their sublevels are assigned the same reference sequence) then their taxonomy IDs are separated with a pipe sign “|”.</p>
+<p>The output file MUST be copied to the <em>customisedDB</em> folder to be used for DisCVR’s validation when using the customised <em>k</em>-mers database.</p>
+</div>
+<div class="section" id="virus-k-mers-database">
+<h2>Virus <em>k</em>-mers database<a class="headerlink" href="#virus-k-mers-database" title="Permalink to this headline">¶</a></h2>
+<p>The last step to build the customised database is to generate the file which contains the virus <em>k</em>-mers. In the generation of DisCVR’s
+built-in database files, a filtering step was used to remove shared sequences between a virus and its ancestors in the taxonomy tree.
+This is an optional step which can be used in the build of the customised database to reduce redundancy in the data and to increase virus
+specificity.</p>
+</div>
+<div class="section" id="data-filtering-optional">
+<h2>Data Filtering (Optional)<a class="headerlink" href="#data-filtering-optional" title="Permalink to this headline">¶</a></h2>
+<p>The filtering process removes shared sequences from the ancestors’ data. For example, if sequences are found in both the strain and the species
+levels, then they are removed from the sequences at the species level. It is recommended to keep a copy of the data in the <strong>DataSeq</strong> directory
+before executing this step to avoid loss of data. The NCBI dump files (i.e. names.dmp and nodes.dmp) are used in this step and they MUST be
+included in the customisedDB folder. The Java program DataSequences is used to filter the downloaded sequences using the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir &lt;DataSeq_filtered&gt;
+cp -r &lt;DataSeq_Dir&gt; &lt;DataSeq_filtered&gt;
+java –cp ./bin customdatabase.DataSequences &lt;DataSeq_Dir&gt; &lt;genomes_file&gt; &lt;database_Name&gt;
+</pre></div>
+</div>
+<p>&lt; DataSeq_Dir&gt;: is the full path for the DataSeq folder which contains the viruses’ data (fasta and Info files).
+&lt;DataSeq_filtered&gt;: is the full path for the folder which contains the filtered data.
+&lt;genomes_file&gt;: is the full path for the referenceGenomeLibrary which is generated from the previous step.
+&lt;database_Name&gt;: is the name to be given to the customised database.</p>
+<p>After executing the program, the sequence files (i.e. fasta files) for the viruses which are ranked at a higher taxonomic level to
+other sequences in the <strong>DataSeq</strong> directory are modified, if they contain shared sequences. The output file: databaseName_lineageID.txt
+shows, per line, the taxID of a virus followed by the taxIDs of higher taxonomic level. In addition, a file which contains summary
+information about the viruses in the database such as their rank in the taxonomy tree and the number of sequences per virus, after
+filtering, is generated. The file is called: databaseName_DataInformation.csv.</p>
+<p>Finally, an output file called: databaseName_allSeqData is generated and it contains all the sequences, after filtering, from
+all the data files in the directory. The three output files can be found in the <strong>DataSeq</strong> directory.</p>
+</div>
+<div class="section" id="k-mers-database-file">
+<h2><em>k</em>-mers database file<a class="headerlink" href="#k-mers-database-file" title="Permalink to this headline">¶</a></h2>
+<p>The final step in the customised database build is to generate the virus <em>k</em>-mers database file from the downloaded viral sequences.
+In this step, <em>k</em>-mers from the viral sequences and from the host genomes are extracted. Low entropy and host <em>k</em>-mers are then removed
+from the virus <em>k</em>-mers. The remaining set of virus <em>k</em>-mers are assigned the taxIDs of all the viruses which are represented by these
+<em>k</em>-mers. Table 3 shows an example of the virus <em>k</em>-mer database file.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="12%" />
+<col width="43%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><em>k</em>-mer</th>
+<th class="head">count</th>
+<th class="head">taxids</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>AAAAACAAGAATGGACAC</td>
+<td>2</td>
+<td>11620 1</td>
+</tr>
+<tr class="row-odd"><td>AAAAACAATGGGCTCTAT</td>
+<td>5</td>
+<td>1980486 1980491 2</td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 3: An example of the virus k-mers database file. Each line contains a k-mer of size 18, the number of times it occurs in the viral sequence, and a list of taxIDs of the viruses which the k-mer is extracted from. The last number in the line indicates whether the k-mer occurs in a single virus (e.g. 1) or in multiple related viruses (e.g. 2).</em></p>
+<p>The virus <em>k</em>-mers database file is generated by using the following command and it is saved to the <em>customisedDB</em> folder.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>java –cp ./bin customdatabase.KmersDatabaseBuild
+</pre></div>
+</div>
+<p>&lt;DataSeq_Dir&gt; &lt;host_file&gt; &lt;kmersDB_file&gt; &lt;k_size&gt; &lt;num_threads&gt; &lt;entropy_threshold&gt; &lt;files_counter&gt;
+&lt;DataSeq_Dir&gt;: full path to the directory which contains a copy of the downloaded data (fasta files).
+&lt;host_file&gt;: full path to the host genomes fasta file.
+&lt;kmersDB_file&gt;: name to be given to the customised <em>k</em>-mers database file.
+&lt;k_size&gt;: <em>k</em>-mer size.
+&lt;num_threads&gt;: number of threads to use when counting <em>k</em>-mers from the virus files. We recommend using 2
+&lt;entropy_threshld&gt;: entropy threshold to filter out low-entropy <em>k</em>-mers. Use 0 to omit this option.
+&lt;files_counter&gt;: number of data files to process at once during taxonomy labelling. It is recommended to use 10 to optimise memory use.</p>
+</div>
+<div class="section" id="an-example">
+<h2>An example<a class="headerlink" href="#an-example" title="Permalink to this headline">¶</a></h2>
+<p>This section shows an example of the whole process to create the customised <em>k</em>-mers database files. The NCBI dump files:
+<em>names.dmp</em> and <em>nodes.dmp</em> must be downloaded from the NCBI into the <em>customisedDB</em> folder before starting the process.
+In addition, the <em>lib</em> folder must be in the same directory as the <em>customisedDB</em> folder. The input files provided in
+the <em>TestData</em> are used in this example. There are two input files:</p>
+<ol class="arabic simple">
+<li>miniDB_sample.txt: contains information of the viruses used to build the <em>k</em>-mers database.</li>
+<li>HumanGenomesTest.fa: contains an example of the host sequences</li>
+</ol>
+<p>The process starts by downloading the data from the NCBI and generating the reference genome file. Filtering of shared
+sequences is then applied on a copy of the viral sequences. The last step is creating the virus <em>k</em>-mers database with
+k size equals to 18 and 0 entropy threshold. The number of threads to count <em>k</em>-mers is 2 and the number of files to
+process at once is 10. The given name for the customised database files in this example is “miniDB_sample”.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash downloadDataAndRefSeq.sh ./TestData/miniDB_sample.txt ./TestData/miniDB_sample/
+mkdir ./TestData/miniDB_sample/DataSeq_filtered
+cp -r ./TestData/miniDB_sample/DataSeq/* ./TestData/miniDB_sample/DataSeq_filtered
+java -cp ./bin customdatabase.GenomesLibrary ./TestData/miniDB_sample.txt miniDB ./TestData/miniDB_sample/RefSeq/
+cp ./TestData/miniDB_sample/RefSeq/miniDB_referenceGenomesLibrary ./customisedDB/
+java -cp ./bin customdatabase.DataSequences ./TestData/miniDB_sample/DataSeq_filtered ./TestData/miniDB_sample/RefSeq/miniDB_referenceGenomesLibrary miniDB
+java -cp ./bin customdatabase.KmersDatabaseBuild ./TestData/miniDB_sample/DataSeq_filtered/ ./TestData/HumanGenomesTest.fa miniDB_Kmers_18 <span class="m">18</span> <span class="m">2</span> <span class="m">0</span> <span class="m">10</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+            
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">DisCVR 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2019, Maha Maabar and Joseph Hughes. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>
