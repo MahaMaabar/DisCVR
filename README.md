@@ -15,7 +15,7 @@ The source code for DisCVR can be downloaded from [https://github.com/centre-for
 Compiled versions with the built-in databases are available from [http://bioinformatics.cvr.ac.uk/discvr.php](http://bioinformatics.cvr.ac.uk/discvr.php)
 The download includes information for installing and running the tool. 
 
-For more information on how to run DisCVR, here is the [manual](https://centre-for-virus-research.github.io/DisCVR/manual)
+For more information on how to run DisCVR, here is the [manual](https://centre-for-virus-research.github.io/DisCVR/)
 
 DisCVR was developed by [Maha Maabar](https://github.com/MahaMaabar)
 
