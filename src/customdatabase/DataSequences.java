@@ -50,6 +50,8 @@ public class DataSequences {
                	
 		String namesFile = actualPath+"/customisedDB/names.dmp";
     	String nodesFile = actualPath+"/customisedDB/nodes.dmp";
+    	System.out.println(namesFile);
+		System.out.println(nodesFile);
     	
     	
     	/*output files */
@@ -97,7 +99,7 @@ public class DataSequences {
 		 * to be used for filtering common sequences
 		 */	
 		System.out.println("Printing virus ancestor's list...");
-		TreeMap<Integer,ArrayList<Integer>> parentsIDsMap =ds.getParentsList(nodesFile,files,taxIdSeqMap,parentFile);
+		TreeMap<Integer,ArrayList<Integer>> parentsIDsMap = ds.getParentsList(nodesFile,files,taxIdSeqMap,parentFile);
 		
 		/*Step 7:
 		 * filter out common sequences between a virus taxID and its LCA
@@ -267,6 +269,8 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 		}
 	    
 	    File sourceFile = new File(sourcePath);
+	    // Does not seem to delete the sourceFile after instantiating it.
+	    sourceFile.delete();
 	}
 
 	/*returns a map of all taxIDs in a file and their rank, taken from the VirusRankMap
@@ -464,8 +468,8 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 			Set<Integer> taxaIdSet =taxIDSeqMap.keySet();
 			int num =0; //to keep track of number of parents
 			for(int id : taxIDSeqMap.keySet()){
-				
-				ArrayList<Integer> parentsList = getFullLineage (id, virusParentMap);
+				System.out.println(id);
+				ArrayList<Integer> parentsList = getFullLineage(id, virusParentMap);
 				
 				//check the parents list is not empty
 				if(parentsList == null){
@@ -547,6 +551,8 @@ public void printVirusInfo(String [] virusInfo, String fileName){
 	/*returns an arrayList contains the full lineage of a taxaID from a tree map.*/
 	public ArrayList<Integer> getFullLineage (int taxaID, TreeMap<Integer,Integer> parent_map)
 	{
+		System.out.println(taxaID);
+		System.out.println(parent_map.get(taxaID));
 		int aParent = parent_map.get(taxaID).intValue();
 	           
 	    ArrayList<Integer> a_path = new ArrayList<Integer>(100);
